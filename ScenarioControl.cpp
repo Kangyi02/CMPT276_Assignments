@@ -93,7 +93,7 @@ void createProductControl()
 void createReleaseControl()
 {
     // Get the product name
-    Product product_list[20];
+    Product product_list[20]; //sth
     Product* temp;
     Product* chosen;
     while (!product_file.eof()) // question
