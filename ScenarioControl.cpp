@@ -36,7 +36,7 @@ void createProductControl()
     cout << "Enter product's name (max 10 chars): ";
 
     // Get user input
-    char product_name[30];
+    char product_name[10];
     cin >> product_name;
 
     // Check if the product exists
