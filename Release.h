@@ -39,6 +39,11 @@ public:
     
     // Destructor
     ~Release();
+
+    char* getRelease_ID()
+    {
+        return release_ID;
+    }
 };
 
 // Initialize the release file
@@ -52,4 +57,8 @@ void createRelease(Release* new_release);
 
 // Get release ID 
 Release* getRelease(char* product_name);
+
+void seekToBeginningOfReleaseFile();
+
+Release* filterRelease(char* product_name)
 #endif

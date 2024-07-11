@@ -42,6 +42,26 @@ public:
 
     // Destructor
     ~ChangeRequest();
+
+    void setRequester_name(char* req_name)
+    {
+        requester_name = req_name;
+    }
+
+    void setChange_ID(int c_ID)
+    {
+        change_ID = c_ID;
+    }
+
+    char* getRequester_name()
+    {
+        return requester_name;
+    }
+
+    int getChange_ID()
+    {
+        return change_ID;
+    }
 };
 
 // Initialize the change request file
@@ -51,7 +71,7 @@ void initChangeRequest();
 void closeChangeRequest();
 
 // Create a new change request 
-char* createChangeRequest(char* requester_name, char* release_date, int change_ID, char* release_ID);
+void createChangeRequest(ChangeRequest* new_cr);
 
 // Get a single change request record
 ChangeRequest* getChangeRequest();

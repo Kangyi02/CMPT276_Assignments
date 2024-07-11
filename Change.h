@@ -27,12 +27,13 @@ data without affecting the external interface.
 ----------------------------------------------------------
 //Exported constants/types/variables
 */
+int CID = 0;
 
 // Change class
 class Change
 {
 private:
-    char* change_ID; // max 6 digits
+    int change_ID; // max 6 digits
 public:
     int priority; // 1 digit from 1 to 5
     char* status; // 'reported’, ‘evaluate’, ‘in process’, ‘cancelled’ or ‘done’
@@ -46,6 +47,16 @@ public:
     Change(const Change& other);
     // destructor
     ~Change();
+
+    int getChange_ID()
+    {
+        return change_ID;
+    }
+
+    int setChange_ID()
+    {
+        change_ID = CID++;
+    }
 };
 
 // Initialize the change file
@@ -58,8 +69,12 @@ void closeChange();
 Change* getChange(char* product_name);
 
 // Create a new change for a product
-int createChange(char* product_name);  
+int createChange(Change* change);  
 
 // Update a change except for its release ID
 void updateChange(int change_ID);
+
+void seekToBeginningOfChangeFile();
+
+Change* filterChange(char* product_name);
 #endif

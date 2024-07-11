@@ -28,13 +28,14 @@ private:
 public:
     int phone_number; // YYYY-MM-DD
     char* email; // max 24 chars
-
+    char* department;
     // Constructors
     Requester();
     Requester(const char* name, int phone, const char* email);
     Requester(const Requester& other);
     // Destructor
     ~Requester();
+    char* get_RequesterName();
 };
 
 // Initialize the requester file
@@ -48,4 +49,6 @@ Requester* getRequester();
 
 // Create a new requester
 char* createRequester();
+
+void seekToBeginningOfRequesterFile();
 #endif
