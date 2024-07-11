@@ -25,8 +25,7 @@ using std::ifstream;
 using std::ofstream;
 
 /*----------------------------------------------------------*/
-//Exported constants/types/variables
-ifstream product_file;
+// Exported constants/types/variables
 
 // Create control
 // Create product control
@@ -39,47 +38,18 @@ void createProductControl()
     char product_name[10];
     cin >> product_name;
 
-    // Check if the product exists
-    int exist = seekToBeginningOfProductFile(product_name);
-
+    // Prompt the user to ensure to add
+    cout << "Are you sure you want to add the product Editor(Y/N)?";
     char userInput[1];
+    cin >> userInput;
 
-    if (exist == 1) // if the product has existed
+    if (userInput == "y" || userInput == "Y")
     {
-        cout << "The item you entered already exists in the system.\n";
-        cout << "Would you like to enter another item(Y/N)? ";
-        
-        cin >> userInput;
-
-        if (userInput == "y" || userInput == "Y") // if the user wants to enter the product name again 
-            createProductControl();
-        else if (userInput == "n" || userInput == "N") // else get out of this function
-            return;
+        createProduct(product_name); // pass product name, write a new product to the file, if creation succuess
+        cout << "The new product has been successfully added.";
     }
-    else if (exist == 0) // if the product has not existed
-    {
-        cout << "Are you sure you want to add the product Editor(Y/N)?";
-        char userInput[1];
-        cin >> userInput;
-
-        if (userInput == "y" || userInput == "Y")
-        {
-            if (createProduct(product_name) == true) // pass product name, write a new product to the file, if creation succuess 
-                cout << "The new product has been successfully added.";
-            else // if creation failed
-            {
-                cout << "The operation cannot be completed because the hard disk is full. Enter Y to retry. Enter N to return to the main menu. ";
-                char userInput1[1];
-                cin >> userInput1;
-                if (userInput1 == "y" || userInput1 == "Y")
-                    createProduct(product_name) == true; // enter y to retry the creation operation
-                else if (userInput1 == "n" || userInput1 == "N")
-                    return; // enter n to go back to the main menu
-            }
-        }  
-        else if (userInput == "n" || userInput == "N")
-            return; // go back to the main menu
-    }
+    else if (userInput == "n" || userInput == "N")
+        return; // go back to the main menu
 
     cout << "Do you want to add another product(Y/N)? ";
     cin >> userInput;
@@ -93,29 +63,39 @@ void createProductControl()
 void createReleaseControl()
 {
     // Get the product name
-    Product product_list[20]; //sth
-    Product* temp;
-    Product* chosen;
-    while (!product_file.eof()) // question
+    Product product_list[20]; // sth
+    Product *temp;
+    Product *chosen;
+
+    // 
+    seekToBeginningOfProductFile();
+
+    while (temp != NULL) // question
     {
         cout << "For which product you want to add a new release to: \n";
-        for (int i=0; i<20; i++)
+        int i;
+        for (i = 0; i < 20; i++) // problem
         {
             temp = getProduct();
-            product_list[i] = *temp;
-            cout << i+1 << ") " << temp->getProduct_name() << "\n";
+            if (temp != NULL)
+            {
+                product_list[i] = *temp;
+                cout << i + 1 << ") " << temp->getProduct_name() << "\n";
+            }
+            else
+                break;
         }
 
-        cout << "21) More\n";
+        cout << i+2 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input;
 
-        if (1 <= user_input <= 20)
+        if (1 <= user_input <= i+1)
         {
-            chosen = &product_list[user_input-1];
+            chosen = &product_list[user_input - 1];
             break;
         }
         else if (user_input == 0)
@@ -131,19 +111,23 @@ void createReleaseControl()
     char release_date[10]; // should it be global??
     cin >> release_date;
 
-    cout <<  "Are you sure you want to add the release(Y/N)? ";
+    cout << "Are you sure you want to add the release(Y/N)? ";
     char sure_input[1];
     if (sure_input == "y" || sure_input == "Y")
     {
         Release new_release = Release(release_ID, chosen->getProduct_name(), release_date);
         createRelease(&new_release);
     }
-    else  if (sure_input == "n" || sure_input == "N")
+    else if (sure_input == "n" || sure_input == "N")
     {
         return;
     }
 }
-void createChangeRequestControl();
+
+void createChangeRequestControl()
+{
+
+}
 
 // Query control
 void queryChangeControl();

@@ -19,7 +19,6 @@ using std::ofstream;
 /*----------------------------------------------------------*/
 // Exported constants/types/variables
 // Define the file stream object
-extern ifstream product_file;
 /*----------------------------------------------------------*/
 
 // Product class
@@ -51,11 +50,11 @@ void closeProduct();
 
 // Create a new product. Write the product into file. 
 // Return false if it failed, otherwise true.
-bool createProduct(char* product_name);
+void createProduct(char* product_name);
 
 // Get the product by reading from the product file 
 Product* getProduct();
 
 // Search a product in the product file from the beginning of the file
-int seekToBeginningOfProductFile(char* product_name);
+void seekToBeginningOfProductFile();
 #endif 
