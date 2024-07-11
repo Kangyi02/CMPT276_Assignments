@@ -72,7 +72,7 @@ Change* getChange(char* product_name);
 int createChange(Change* change);  
 
 // Update a change except for its release ID
-void updateChange(int change_ID);
+void updateChange(Change* new_change);
 
 void seekToBeginningOfChangeFile();
 

@@ -14,15 +14,12 @@ ensuring clear separation of concerns and ease of maintenance.
 #define ScenarioControl_H
 
 #include <iostream>
-#include <fstream>
 #include "ScenarioControl.h"
 #include "Product.h"
 #include "Release.h"
 
 using std::cin;
 using std::cout;
-using std::ifstream;
-using std::ofstream;
 
 /*----------------------------------------------------------*/
 // Exported constants/types/variables
@@ -654,6 +651,7 @@ void updateChangeControl()
             break;
     }
 
+    updateChange(chosen_change);
     // print out the updated change info
     cout << "Change '1234' has been updated:\n"
         << "Description                     " 
