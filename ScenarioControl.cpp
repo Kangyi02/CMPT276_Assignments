@@ -64,7 +64,7 @@ void createReleaseControl()
     Product *temp;
     Product *chosen;
 
-    // 
+    //
     seekToBeginningOfProductFile();
 
     while (temp != NULL) // question
@@ -84,14 +84,14 @@ void createReleaseControl()
                 break;
         }
 
-        cout << i+2 << ") More\n";
+        cout << i + 2 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input;
 
-        if (1 <= user_input <= i+1)
+        if (1 <= user_input <= i + 1)
         {
             chosen = &product_list[user_input - 1];
             break;
@@ -125,11 +125,11 @@ void createReleaseControl()
 void createChangeRequestControl()
 {
     // Get the product name
-    Requester requester_list[20]; 
+    Requester requester_list[20];
     Requester *temp;
     Requester *chosen_requester;
 
-    // 
+    //
     seekToBeginningOfRequesterFile();
 
     while (temp != NULL) // question
@@ -143,24 +143,24 @@ void createChangeRequestControl()
             if (temp != NULL)
             {
                 requester_list[i] = *temp;
-                cout << i + 1 << ") " << temp->get_RequesterName() 
-                                      << temp->phone_number 
-                                      << temp->email 
-                                      << temp->department
-                                      <<"\n";
+                cout << i + 1 << ") " << temp->get_RequesterName()
+                     << temp->phone_number
+                     << temp->email
+                     << temp->department
+                     << "\n";
             }
             else
                 break;
         }
 
-        cout << i+2 << ") Show more requesters\n";
+        cout << i + 2 << ") Show more requesters\n";
         cout << "0) Create a new requester\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input;
 
-        if (1 <= user_input <= i+1)
+        if (1 <= user_input <= i + 1)
         {
             chosen_requester = &requester_list[user_input - 1];
             break;
@@ -168,10 +168,10 @@ void createChangeRequestControl()
         else if (user_input == 0)
         {
             cout << "Creating a new requester: \n"
-                << "Enter requester's name ('Last name, First name’, max 30 chars): ";
-            
+                 << "Enter requester's name ('Last name, First name’, max 30 chars): ";
+
             // ask every thing, make a requester object, create requester
-            // cin >> 
+            // cin >>
             //
             //
             cout << "The new requester has been successfully added. \n";
@@ -184,7 +184,7 @@ void createChangeRequestControl()
     Product *temp1;
     Product *chosen_product;
 
-    // 
+    //
     seekToBeginningOfProductFile();
 
     while (temp1 != NULL) // question
@@ -204,14 +204,14 @@ void createChangeRequestControl()
                 break;
         }
 
-        cout << i+2 << ") More\n";
+        cout << i + 2 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input;
 
-        if (1 <= user_input <= i+1)
+        if (1 <= user_input <= i + 1)
         {
             chosen_product = &product_list[user_input - 1];
             break;
@@ -231,11 +231,11 @@ void createChangeRequestControl()
     {
         cout << "Which change corresponds to the change request? \n";
         // change formats later
-        cout << "Description                     " 
-            << "change ID   " 
-            << "State      " 
-            << "Priority     " 
-            << "Anticipated Release\n";
+        cout << "Description                     "
+             << "change ID   "
+             << "State      "
+             << "Priority     "
+             << "Anticipated Release\n";
 
         int i;
         for (i = 0; i < 20; i++) // problem
@@ -246,23 +246,23 @@ void createChangeRequestControl()
                 change_list[i] = *temp2;
                 // change format later
                 cout << i + 1 << ") " << temp2->description
-                                        << temp2->getChange_ID()
-                                        << temp2->status
-                                        << temp2->priority
-                                        << temp2->anticipated_release_ID << "\n";
+                     << temp2->getChange_ID()
+                     << temp2->status
+                     << temp2->priority
+                     << temp2->anticipated_release_ID << "\n";
             }
             else
                 break;
         }
 
-        cout << i+2 << ") More\n";
+        cout << i + 2 << ") More\n";
         cout << "0) New Change\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input;
 
-        if (1 <= user_input <= i+1)
+        if (1 <= user_input <= i + 1)
         {
             chosen_change = &change_list[user_input - 1];
             break;
@@ -277,7 +277,7 @@ void createChangeRequestControl()
             chosen_change->product_name = chosen_product->getProduct_name();
             chosen_change->anticipated_release_ID = "None";
 
-            cout<< "The new change has been successfully created. ";
+            cout << "The new change has been successfully created. ";
             createChange(chosen_change);
         }
     }
@@ -287,7 +287,7 @@ void createChangeRequestControl()
     Release *temp3;
     Release *chosen_release;
 
-    // 
+    //
     seekToBeginningOfReleaseFile();
 
     while (temp3 != NULL) // question
@@ -295,8 +295,8 @@ void createChangeRequestControl()
         cout << "Select a reported release that corresponds to this change request: \n";
 
         // change formats later
-        cout << "Release ID" 
-            << "Release date\n";
+        cout << "Release ID"
+             << "Release date\n";
 
         int i;
         for (i = 0; i < 20; i++) // problem
@@ -307,19 +307,19 @@ void createChangeRequestControl()
                 release_list[i] = *temp3;
                 // change format later
                 cout << i + 1 << ") " << temp3->getRelease_ID()
-                                        << temp3->release_date << "\n";
+                     << temp3->release_date << "\n";
             }
             else
                 break;
         }
 
-        cout << i+2 << ") More\n";
+        cout << i + 2 << ") More\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input;
 
-        if (1 <= user_input <= i+1)
+        if (1 <= user_input <= i + 1)
         {
             chosen_release = &release_list[user_input - 1];
             break;
@@ -328,7 +328,7 @@ void createChangeRequestControl()
 
     // get other info
     cout << "Enter the request date of the change request (YYYY-MM-DD): ";
-    ChangeRequest* new_changeRequest;
+    ChangeRequest *new_changeRequest;
     cin >> new_changeRequest->request_date;
     new_changeRequest->setRequester_name(chosen_requester->get_RequesterName());
     new_changeRequest->setChange_ID(chosen_change->getChange_ID());
@@ -347,7 +347,7 @@ void queryChangeControl()
     Product *temp1;
     Product *chosen_product;
 
-    // 
+    //
     seekToBeginningOfProductFile();
 
     while (temp1 != NULL) // question
@@ -366,14 +366,14 @@ void queryChangeControl()
                 break;
         }
 
-        cout << i+2 << ") More\n";
+        cout << i + 2 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input;
 
-        if (1 <= user_input <= i+1)
+        if (1 <= user_input <= i + 1)
         {
             chosen_product = &product_list[user_input - 1];
             break;
@@ -391,10 +391,10 @@ void queryChangeControl()
 
     while (temp2 != NULL) // question
     {
-        cout << "Changes in the product '"<< chosen_product->getProduct_name() << "':\n";
+        cout << "Changes in the product '" << chosen_product->getProduct_name() << "':\n";
         // change formats later
-        cout << "Description                     " 
-            << "change ID   \n";
+        cout << "Description                     "
+             << "change ID   \n";
 
         int i;
         for (i = 0; i < 20; i++) // problem
@@ -405,21 +405,21 @@ void queryChangeControl()
                 change_list[i] = *temp2;
                 // change format later
                 cout << i + 1 << ") " << temp2->description
-                                        << temp2->getChange_ID()
-                                        << "\n";
+                     << temp2->getChange_ID()
+                     << "\n";
             }
             else
                 break;
         }
 
-        cout << i+2 << ") More\n";
+        cout << i + 2 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input;
 
-        if (1 <= user_input <= i+1)
+        if (1 <= user_input <= i + 1)
         {
             chosen_change = &change_list[user_input - 1];
             break;
@@ -429,12 +429,12 @@ void queryChangeControl()
     }
 
     cout << "Here is the information about the change item you queried: \n";
-    cout << "Product    " 
-        << "Description                     " 
-        << "change ID   " 
-        << "State      " 
-        << "Priority     "
-        << "Anticipated Release\n";
+    cout << "Product    "
+         << "Description                     "
+         << "change ID   "
+         << "State      "
+         << "Priority     "
+         << "Anticipated Release\n";
 
     cout << chosen_product->getProduct_name()
          << chosen_change->description
@@ -447,13 +447,13 @@ void queryChangeControl()
 // Update control
 void updateChangeControl()
 {
-     // get product
+    // get product
     // Get the product name
     Product product_list[20]; // sth
     Product *temp1;
     Product *chosen_product;
 
-    // 
+    //
     seekToBeginningOfProductFile();
 
     while (temp1 != NULL) // question
@@ -473,14 +473,14 @@ void updateChangeControl()
                 break;
         }
 
-        cout << i+2 << ") More\n";
+        cout << i + 2 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input;
 
-        if (1 <= user_input <= i+1)
+        if (1 <= user_input <= i + 1)
         {
             chosen_product = &product_list[user_input - 1];
             break;
@@ -500,11 +500,11 @@ void updateChangeControl()
     {
         cout << "Select a change you want to update: \n";
         // change formats later
-        cout << "Description                     " 
-            << "change ID   " 
-            << "State      " 
-            << "Priority     " 
-            << "Anticipated Release\n";
+        cout << "Description                     "
+             << "change ID   "
+             << "State      "
+             << "Priority     "
+             << "Anticipated Release\n";
 
         int i;
         for (i = 0; i < 20; i++) // problem
@@ -512,26 +512,27 @@ void updateChangeControl()
             temp2 = filterChange(chosen_product->getProduct_name());
             if (temp2 != NULL)
             {
+
                 change_list[i] = *temp2;
                 // change format later
                 cout << i + 1 << ") " << temp2->description
-                                        << temp2->getChange_ID()
-                                        << temp2->status
-                                        << temp2->priority
-                                        << temp2->anticipated_release_ID << "\n";
+                     << temp2->getChange_ID()
+                     << temp2->status
+                     << temp2->priority
+                     << temp2->anticipated_release_ID << "\n";
             }
             else
                 break;
         }
 
-        cout << i+2 << ") More\n";
+        cout << i + 2 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input;
 
-        if (1 <= user_input <= i+1)
+        if (1 <= user_input <= i + 1)
         {
             chosen_change = &change_list[user_input - 1];
             break;
@@ -543,60 +544,60 @@ void updateChangeControl()
     }
 
     cout << "Updating the change with the change ID '1234' in the product '"
-        << chosen_product->getProduct_name() << "':\n"
-        << "Do you want to replace the description (Y/N)? ";
+         << chosen_product->getProduct_name() << "':\n"
+         << "Do you want to replace the description (Y/N)? ";
     char user_input1[1];
     cin >> user_input1;
-    if (user_input1=="Y" || user_input1=="y")
+    if (user_input1 == "Y" || user_input1 == "y")
     {
         cout << "Old description is: "
-            << chosen_change->description
-            << "\n"
-            << "New description is: "
-            << user_input1;
+             << chosen_change->description
+             << "\n"
+             << "New description is: "
+             << user_input1;
         chosen_change->description = user_input1;
     }
 
     // update status
     cout << "The current 'status' is Reported.\n"
-        << "Select a status that you want to update to:\n"
-        << "1) Reported\n"
-        << "2) Evaluated\n"
-        << "3) Cancelled\n"
-        << "4) In process\n"
-        << "5) Done\n"
-        << "0) Keep the current status\n"
-        << "Enter selection: ";
+         << "Select a status that you want to update to:\n"
+         << "1) Reported\n"
+         << "2) Evaluated\n"
+         << "3) Cancelled\n"
+         << "4) In process\n"
+         << "5) Done\n"
+         << "0) Keep the current status\n"
+         << "Enter selection: ";
 
     int user_input2;
     cin >> user_input2;
-    switch(user_input2)
+    switch (user_input2)
     {
-        case 1:
-            chosen_change->status == "Reported";
-            break;
-        case 2:
-            chosen_change->status == "Evaluated";
-            break;
-        case 3:
-            chosen_change->status == "Cancelled";
-            break;
-        case 4:
-            chosen_change->status == "In process";
-            break;
-        case 5:
-            chosen_change->status == "Done";
-            break;
-        case 0:
-            break;
+    case 1:
+        chosen_change->status == "Reported";
+        break;
+    case 2:
+        chosen_change->status == "Evaluated";
+        break;
+    case 3:
+        chosen_change->status == "Cancelled";
+        break;
+    case 4:
+        chosen_change->status == "In process";
+        break;
+    case 5:
+        chosen_change->status == "Done";
+        break;
+    case 0:
+        break;
     }
 
     // update priority
     cout << "The current priority is " << chosen_change->priority
-        << "Enter a new priority, or 0 to keep the current priority: ";
-    
+         << "Enter a new priority, or 0 to keep the current priority: ";
+
     cin >> user_input2;
-    if (user_input2!=0)
+    if (user_input2 != 0)
         chosen_change->priority = user_input2;
 
     // update release id
@@ -607,7 +608,7 @@ void updateChangeControl()
     Release *temp3;
     Release *chosen_release;
 
-    // 
+    //
     seekToBeginningOfReleaseFile();
 
     while (temp3 != NULL) // question
@@ -615,11 +616,11 @@ void updateChangeControl()
         cout << "Select an anticipated release that you want to update to: \n";
 
         // change formats later
-        cout << "Release ID" 
-            << "Release date\n";
+        cout << "Release ID"
+             << "Release date\n";
 
         int i;
-        for (i = 0; i < 20; i++) 
+        for (i = 0; i < 20; i++)
         {
             temp3 = filterRelease(chosen_product->getProduct_name());
             if (temp2 != NULL)
@@ -627,20 +628,20 @@ void updateChangeControl()
                 release_list[i] = *temp3;
                 // change format later
                 cout << i + 1 << ") " << temp3->getRelease_ID()
-                                        << temp3->release_date << "\n";
+                     << temp3->release_date << "\n";
             }
             else
                 break;
         }
 
-        cout << i+2 << ") More\n";
+        cout << i + 2 << ") More\n";
         cout << "0) Keep the current release\n"
              << "Enter selection: ";
 
         int user_input;
         cin >> user_input;
 
-        if (1 <= user_input <= i+1)
+        if (1 <= user_input <= i + 1)
         {
             chosen_release = &release_list[user_input - 1];
             // update the release id
@@ -654,11 +655,11 @@ void updateChangeControl()
     updateChange(chosen_change);
     // print out the updated change info
     cout << "Change '1234' has been updated:\n"
-        << "Description                     " 
-        << "change ID   " 
-        << "State      " 
-        << "Priority     "
-        << "Anticipated Release\n";
+         << "Description                     "
+         << "change ID   "
+         << "State      "
+         << "Priority     "
+         << "Anticipated Release\n";
 
     cout << chosen_change->description
          << chosen_change->getChange_ID()
@@ -668,8 +669,295 @@ void updateChangeControl()
 }
 
 // Reports control
-void allChangesReportControl();
-void allRequestersReportControl();
+void allChangesReportControl()
+{
+    // get product
+    // Get the product name
+    Product product_list[20]; // sth
+    Product *temp1;
+    Product *chosen_product;
+
+    //
+    seekToBeginningOfProductFile();
+
+    while (temp1 != NULL) // question
+    {
+        cout << "Select a product to print its report: \n";
+        int i;
+        for (i = 0; i < 20; i++) // problem
+        {
+            temp1 = getProduct();
+            if (temp1 != NULL)
+            {
+                product_list[i] = *temp1;
+                cout << i + 1 << ") " << temp1->getProduct_name() << "\n";
+            }
+            else
+                break;
+        }
+
+        cout << i + 2 << ") More\n";
+        cout << "0) Exit\n";
+        cout << "Enter selection: ";
+
+        int user_input;
+        cin >> user_input;
+
+        if (1 <= user_input <= i + 1)
+        {
+            chosen_product = &product_list[user_input - 1];
+            break;
+        }
+        else if (user_input == 0)
+            return;
+    }
+
+    // get changes
+    Change change_list[20]; // sth
+    Change *temp2;
+    Change *chosen_change;
+
+    seekToBeginningOfChangeFile();
+
+    while (temp2 != NULL) // question
+    {
+        cout << "Change report for the product '" << chosen_product->getProduct_name() << "': \n";
+
+        // change formats later
+        cout << "Description                     "
+             << "change ID   "
+             << "State      "
+             << "Priority     "
+             << "Anticipated Release\n";
+
+        int i;
+        for (i = 0; i < 20; i++) // problem
+        {
+            temp2 = filterChange_doneOrCancelled(chosen_product->getProduct_name()); // filter both product name and status
+            if (temp2 != NULL)
+            {
+                    change_list[i] = *temp2;
+                    // change format later
+                    cout << i + 1 << ") " << temp2->description
+                         << temp2->getChange_ID()
+                         << temp2->status
+                         << temp2->priority
+                         << temp2->anticipated_release_ID << "\n";
+            }
+            else
+                break;
+        }
+
+        cout << i + 2 << ") More\n";
+        cout << "0) Exit\n";
+        cout << "Enter selection: ";
+
+        int user_input;
+        cin >> user_input;
+
+        if (user_input == 0)
+            return;
+    }
+}
+
+void allRequestersReportControl()
+{
+    // get product
+    // Get the product name
+    Product product_list[20]; // sth
+    Product *temp1;
+    Product *chosen_product;
+
+    //
+    seekToBeginningOfProductFile();
+
+    while (temp1 != NULL) // question
+    {
+        cout << "Select a product to print its report: \n";
+        int i;
+        for (i = 0; i < 20; i++) // problem
+        {
+            temp1 = getProduct();
+            if (temp1 != NULL)
+            {
+                product_list[i] = *temp1;
+                cout << i + 1 << ") " << temp1->getProduct_name() << "\n";
+            }
+            else
+                break;
+        }
+
+        cout << i + 2 << ") More\n";
+        cout << "0) Exit\n";
+        cout << "Enter selection: ";
+
+        int user_input;
+        cin >> user_input;
+
+        if (1 <= user_input <= i + 1)
+        {
+            chosen_product = &product_list[user_input - 1];
+            break;
+        }
+        else if (user_input == 0)
+            return;
+    }
+
+    // get changes
+    Change change_list[20]; // sth
+    Change *temp2;
+    Change *chosen_change;
+
+    seekToBeginningOfChangeFile();
+
+    while (temp2 != NULL) // question
+    {
+        cout << "Change report for the product '" << chosen_product->getProduct_name() << "': \n";
+
+        // change formats later
+        cout << "Description                     "
+             << "change ID   "
+             << "State      "
+             << "Priority     "
+             << "Anticipated Release\n";
+
+        int i;
+        for (i = 0; i < 20; i++) // problem
+        {
+            temp2 = filterChange(chosen_product->getProduct_name()); // filter both product name and status
+            if (temp2 != NULL)
+            {
+                    change_list[i] = *temp2;
+                    // change format later
+                    cout << i + 1 << ") " << temp2->description
+                         << temp2->getChange_ID()
+                         << temp2->status
+                         << temp2->priority
+                         << temp2->anticipated_release_ID << "\n";
+            }
+            else
+                break;
+        }
+
+        cout << i + 2 << ") More\n";
+        cout << "0) Exit\n";
+        cout << "Enter selection: ";
+
+        int user_input;
+        cin >> user_input;
+
+        if (1 <= user_input <= i + 1)
+        {
+            chosen_change = &change_list[user_input - 1];
+            break;
+        }
+        else if (user_input == 0)
+        {
+            return;
+        }
+    }
+
+    // get release
+    Release release_list[20]; // sth
+    Release *temp3;
+    Release *chosen_release;
+
+    //
+    seekToBeginningOfReleaseFile();
+
+    while (temp3 != NULL) // question
+    {
+        cout << "Select an anticipated release that you want to update to: \n";
+
+        // change formats later
+        cout << "Release ID"
+             << "Release date\n";
+
+        int i;
+        for (i = 0; i < 20; i++)
+        {
+            temp3 = filterRelease(chosen_product->getProduct_name());
+            if (temp2 != NULL)
+            {
+                release_list[i] = *temp3;
+                // change format later
+                cout << i + 1 << ") " << temp3->getRelease_ID()
+                     << temp3->release_date << "\n";
+            }
+            else
+                break;
+        }
+
+        cout << i + 2 << ") More\n";
+        cout << "0) Exit\n"
+             << "Enter selection: ";
+
+        int user_input;
+        cin >> user_input;
+
+        if (1 <= user_input <= i + 1)
+        {
+            chosen_release = &release_list[user_input - 1];
+            break;
+        }
+        else if (user_input == 0)
+            break;
+    }
+
+    // 
+    Requester requester_list[20]; // sth
+    Requester *temp4;
+    Requester *chosen_requester;
+
+    ChangeRequest changeRequester_list[20]; // sth
+    ChangeRequest *temp5;
+    ChangeRequest *chosen_changeRequester;
+
+    //
+    seekToBeginningOfRequesterFile();
+    seekToBeginningOfChangeRequestFile();
+
+    // print out header info
+    cout << "Here is the report: \n" 
+         << "Product: " << chosen_product->getProduct_name()
+         << "Change description: " << chosen_change->description
+         << "Change ID: " << chosen_change->getChange_ID()
+         << "Release ID: " << chosen_release->getRelease_ID()
+         << "State: " << chosen_change->status;
+
+    while (temp5 != NULL) // question
+    {
+        int i;
+        cout << "Requester" << "Email";
+        for (i = 0; i < 20; i++)
+        {
+            temp5 = filter_ChangeRequest(chosen_change->getChange_ID(), chosen_release->getRelease_ID());
+            if (temp5 != NULL)
+            {
+                temp4 = filer_requester(temp5->getRequester_name());
+                requester_list[i] = *temp4;
+                cout << i+1 << temp4->get_RequesterName() << temp4->email;
+            }
+            else
+                break;
+        }
+
+        cout << i + 2 << ") More\n";
+        cout << "0) Exit\n"
+             << "Enter selection: ";
+
+        int user_input;
+        cin >> user_input;
+
+        if (1 <= user_input <= i + 1)
+        {
+            chosen_release = &release_list[user_input - 1];
+            break;
+        }
+        else if (user_input == 0)
+            break;
+    }
+}
 
 // ShutDown control
 void shutDownControl();

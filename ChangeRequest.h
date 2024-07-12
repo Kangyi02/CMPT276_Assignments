@@ -75,4 +75,8 @@ void createChangeRequest(ChangeRequest* new_cr);
 
 // Get a single change request record
 ChangeRequest* getChangeRequest();
+
+void seekToBeginningOfChangeRequestFile();
+
+ChangeRequest* filter_ChangeRequest(int change_ID, char* release_ID);
 #endif
