@@ -15,8 +15,11 @@ ensuring clear separation of concerns and ease of maintenance.
 
 #include <iostream>
 #include "ScenarioControl.h"
+#include "Requester.h"
 #include "Product.h"
 #include "Release.h"
+#include "ChangeRequest.h"
+#include "Change.h"
 
 using std::cin;
 using std::cout;
