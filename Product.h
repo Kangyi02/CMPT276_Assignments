@@ -13,9 +13,6 @@ of products is hidden, providing a clean and straightforward interface for inter
 #ifndef Product_H
 #define Product_H
 
-using std::ifstream;
-using std::ofstream;
-
 /*----------------------------------------------------------*/
 // Exported constants/types/variables
 // Define the file stream object

@@ -14,7 +14,7 @@ straightforward interface for interaction.
 #ifndef Requester_H
 #define Requester_H
 
-#include "ChangeRequest.h"
+extern int requesterPosition;
 
 /*
 ----------------------------------------------------------

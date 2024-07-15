@@ -14,14 +14,12 @@ providing a clean and straightforward interface for interaction.
 #ifndef Release_H
 #define Release_H
 
-#include "Product.h"
-#include "ChangeRequest.h"
-#include "Change.h"
-
 /*
 ----------------------------------------------------------
 // Exported constants/types/variables
 */
+
+extern int releasePosition;
 
 // Release class
 class Release

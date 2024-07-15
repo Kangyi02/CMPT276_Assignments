@@ -19,10 +19,6 @@ data without affecting the external interface.
 #ifndef Change_H
 #define Change_H
 
-#include "Release.h"
-#include "ChangeRequest.h"
-#include "Product.h"
-
 /*
 ----------------------------------------------------------
 //Exported constants/types/variables

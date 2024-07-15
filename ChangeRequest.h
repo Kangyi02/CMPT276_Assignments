@@ -15,10 +15,7 @@ straightforward interface for interaction.
 #ifndef ChangeRequest_H
 #define ChangeRequest_H
 
-#include <iostream> 
-#include "Requester.h"
-#include "Change.h"
-#include "Release.h"
+extern int changeRequestPosition;
 
 /*
 ----------------------------------------------------------
@@ -43,6 +40,7 @@ public:
     // Destructor
     ~ChangeRequest();
 
+    //will move to cpp file
     void setRequester_name(char* req_name)
     {
         requester_name = req_name;
