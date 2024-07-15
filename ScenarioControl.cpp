@@ -749,7 +749,7 @@ void allChangesReportControl()
         int i;
         for (i = 0; i < 20; i++) // problem
         {
-            temp2 = filterChange_doneOrCancelled(chosen_product->getProduct_name()); // Filter changes by product name and status
+            temp2 = filterChange_DoneOrCancelled(chosen_product->getProduct_name()); // Filter changes by product name and status
             if (temp2 != NULL)
             {
                     change_list[i] = *temp2;
@@ -954,10 +954,10 @@ void allRequestersReportControl()
         cout << "Requester" << "Email";
         for (i = 0; i < 20; i++)
         {
-            temp5 = filter_ChangeRequest(chosen_change->getChange_ID(), chosen_release->getRelease_ID()); // Filter change requests by change ID and release ID
+            temp5 = filterChangeRequest(chosen_change->getChange_ID(), chosen_release->getRelease_ID()); // Filter change requests by change ID and release ID
             if (temp5 != NULL)
             {
-                temp4 = filer_requester(temp5->getRequester_name());    // Get the requester by name
+                temp4 = filerRequester(temp5->getRequester_name());    // Get the requester by name
                 requester_list[i] = *temp4;
                 // Display each requester
                 cout << i+1 << temp4->get_RequesterName() << temp4->email;
