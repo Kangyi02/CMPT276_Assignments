@@ -16,8 +16,6 @@ straightforward interface for interaction.
 
 extern int requesterPosition;
 
-#include "ChangeRequest.h"
-
 /*
 ----------------------------------------------------------
 // Exported constants/types/variables

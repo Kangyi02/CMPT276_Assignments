@@ -43,7 +43,7 @@ char* Requester::get_RequesterName() {
 
 void initRequester()
 {
-    requesterFileStream.open("requesters.bin", ios::out | ios::trunc | ios::binary);
+    requesterFileStream.open("requesters.bin", ios::in | ios::out | ios::binary | ios::app);
     if (!requesterFileStream) {
         cerr << "Error opening Requester file for initialization." << endl;
     }
