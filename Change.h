@@ -78,5 +78,5 @@ void seekToBeginningOfChangeFile();
 
 Change* filterChange(char* product_name);
 
-Change* filterChange_doneOrCancelled(char* product_name);
+Change* filterChange_DoneOrCancelled(char* product_name);
 #endif

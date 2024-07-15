@@ -52,5 +52,5 @@ char* createRequester();
 
 void seekToBeginningOfRequesterFile();
 
-Requester* filer_requester(char* requester_name);
+Requester* filerRequester(char* requester_name);
 #endif

@@ -78,5 +78,5 @@ ChangeRequest* getChangeRequest();
 
 void seekToBeginningOfChangeRequestFile();
 
-ChangeRequest* filter_ChangeRequest(int change_ID, char* release_ID);
+ChangeRequest* filterChangeRequest(int change_ID, char* release_ID);
 #endif
