@@ -60,10 +60,12 @@ void closeRequester() {
 }
 
 // Get the next requester
-Requester getNextRequester() {
-    Requester req;
-    requesterFileStream.read(reinterpret_cast<char*>(&req), sizeof(Requester));
-    return req;
+bool getNextRequester(Requester* req) {
+    if(requesterFileStream.read(reinterpret_cast<char*>(req), sizeof(Requester)))
+    {
+        return true;
+    }
+    return false;
 }
 
 // Create a new requester
