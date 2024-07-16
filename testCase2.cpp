@@ -17,7 +17,7 @@ int main() {
     initChange();
 
     // Create a new change
-    Change change1("0", 3, "reported", "Initial change description", "ProductA", "R1");
+    Change change1("0", 3, "Reported", "Initial change description", "ProductA", "R1");
     change1.setChange_ID();  // Set a unique change ID
     createChange(&change1);  // Create the change
 
@@ -27,7 +27,7 @@ int main() {
     assert(retrievedChange != nullptr && compareChanges(change1, *retrievedChange));
 
     // Update the change
-    Change updatedChange("0", 4, "in process", "Updated change description", "ProductA", "R2");
+    Change updatedChange("0", 4, "In process", "Updated change description", "ProductA", "R2");
     updatedChange.setChange_ID();  // Keep the same change ID for update
     updateChange(&updatedChange);  // Update the change
 
@@ -35,10 +35,6 @@ int main() {
     seekToBeginningOfChangeFile();
     Change* updatedRetrievedChange = getChange(updatedChange.product_name);
     assert(updatedRetrievedChange != nullptr && compareChanges(updatedChange, *updatedRetrievedChange));
-
-    // Clean up
-    delete retrievedChange;
-    delete updatedRetrievedChange;
 
     // Shut down the change file
     closeChange();
