@@ -23,19 +23,13 @@ extern int requesterPosition;
 
 // Requester class
 class Requester {
-private:
-    char* requester_name; // max 20 chars: last name, first name
 public:
-    int phone_number; // YYYY-MM-DD
-    char* email; // max 24 chars
-    char* department;
-    // Constructors
+    char requester_name[21]; // max 20 chars: last name, first name
+    int phone_number[11]; // YYYY-MM-DD
+    char email[25]; // max 24 chars
+    char department[13];
+
     Requester();
-    Requester(const char* name, int phone, const char* email);
-    Requester(const Requester& other);
-    // Destructor
-    ~Requester();
-    char* get_RequesterName();
 };
 
 // Initialize the requester file
@@ -45,12 +39,12 @@ void initRequester();
 void closeRequester();
 
 // Get requester name 
-Requester* getRequester();
+Requester getNextRequester();
 
 // Create a new requester
-char* createRequester();
+char createRequester();
 
 void seekToBeginningOfRequesterFile();
 
-Requester* filerRequester(char* requester_name);
+Requester filterRequester(char requester_name);
 #endif
