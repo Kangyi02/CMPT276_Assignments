@@ -24,7 +24,8 @@ extern int requesterPosition;
 // Requester class
 class Requester {
 private:
-    char* requester_name; // max 20 chars: last name, first name
+    ; // max 20 chars: last name, first name  
+    char requester_name[10];
 public:
     int phone_number; // YYYY-MM-DD
     char* email; // max 24 chars
