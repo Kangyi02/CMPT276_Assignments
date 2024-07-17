@@ -1,10 +1,15 @@
 #include "StartUp.h"
 #include "UI.h"
+#include <iostream>
 
 int main()
 {
-    initStart();
-    activateUI();
+    if (initStart()) {
+        std::cout << "All modules initialized successfully." << std::endl;
+        activateUI();
+    } else {
+        std::cout << "Failed to initialize one or more modules." << std::endl;
+    }
     return 0;
 }
 
