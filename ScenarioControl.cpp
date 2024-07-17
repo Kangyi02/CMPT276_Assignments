@@ -45,7 +45,8 @@ void createProductControl()
     // Check user input and proceed accordingly
     if (userInput == "y" || userInput == "Y")
     {
-        createProduct(product_name); // Create the product(Writing product record to the file) and confirm success
+        // Create the product(Writing product record to the file) and confirm success
+        createProduct(product_name); 
         cout << "The new product has been successfully added.";
     }
     else if (userInput == "n" || userInput == "N")
@@ -54,6 +55,7 @@ void createProductControl()
     // Ask if the user wants to add another product
     cout << "Do you want to add another product(Y/N)? ";
     cin >> userInput;
+
     // If yes, call the function again to add another product
     if (userInput == "y" || userInput == "Y") 
         createProductControl();
@@ -64,20 +66,21 @@ void createProductControl()
 // Function to control the creation of a release
 void createReleaseControl()
 {
-    // Array to store a list of products
-    Product product_list[20]; 
-    Product *temp;   // Temporary product pointer
-    Product *chosen;  // Chosen product pointer
-
     // Move the file pointer to the beginning of the product file
     seekToBeginningOfProductFile();
-    // Loop to display product list and select a product
-    while (temp != NULL) // question
+
+     // Array to store a list of products
+    Product product_list[20]; 
+    Product *temp = getProduct();   // Temporary product pointer
+    Product *chosen;  // Chosen product pointer
+
+    while (getNextProduct(temp) == true) 
     {
+        // Loop to display product list and select a product
         cout << "For which product you want to add a new release to: \n";
-        cout << "Product    ";
+        cout << "Product    \n";
         int i;
-        for (i = 0; i < 20; i++) // problem
+        for (i = 0; i < 20; i++) 
         {
             temp = getProduct();    // Get the next product from the file
             if (temp != NULL)
@@ -88,6 +91,7 @@ void createReleaseControl()
             else
                 break;  // Exit loop if no more products
         }
+
         // Display options for more products or exit
         cout << i + 2 << ") More\n";
         cout << "0) Exit\n";
@@ -109,10 +113,12 @@ void createReleaseControl()
     cout << "Enter a release ID of the new release(max 8 chars): ";
     char release_ID[8]; // should it be global??
     cin >> release_ID;
+
     // Prompt user to enter release date
     cout << "Enter a release date of the release (YYYY-MM-DD): ";
     char release_date[10]; // should it be global??
     cin >> release_date;
+
     // Confirm adding the release
     cout << "Are you sure you want to add the release(Y/N)? ";
     // Check user input and proceed accordingly
@@ -132,20 +138,22 @@ void createReleaseControl()
 // Function to control the creation of a change request
 void createChangeRequestControl()
 {
-    // Array to store a list of requesters
-    Requester requester_list[20];
-    Requester *temp;    // Temporary requester pointer
-    Requester *chosen_requester;   // Chosen requester pointer
-
     // Move the file pointer to the beginning of the requester file
     seekToBeginningOfRequesterFile();
+
+    // Array to store a list of requesters
+    Requester requester_list[20];
+    Requester *temp = getRequester();    // Temporary requester pointer
+    Requester *chosen_requester;   // Chosen requester pointer
+
+    cout << "Select a requester that reports this change request: \n";
+    cout << "Requester name                " << "Phone      " << "Email                   " << "Department  ";
+    
     // Loop to display requester list and select a requester
+    int i;
     while (temp != NULL) // question
     {
-        cout << "Select a requester that reports this change request: \n";
-        int i;
-        cout << "Requester name                " << "Phone      " << "Email                   " << "Department  ";
-        for (i = 0; i < 20; i++) // problem
+        for (i = 1; i < 20; i++) // problem
         {
             temp = getRequester();  // Get the next requester from the file
             if (temp != NULL)
@@ -187,20 +195,21 @@ void createChangeRequestControl()
         }
     }
 
-    // Array to store a list of products
-    Product product_list[20]; 
-    Product *temp1;     // Temporary product pointer
-    Product *chosen_product;    // Chosen product pointer
-
     // Move the file pointer to the beginning of the product file
     seekToBeginningOfProductFile();
+
+    // Array to store a list of products
+    Product product_list[20]; 
+    Product *temp1 = getProduct();     // Temporary product pointer
+    Product *chosen_product;    // Chosen product pointer
+
+    cout << "Select a product that corresponds to this change request: \n";
+    cout << "Product    ";
+
     // Loop to display product list and select a product
     while (temp1 != NULL) // question
     {
-        cout << "Select a product that corresponds to this change request: \n";
-        cout << "Product    ";
-        int i;
-        for (i = 0; i < 20; i++) // problem
+        for (int i = 1; i < 20; i++) // problem
         {
             temp1 = getProduct();   // Get the next product from the file
             if (temp1 != NULL)
@@ -228,12 +237,13 @@ void createChangeRequestControl()
             return; // Return if user chooses to exit
     }
 
-    // Array to store a list of changes
-    Change change_list[20];
-    Change *temp2; // Temporary change pointer
-    Change *chosen_change; // Chosen change pointer
     // Move the file pointer to the beginning of the change file
     seekToBeginningOfChangeFile();
+
+    // Array to store a list of changes
+    Change change_list[20];
+    Change *temp2 = filterChange(chosen_product->getProduct_name()); // Temporary change pointer
+    Change *chosen_change; // Chosen change pointer
 
     // Loop to display change list and select a change
     while (temp2 != NULL) // question
@@ -246,10 +256,9 @@ void createChangeRequestControl()
              << "Priority     "
              << "Anticipated Release\n";
 
-        int i;
-        for (i = 0; i < 20; i++) // problem
+        for (i = 1; i < 20; i++) // problem
         {
-            temp2 = filterChange(chosen_product->getProduct_name());   // Filter changes by product name 
+            temp2 = filterChange(chosen_product->getProduct_name());  // Filter changes by product name 
             if (temp2 != NULL)
             {
                 change_list[i] = *temp2;    // Add change to the list
@@ -400,6 +409,7 @@ void queryChangeControl()
 
     // Move the file pointer to the beginning of the change file
     seekToBeginningOfChangeFile();
+
     // Loop to display change list and select a change
     while (temp2 != NULL) // question
     {
@@ -981,6 +991,7 @@ void allRequestersReportControl()
         else if (user_input == 0)
             break;
     }
+
 }
 
 // Function to control the shutdown process
