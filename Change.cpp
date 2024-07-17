@@ -95,7 +95,7 @@ bool addChange(Change* ch)
     return false;
 }
 
-// Helper function that check if two int array is same
+// Helper function of updateChange() that check if two int array is same
 // Precondition: two array need to have the same length
 bool intArrayEqual(int* arr1, int* arr2)
 {
