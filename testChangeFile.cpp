@@ -46,7 +46,7 @@ int main() {
     // Verify the change was written to the file
     seekToBeginningOfChangeFile();
     Change retrievedChange;
-    //assert(getNextChange(&retrievedChange));
+    assert(getNextChange(&retrievedChange));
     assert(compareChanges(change1, retrievedChange));
 
     // Update the change (without changing change_ID and product_name)
