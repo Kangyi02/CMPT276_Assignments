@@ -100,7 +100,40 @@ bool addChange(Change* ch)
 // Update attritube of provided change
 bool updateChange(Change* ch)
 {
-    
+    Change currentChange;
+    ChangeFileStream.seekg(1, ios::beg); // set g to the beginning skipping dummy
+    int position = 1; // counter for offset
+    // loop until reach the end of file
+    while(ChangeFileStream.read(reinterpret_cast<char*>(&currentChange), sizeof(Change)))
+    {
+        // start manipulation if change ID match
+        if(intArrayEqual(currentChange.change_ID, ch->change_ID))
+        {
+            ChangeFileStream.seekp(position* sizeof(Change), ios::beg);
+            ChangeFileStream.write(reinterpret_cast<const char*>(&currentChange), sizeof(Change));
+            if (!ChangeFileStream) 
+            {
+            cerr << "Error writing to file." << endl;
+            return false;
+            }
+            return true;
+        }
+        position += 1;
+    }
+}
+
+// Helper function that check if two int array is same
+// Precondition: two array need to have the same length
+bool intArrayEqual(int* arr1, int* arr2)
+{
+    for(int i = 0; i < sizeof(arr1); ++i)
+    {
+        if(arr1[i] != arr2[i])
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 // Filter change by product name
