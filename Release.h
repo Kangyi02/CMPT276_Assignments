@@ -19,8 +19,6 @@ providing a clean and straightforward interface for interaction.
 // Exported constants/types/variables
 */
 
-extern int releasePosition;
-
 // Release class
 class Release
 {

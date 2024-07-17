@@ -15,8 +15,6 @@ straightforward interface for interaction.
 #ifndef ChangeRequest_H
 #define ChangeRequest_H
 
-extern int changeRequestPosition;
-
 /*
 ----------------------------------------------------------
 // Exported constants/types/variables
