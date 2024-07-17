@@ -58,5 +58,5 @@ Release* getRelease(char* product_name);
 
 void seekToBeginningOfReleaseFile();
 
-Release* filterRelease(char* product_name)
+Release* filterRelease(char* product_name);
 #endif

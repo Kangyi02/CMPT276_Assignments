@@ -45,7 +45,7 @@ void closeRelease() {
 
 void createRelease(Release* new_release) {
     if (ReleaseFileStream.is_open()) {
-        ReleaseFileStream.write(reinterpret_cast<char*>(new_release->release_ID), sizeof(char) * 9);
+        ReleaseFileStream.write(reinterpret_cast<char*>(new_release->getRelease_ID()), sizeof(char) * 9);
         ReleaseFileStream.write(reinterpret_cast<char*>(new_release->product_name), sizeof(char) * 11);
         ReleaseFileStream.write(reinterpret_cast<char*>(new_release->release_date), sizeof(char) * 11);
     } else {

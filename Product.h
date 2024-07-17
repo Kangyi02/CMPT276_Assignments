@@ -27,7 +27,7 @@ public:
 
     // Constructors
     Product();
-    Product(const char* name, const char* date);
+    Product(const char name[11], const char date[11]);
     Product(const Product& other);
 
     // Destructor

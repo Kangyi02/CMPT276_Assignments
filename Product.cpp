@@ -1,6 +1,6 @@
 #include "Product.h"
 #include <iostream>
-#incldue <fstream>
+#include <fstream>
 
 using namespace std;
 
@@ -20,7 +20,7 @@ Product::~Product()
 
 void initProduct() 
 {
-    productFileStream.open(/*file path*/, ios::in | ios::out | ios::binary | ios::app);
+    productFileStream.open(/*file path*/"", ios::in | ios::out | ios::binary | ios::app);
     if (!productFileStream) 
     {
         cerr << "Error: Could not open file." << endl;
@@ -55,7 +55,7 @@ Product* getProduct()
     }
 
     Product* prod = new Product();
-    productFileStream.seekg(producttPosition * sizeof(Product), ios::beg);
+    productFileStream.seekg(productPosition * sizeof(Product), ios::beg);
     if (productFileStream.read(reinterpret_cast<char*>(prod), sizeof(Product))) 
     {
         return prod;
