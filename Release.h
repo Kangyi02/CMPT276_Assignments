@@ -38,12 +38,12 @@ void initRelease();
 void closeRelease();
 
 // Create a new release for a product
-void createRelease(Release* new_release);
+bool addRelease(Release* new_release);
 
 // Get release ID 
 bool getNextRelease(char* product_name);
 
 void seekToBeginningOfReleaseFile();
 
-Release* filterRelease(char* product_name)
+Release filterNextRelease(char* product_name);
 #endif

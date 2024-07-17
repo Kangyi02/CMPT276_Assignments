@@ -30,8 +30,8 @@ class Change
 {
 public:
     int change_ID[7]; // max 6 digits
-    int priority; // 1 digit from 1 to 5
-    char status; // 'reported’, ‘evaluate’, ‘in process’, ‘cancelled’ or ‘done’
+    int priority[2]; // 1 digit from 1 to 5
+    char status[11]; // 'reported’, ‘evaluate’, ‘in process’, ‘cancelled’ or ‘done’
     char description[31]; // max 30 chars
     char product_name[11]; // max 10 chars
     char anticipated_release_ID[9]; // max 8 chars
@@ -51,14 +51,14 @@ void closeChange();
 bool getNextChange(char* product_name, Change* change);
 
 // Create a new change for a product
-int createChange(Change* change);  
+bool addChange(Change* change);  
 
 // Update a change except for its release ID
-void updateChange(Change* new_change);
+bool updateChange(Change* change);
 
 void seekToBeginningOfChangeFile();
 
-Change* filterChange(char* product_name);
+Change filterNextChange(char* product_name);
 
-Change* filterChange_DoneOrCancelled(char* product_name);
+Change filterNextChange_DoneOrCancelled(char* product_name);
 #endif

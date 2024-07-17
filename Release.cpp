@@ -6,28 +6,44 @@ using namespace std;
 
 fstream ReleaseFileStream;
 
-Release::Release() {
-    release_ID = new char[9];
-    product_name = new char[11];
-    release_date = new char[11];
+Release::Release() 
+{
+    // Initialize requester_name with an empty string
+    strcpy(release_ID, "");
+
+    // Initialize phone_number with zeroes
+    for (int i = 0; i < 11; ++i) 
+    {
+        phone_number[i] = 0;
+    }
+
+    // Initialize email with an empty string
+    strcpy(email, "");
+
+    // Initialize department with an empty string
+    strcpy(department, "");
 }
 
-Release::Release(const char* id, const char* name, const char* date) : Release() {
-    strcpy(release_ID, id);
-    strcpy(product_name, name);
-    strcpy(release_date, date);
-}
+// Parameterized constructor implementation
+Release::Release(const char* name, const int* phone, const char* email_addr, const char* dept) 
+{
+    // Initialize requester_name with the provided name, ensuring it does not exceed the max length
+    strncpy(requester_name, name, sizeof(name) - 1);
+    requester_name[sizeof(name) - 1] = '\0'; // Ensure null termination
 
-Release::Release(const Release& other) : Release() {
-    strcpy(release_ID, other.release_ID);
-    strcpy(product_name, other.product_name);
-    strcpy(release_date, other.release_date);
-}
+    // Initialize phone_number with the provided phone number
+    for(int i = 0; i < 11; ++i) 
+    {
+        phone_number[i] = phone[i];
+    }
 
-Release::~Release() {
-    delete[] release_ID;
-    delete[] product_name;
-    delete[] release_date;
+    // Initialize email with the provided email address, ensuring it does not exceed the max length
+    strncpy(email, email_addr, sizeof(email_addr) - 1);
+    email[sizeof(email_addr) - 1] = '\0'; // Ensure null termination
+
+    // Initialize department with the provided department, ensuring it does not exceed the max length
+    strncpy(department, dept, sizeof(dept) - 1);
+    department[sizeof(dept) - 1] = '\0'; // Ensure null termination
 }
 
 void initRelease() {

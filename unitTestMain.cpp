@@ -17,12 +17,12 @@ int main()
     cout << "***Test case 1: creating a new product***\n"; 
     cout << "Expected outcome: The new product has been successfully added.\n";
     cout << "Actual outcome: ";
-    createProduct("Editor");
+    addProduct("Editor");
 
     //  Test case 2: Create a product with an exsiting product name
     cout << "***Test case 2: creating a product with an exsiting product name***\n"; 
     cout << "Expected outcome: Error! The product has existed.\n";
     cout << "Actual outcome: ";
-    createProduct("Editor");
+    addProduct("Editor");
     return 0;
 }

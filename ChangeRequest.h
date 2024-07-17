@@ -42,12 +42,12 @@ void initChangeRequest();
 void closeChangeRequest();
 
 // Create a new change request 
-void createChangeRequest(ChangeRequest* new_cr);
+bool addChangeRequest(ChangeRequest* chreq);
 
 // Get a single change request record
 bool getNextChangeRequest(ChangeRequest* chreq);
 
 void seekToBeginningOfChangeRequestFile();
 
-ChangeRequest* filterChangeRequest(int change_ID, char* release_ID);
+ChangeRequest filterNextChangeRequest(int change_ID, char* release_ID);
 #endif

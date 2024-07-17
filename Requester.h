@@ -41,9 +41,9 @@ void closeRequester();
 bool getNextRequester(Requester* req);
 
 // Create a new requester
-char createRequester();
+bool addRequester(Requester* req);
 
 void seekToBeginningOfRequesterFile();
 
-Requester filterRequester(char requester_name);
+bool filterRequester(Requester* req, char requester_name);
 #endif
