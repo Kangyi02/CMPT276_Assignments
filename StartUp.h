@@ -25,5 +25,5 @@ straightforward interface for starting the application.
 // Exported functions
 */
 
-void initStart();
+bool initStart();
 #endif
