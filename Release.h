@@ -45,4 +45,5 @@ void seekToBeginningOfReleaseFile();
 bool addRelease(Release* rel);
 
 bool filterNextRelease(Release* rel, char* product_name);
+
 #endif

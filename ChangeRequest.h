@@ -50,4 +50,5 @@ bool getNextChangeRequest(ChangeRequest* chreq);
 bool addChangeRequest(ChangeRequest* chreq);
 
 bool filterNextChangeRequest(ChangeRequest* chreq, int* ch_ID);
+
 #endif

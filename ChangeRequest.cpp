@@ -22,7 +22,6 @@ ChangeRequest::ChangeRequest(const int* id, const char* name, const char* date, 
     {
         change_ID[i] = id[i];
     }
-    change_ID[sizeof(change_ID) - 1] = '\0'; // Ensure null termination
 
     strncpy(requester_name, name, sizeof(requester_name));
     requester_name[sizeof(requester_name) - 1] = '\0';

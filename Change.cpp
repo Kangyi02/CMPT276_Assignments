@@ -23,13 +23,11 @@ Change::Change(const char* id, const int* prio, const char* stat, const char* de
     {
         change_ID[i] = id[i];
     }
-    change_ID[sizeof(change_ID) - 1] = '\0'; // Ensure null termination
 
     for(int i = 0; i < sizeof(priority) - 1; ++i) 
     {
         priority[i] = prio[i];
     }
-    priority[sizeof(priority) - 1] = '\0';
 
     strncpy(status, stat, sizeof(status));
     status[sizeof(status) - 1] = '\0';
@@ -97,6 +95,20 @@ bool addChange(Change* ch)
     return false;
 }
 
+// Helper function that check if two int array is same
+// Precondition: two array need to have the same length
+bool intArrayEqual(int* arr1, int* arr2)
+{
+    for(int i = 0; i < sizeof(arr1); ++i)
+    {
+        if(arr1[i] != arr2[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 // Update attritube of provided change
 bool updateChange(Change* ch)
 {
@@ -120,20 +132,7 @@ bool updateChange(Change* ch)
         }
         position += 1;
     }
-}
-
-// Helper function that check if two int array is same
-// Precondition: two array need to have the same length
-bool intArrayEqual(int* arr1, int* arr2)
-{
-    for(int i = 0; i < sizeof(arr1); ++i)
-    {
-        if(arr1[i] != arr2[i])
-        {
-            return false;
-        }
-    }
-    return true;
+    return false;
 }
 
 // Filter change by product name
@@ -181,7 +180,6 @@ bool getNextCID(int* id)
         changeIDValue += 1;
 
         // Convert back to change_ID array
-        int newID[6] = {0};
         for (int i = 5; i >= 0; --i)
         {
             id[i] = changeIDValue % 10; //now id has next change ID
@@ -215,4 +213,6 @@ bool updateChangeIDrec()
     }
     ChangeFileStream.seekg(0, ios::beg); 
     ChangeFileStream.write(reinterpret_cast<char*>(&currentChange), sizeof(Change));
+
+    return true;
 }

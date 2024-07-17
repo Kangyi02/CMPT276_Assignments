@@ -44,4 +44,5 @@ bool addProduct(char* prod_name);
 
 // Get the product by reading from the product file 
 bool getNextProduct(Product* prod);
+
 #endif 

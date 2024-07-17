@@ -50,21 +50,24 @@ bool closeChange();
 
 void seekToBeginningOfChangeFile();
 
-// Get change ID
-bool getNextChange(char* prod_name, Change* ch);
+// Get a next change
+bool getNextChange(Change* ch);
 
 // Create a new change for a product
 bool addChange(Change* change); 
 
-// Update a change except for its release ID
+// Overwrite an existing change with provided change
 bool updateChange(Change* change);
 
+// Get a next change with the provided product name
 bool filterNextChange(Change* ch, char* prod_name);
 
+// Get a next change which is in the specified status
 bool filterNextChange_DoneOrCancelled(Change* ch, char* prod_name);
+
 
 bool getNextCID(int* id);
 
-bool updateChangeIDrec(const int* id);
+bool updateChangeIDrec();
 
 #endif
