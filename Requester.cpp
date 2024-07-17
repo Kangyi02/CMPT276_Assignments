@@ -1,15 +1,15 @@
 #include "Requester.h"
-#include <cstring>
 #include <iostream>
 #include <fstream>
 
 using namespace std;
 
-fstream requesterFileStream;
+fstream RequesterFileStream;
 
 // Default constructor implementation
 Requester::Requester() 
 {
+    //initialize all the attributes
     requester_name[0] = '\0';
     phone_number[0] = '\0';
     email[0] = '\0';
@@ -19,30 +19,27 @@ Requester::Requester()
 // Parameterized constructor implementation
 Requester::Requester(const char* name, const int* phone, const char* email_addr, const char* dept) 
 {
-    // Initialize requester_name with the provided name, ensuring it does not exceed the max length
-    strncpy(requester_name, name, sizeof(name) - 1);
-    requester_name[sizeof(name) - 1] = '\0'; // Ensure null termination
+    // Initialize all the attribute with provided data
+    strncpy(requester_name, name, sizeof(requester_name) - 1);
+    requester_name[sizeof(requester_name) - 1] = '\0'; // Ensure null termination
 
-    // Initialize phone_number with the provided phone number
     for(int i = 0; i < 11; ++i) 
     {
         phone_number[i] = phone[i];
     }
 
-    // Initialize email with the provided email address, ensuring it does not exceed the max length
-    strncpy(email, email_addr, sizeof(email_addr) - 1);
-    email[sizeof(email_addr) - 1] = '\0'; // Ensure null termination
+    strncpy(email, email_addr, sizeof(email) - 1);
+    email[sizeof(email) - 1] = '\0';
 
-    // Initialize department with the provided department, ensuring it does not exceed the max length
-    strncpy(department, dept, sizeof(dept) - 1);
-    department[sizeof(dept) - 1] = '\0'; // Ensure null termination
+    strncpy(department, dept, sizeof(department) - 1);
+    department[sizeof(department) - 1] = '\0'; 
 }
 
 // Initialize the requester file
 bool initRequester() 
 {
-    requesterFileStream.open("requesters.bin", ios::in | ios::out | ios::binary | ios::ate);
-    if (!requesterFileStream) 
+    RequesterFileStream.open("Requester.bin", ios::in | ios::out | ios::binary | ios::app);
+    if (!RequesterFileStream) 
     {
         return false;
     }
@@ -52,10 +49,10 @@ bool initRequester()
 // Shut down the requester file
 bool closeRequester()
 {
-    if(requesterFileStream.is_open()) 
+    if(RequesterFileStream.is_open()) 
     {
-        requesterFileStream.close();
-        if(requesterFileStream.is_open())
+        RequesterFileStream.close();
+        if(RequesterFileStream.is_open())
         {
             return false;
         }
@@ -64,10 +61,16 @@ bool closeRequester()
     return true;
 }
 
-// Get the next requester
+// Move the get pointer to the beginning of the requester file
+void seekToBeginningOfRequesterFile() 
+{
+    RequesterFileStream.seekg(0, ios::beg);
+}
+
+// Get a next requester
 bool getNextRequester(Requester* req) 
 {
-    if(requesterFileStream.read(reinterpret_cast<char*>(req), sizeof(Requester)))
+    if(RequesterFileStream.read(reinterpret_cast<char*>(req), sizeof(Requester)))
     {
         return true;
     }
@@ -77,28 +80,22 @@ bool getNextRequester(Requester* req)
 // Store a new requester to file
 bool addRequester(Requester* req) 
 {
-    if(requesterFileStream.write(reinterpret_cast<char*>(req), sizeof(Requester)))
+    if(RequesterFileStream.write(reinterpret_cast<char*>(req), sizeof(Requester)))
     {
         return true;
     }
     return false;
 }
 
-void seekToBeginningOfRequesterFile() 
-{
-    requesterFileStream.seekg(0, ios::beg);
-}
-
 // Filter requesters by name
-Requester filterRequester(char* requester_name) 
+bool filterNextRequester(Requester* req, char* req_name) 
 {
-    Requester req;
-    while(requesterFileStream.read(reinterpret_cast<char*>(&req), sizeof(Requester))) 
+    while(RequesterFileStream.read(reinterpret_cast<char*>(req), sizeof(Requester))) 
     {
-        if(strcmp(req.requester_name, requester_name) == 0) 
+        if(strcmp(req->requester_name, req_name) == 0) 
         {
-            return req;
-        }
+            return true;
+        }        
     }
-    return req; // Return an empty requester if not found
+    return false; //return false if reach the end of the file
 }

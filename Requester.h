@@ -20,7 +20,8 @@ straightforward interface for interaction.
 */
 
 // Requester class
-class Requester {
+class Requester 
+{
 public:
     char requester_name[21]; // max 20 chars: last name, first name
     int phone_number[11]; //
@@ -28,7 +29,7 @@ public:
     char department[13];
 
     Requester();
-    Requester(const char* name, const int phone, const char* email_addr, const char* dept);
+    Requester(const char* name, const int* phone, const char* email_addr, const char* dept);
 };
 
 // Initialize the requester file
@@ -45,5 +46,7 @@ bool getNextRequester(Requester* req);
 // Create a new requester
 bool addRequester(Requester* req);
 
-bool filterRequester(Requester* req, char* requester_name);
+// Filter requester by their name
+bool filterNextRequester(Requester* req, char* name);
+
 #endif

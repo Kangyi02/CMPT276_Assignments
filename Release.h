@@ -39,11 +39,11 @@ bool closeRelease();
 
 void seekToBeginningOfReleaseFile();
 
-// Create a new release for a product
-bool addRelease(Release* new_release);
 
-// Get release ID 
-bool getNextRelease(char* product_name);
+
+// Create a new release for a product
+bool addRelease(Release* rel);
 
 bool filterNextRelease(Release* rel, char* product_name);
+
 #endif

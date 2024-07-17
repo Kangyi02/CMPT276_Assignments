@@ -314,7 +314,9 @@ void createChangeRequestControl()
             cin >> chosen_change.description;
             *chosen_change.priority = 0; // if 0 print out N/A
             *chosen_change.status = *"Reported";
-            chosen_change.setChange_ID(); 
+            int id[7];
+            getNextCID(id);
+            *chosen_change.change_ID = *id; 
             *chosen_change.product_name = *chosen_product.product_name;
             *chosen_change.anticipated_release_ID = *"None";
 
@@ -1005,7 +1007,7 @@ void allRequestersReportControl()
     {
         int i;
         cout << "Requester" << "Email";
-        filterRequester(&temp4, temp5.requester_name);
+        filterNextRequester(&temp4, temp5.requester_name);
         requester_list[0] = temp4;
         cout << "1) " << temp4.requester_name << temp4.email;
 
@@ -1013,7 +1015,7 @@ void allRequestersReportControl()
         {
             if (filterNextChangeRequest(&temp5, chosen_change.change_ID, chosen_release.release_ID))
             {
-                filterRequester(&temp4, temp5.requester_name);    // Get the requester by name
+                filterNextRequester(&temp4, temp5.requester_name);    // Get the requester by name
                 requester_list[i] = temp4;
                 // Display each requester
                 cout << i+1 << ") " << temp4.requester_name << temp4.email;
@@ -1041,13 +1043,55 @@ void allRequestersReportControl()
 }
 
 // Function to control the shutdown process
-void shutDownControl()
-{
-    closeChange();
-    closeChangeRequest();
-    closeProduct();
-    closeRelease();
-    closeRequester();
+void shutDownControl() {
+    bool allClosed = true;
+
+    // Close Change
+    if (closeChange()) {
+        cout << "Change module closed successfully.\n";
+    } else {
+        cout << "Failed to close Change module.\n";
+        allClosed = false;
+    }
+
+    // Close Change Request
+    if (closeChangeRequest()) {
+        cout << "Change Request module closed successfully.\n";
+    } else {
+        cout << "Failed to close Change Request module.\n";
+        allClosed = false;
+    }
+
+    // Close Product
+    if (closeProduct()) {
+        cout << "Product module closed successfully.\n";
+    } else {
+        cout << "Failed to close Product module.\n";
+        allClosed = false;
+    }
+
+    // Close Release
+    if (closeRelease()) {
+        cout << "Release module closed successfully.\n";
+    } else {
+        cout << "Failed to close Release module.\n";
+        allClosed = false;
+    }
+
+    // Close Requester
+    if (closeRequester()) {
+        cout << "Requester module closed successfully.\n";
+    } else {
+        cout << "Failed to close Requester module.\n";
+        allClosed = false;
+    }
+
+    // Overall status
+    if (allClosed) {
+        cout << "All modules closed successfully.\n";
+    } else {
+        cout << "One or more modules failed to close.\n";
+    }
 }
 
 #endif

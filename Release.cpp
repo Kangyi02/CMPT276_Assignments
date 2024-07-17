@@ -12,82 +12,69 @@ Release::Release() {
     release_date[0] = '\0';
 }
 
-// Parameterized constructor implementation
-Release::Release(const char* relID, const char* prodname, const char* reldate) 
+Release::Release(const char* id, const char* name, const char* date)
 {
-    
+    strncpy(release_ID, id, sizeof(release_ID));
+    release_ID[sizeof(release_ID) - 1] = '\0';
+
+    strncpy(product_name, name, sizeof(product_name));
+    product_name[sizeof(product_name) - 1] = '\0';
+
+    strncpy(release_date, date, sizeof(release_date));
+    release_date[sizeof(release_date) - 1] = '\0';
 }
 
-bool initRelease() {
-    ReleaseFileStream.open("file location", ios::in | ios::out | ios::binary | ios::app);
-    if (!ReleaseFileStream) {
-        cerr << "Error: Could not open file." << endl;
+// Initialize the release file
+bool initRelease()
+{
+    ReleaseFileStream.open("Release.bin", ios::in | ios::out | ios::binary | ios::app);
+    if (!ReleaseFileStream) 
+    {
+        return false;
     }
+    return true;
 }
 
-void closeRelease() {
-    if (ReleaseFileStream.is_open()) {
+// Shut down the release file
+bool closeRelease()
+{
+    if(ReleaseFileStream.is_open()) 
+    {
         ReleaseFileStream.close();
-    }
-}
-
-void createRelease(Release* new_release) {
-    if (ReleaseFileStream.is_open()) {
-        ReleaseFileStream.write(reinterpret_cast<char*>(new_release->getRelease_ID()), sizeof(char) * 9);
-        ReleaseFileStream.write(reinterpret_cast<char*>(new_release->product_name), sizeof(char) * 11);
-        ReleaseFileStream.write(reinterpret_cast<char*>(new_release->release_date), sizeof(char) * 11);
-    } else {
-        cerr << "Error: File not open." << endl;
-    }
-}
-
-Release* getRelease(char* product_name) {
-    if (ReleaseFileStream.is_open()) {
-        seekToBeginningOfReleaseFile();
-        char id[9];
-        char name[11];
-        char date[11];
-
-        while (ReleaseFileStream.read(reinterpret_cast<char*>(&id), sizeof(id))) {
-            ReleaseFileStream.read(reinterpret_cast<char*>(&name), sizeof(name));
-            ReleaseFileStream.read(reinterpret_cast<char*>(&date), sizeof(date));
-
-            if (strcmp(name, product_name) == 0) {
-                return new Release(id, name, date);
-            }
+        if(ReleaseFileStream.is_open())
+        {
+            return false;
         }
-    } else {
-        cerr << "Error: File not open." << endl;
+        return true;
     }
-    return nullptr;
+    return true;
 }
 
-void seekToBeginningOfReleaseFile() {
-    if (ReleaseFileStream.is_open()) {
-        ReleaseFileStream.clear(); // Clear any error flags
-        ReleaseFileStream.seekg(0, ios::beg);
-    } else {
-        cerr << "Error: File not open." << endl;
-    }
+// Move the get pointer to the beginning of the release file
+void seekToBeginningOfReleaseFile()
+{
+    ReleaseFileStream.seekg(0, ios::beg);
 }
 
-Release* filterRelease(char* product_name) {
-    if (ReleaseFileStream.is_open()) {
-        seekToBeginningOfReleaseFile();
-        char id[9];
-        char name[11];
-        char date[11];
-
-        while (ReleaseFileStream.read(reinterpret_cast<char*>(&id), sizeof(id))) {
-            ReleaseFileStream.read(reinterpret_cast<char*>(&name), sizeof(name));
-            ReleaseFileStream.read(reinterpret_cast<char*>(&date), sizeof(date));
-
-            if (strcmp(name, product_name) == 0) {
-                return new Release(id, name, date);
-            }
-        }
-    } else {
-        cerr << "Error: File not open." << endl;
+// Add a new release to file
+bool addRelease(Release* rel)
+{
+    if(ReleaseFileStream.write(reinterpret_cast<char*>(rel), sizeof(Release)))
+    {
+        return true;
     }
-    return nullptr;
+    return false;
+}
+
+// Filter release by product name
+bool filterNextRelease(Release* rel, char* prod_name)
+{
+    while(ReleaseFileStream.read(reinterpret_cast<char*>(rel), sizeof(Release))) 
+    {
+        if(strcmp(rel->product_name, prod_name) == 0) 
+        {
+            return true;
+        }        
+    }
+    return false;
 }
