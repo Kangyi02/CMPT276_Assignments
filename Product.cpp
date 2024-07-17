@@ -6,10 +6,23 @@ using namespace std;
 
 fstream productFileStream;
 
-//constructor
-Product::Product() : product_name(new char[10]), release_date(new char[8]) {}
-Product::Product(const char* name, const char* date) : product_name(name), release_date(date) {}
-Product::Product(const Product& other) : product_name(other.product_name), release_date(other.release_date) {}
+// Default constructor implementation
+Product::Product() 
+{
+    product_name[0] = '\0';
+    release_date[0] = '\0';
+}
+
+// Parameterized constructor implementation
+Product::Product(const char* name, const char* date)
+{
+    //initialize fields with provided parameters, ensuring max length is not exceeded
+    strncpy(product_name, name, sizeof(name) - 1);
+    product_name[sizeof(name) - 1] = '\0';
+
+    strncpy(release_date, date, sizeof(date) - 1);
+    product_name[sizeof(date) - 1] = '\0';
+}
 
 //deconstructor
 Product::~Product() 
@@ -18,61 +31,54 @@ Product::~Product()
     delete[] release_date;
 }
 
-void initProduct() 
+// Initialize the product file
+//FIX FILE PATH BEFORE SUBMITTING
+bool initProduct() 
 {
-    productFileStream.open(/*file path*/"", ios::in | ios::out | ios::binary | ios::app);
+    productFileStream.open(/*file path*/, ios::in | ios::out | ios::binary | ios::ate);
     if (!productFileStream) 
     {
-        cerr << "Error: Could not open file." << endl;
+        return false;
     }
+    return true;
 }
 
-void closeProduct() 
+// Shut down the product file
+bool closeProduct() 
 {
     if (productFileStream.is_open()) 
     {
         productFileStream.close();
+        if (productFileStream.is_open())
+        {
+            return false;
+        }
+        return true;
     }
-}
-
-void createProduct(char* product_name)
-{
-    //unfinished
-}
-
-Product* getProduct() 
-{
-    if (productFileStream.is_open()) 
-    {
-        char name[10];
-        char date[8];
-
-        productFileStream >> name >> date;
-        return new Product(name, date);
-    } else {
-        cerr << "Error: File not open." << endl;
-        return nullptr;
-    }
-
-    Product* prod = new Product();
-    productFileStream.seekg(productPosition * sizeof(Product), ios::beg);
-    if (productFileStream.read(reinterpret_cast<char*>(prod), sizeof(Product))) 
-    {
-        return prod;
-    } else {
-        delete prod;
-        return nullptr;
-    }
+    return true;
 }
 
 void seekToBeginningOfProductFile() 
 {
-    if (productFileStream.is_open()) 
+    productFileStream.seekg(0, ios::beg);
+}
+
+// Store a new product to file
+bool addProduct(char* product_name)
+{
+    if (productFileStream.write(reinterpret_cast<char*>(product_name), sizeof(Product)))
     {
-        productFileStream.clear();
-        productFileStream.seekg(0, ios::beg);
-    } else 
-    {
-        cerr << "Error: File not open." << endl;
+        return true;
     }
+    return false;
+}
+
+// Get the next product
+bool getNextProduct(Product* prod) 
+{
+    if (productFileStream.read(reinterpret_cast<char*>(prod), sizeof(Product))) 
+    {
+        return true;
+    }
+    return false;
 }
