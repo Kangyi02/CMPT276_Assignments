@@ -46,6 +46,7 @@ bool getNextRequester(Requester* req);
 // Create a new requester
 bool addRequester(Requester* req);
 
+// Filter requester by their name
 bool filterNextRequester(Requester* req, char* name);
 
 #endif

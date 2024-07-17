@@ -28,7 +28,7 @@ Product::Product(const char* name, const char* date)
 //FIX FILE PATH BEFORE SUBMITTING
 bool initProduct() 
 {
-    productFileStream.open("Product.bin", ios::in | ios::out | ios::binary | ios::ate);
+    productFileStream.open("Product.bin", ios::in | ios::out | ios::binary | ios::app);
     if (!productFileStream) 
     {
         return false;
@@ -51,6 +51,7 @@ bool closeProduct()
     return true;
 }
 
+// Move the get pointer to the beginning of the product file
 void seekToBeginningOfProductFile() 
 {
     productFileStream.seekg(0, ios::beg);

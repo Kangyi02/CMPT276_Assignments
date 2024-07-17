@@ -39,6 +39,8 @@ bool closeRelease();
 
 void seekToBeginningOfReleaseFile();
 
+
+
 // Create a new release for a product
 bool addRelease(Release* rel);
 

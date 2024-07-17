@@ -49,5 +49,5 @@ bool getNextChangeRequest(ChangeRequest* chreq);
 // Create a new change request 
 bool addChangeRequest(ChangeRequest* chreq);
 
-bool filterNextChangeRequest(ChangeRequest* chreq, int* change_ID, char* release_ID);
+bool filterNextChangeRequest(ChangeRequest* chreq, int* ch_ID);
 #endif

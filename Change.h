@@ -40,6 +40,8 @@ public:
     Change(const char* id, const int* prio, const char* status, const char* desc, const char* prodname, const char* arid);
 };
 
+
+
 // Initialize the change file
 bool initChange();
 
@@ -60,5 +62,9 @@ bool updateChange(Change* change);
 bool filterNextChange(Change* ch, char* prod_name);
 
 bool filterNextChange_DoneOrCancelled(Change* ch, char* prod_name);
+
+bool getNextCID(int* id);
+
+bool updateChangeIDrec(const int* id);
 
 #endif

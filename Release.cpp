@@ -15,15 +15,19 @@ Release::Release() {
 Release::Release(const char* id, const char* name, const char* date)
 {
     strncpy(release_ID, id, sizeof(release_ID));
+    release_ID[sizeof(release_ID) - 1] = '\0';
 
     strncpy(product_name, name, sizeof(product_name));
+    product_name[sizeof(product_name) - 1] = '\0';
 
     strncpy(release_date, date, sizeof(release_date));
+    release_date[sizeof(release_date) - 1] = '\0';
 }
 
+// Initialize the release file
 bool initRelease()
 {
-    ReleaseFileStream.open("Release.bin", ios::in | ios::out | ios::binary | ios::ate);
+    ReleaseFileStream.open("Release.bin", ios::in | ios::out | ios::binary | ios::app);
     if (!ReleaseFileStream) 
     {
         return false;
@@ -31,7 +35,7 @@ bool initRelease()
     return true;
 }
 
-
+// Shut down the release file
 bool closeRelease()
 {
     if(ReleaseFileStream.is_open()) 
@@ -46,11 +50,13 @@ bool closeRelease()
     return true;
 }
 
+// Move the get pointer to the beginning of the release file
 void seekToBeginningOfReleaseFile()
 {
     ReleaseFileStream.seekg(0, ios::beg);
 }
 
+// Add a new release to file
 bool addRelease(Release* rel)
 {
     if(ReleaseFileStream.write(reinterpret_cast<char*>(rel), sizeof(Release)))
@@ -60,6 +66,7 @@ bool addRelease(Release* rel)
     return false;
 }
 
+// Filter release by product name
 bool filterNextRelease(Release* rel, char* prod_name)
 {
     while(ReleaseFileStream.read(reinterpret_cast<char*>(rel), sizeof(Release))) 
