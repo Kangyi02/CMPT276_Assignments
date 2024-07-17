@@ -35,7 +35,7 @@ Product::~Product()
 //FIX FILE PATH BEFORE SUBMITTING
 bool initProduct() 
 {
-    productFileStream.open(/*file path*/, ios::in | ios::out | ios::binary | ios::ate);
+    productFileStream.open("/*file path*/", ios::in | ios::out | ios::binary | ios::ate);
     if (!productFileStream) 
     {
         return false;

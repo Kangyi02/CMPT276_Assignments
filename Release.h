@@ -45,11 +45,5 @@ bool addRelease(Release* new_release);
 // Get release ID 
 bool getNextRelease(char* product_name);
 
-<<<<<<< HEAD
-void seekToBeginningOfReleaseFile();
-
-Release* filterRelease(char* product_name);
-=======
-bool filterNextRelease(Release rel, char* product_name);
->>>>>>> 04d3e2bad9b3c0ca70fbe826e72de0be4b263b44
+bool filterNextRelease(Release* rel, char* product_name);
 #endif

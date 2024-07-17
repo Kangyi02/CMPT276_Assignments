@@ -38,7 +38,11 @@ public:
 
     // constructors
     Change();
-    Change(const char* id, const int prio, const char* status, const char* desc, const char* pname, const char* arid);
+    Change(char* id, int prio, char* status, char* desc, char* pname, char* arid);
+    void setChange_ID()
+    {
+        *change_ID = CID++;
+    }
 };
 
 // Initialize the change file
