@@ -26,4 +26,5 @@ straightforward interface for starting the application.
 */
 
 bool initStart();
+
 #endif
