@@ -27,7 +27,7 @@ using std::cout;
 /*----------------------------------------------------------*/
 // Exported constants/types/variables
 
-// Function to control the creation of a product
+// Function to control the creation of a product done
 void createProductControl()
 {
     // Prompt user to enter the product name
@@ -45,25 +45,16 @@ void createProductControl()
     // Check user input and proceed accordingly
     if (userInput == "y" || userInput == "Y")
     {
-        // Create the product(Writing product record to the file) and confirm success
-        createProduct(product_name); 
+        // add the product(Writing product record to the file) and confirm success
+        addProduct(product_name); 
         cout << "The new product has been successfully added.";
     }
     else if (userInput == "n" || userInput == "N")
         return; // Return to the main menu if user cancels
 
-    // Ask if the user wants to add another product
-    cout << "Do you want to add another product(Y/N)? ";
-    cin >> userInput;
-
-    // If yes, call the function again to add another product
-    if (userInput == "y" || userInput == "Y") 
-        createProductControl();
-    else if (userInput == "n" || userInput == "N")
-        return; // Return to the main menu if user cancels
 }
 
-// Function to control the creation of a release
+// Function to control the creation of a release done
 void createReleaseControl()
 {
     // Move the file pointer to the beginning of the product file
@@ -71,22 +62,25 @@ void createReleaseControl()
 
      // Array to store a list of products
     Product product_list[20]; 
-    Product *temp = getProduct();   // Temporary product pointer
-    Product *chosen;  // Chosen product pointer
+    Product* temp;   // Temporary product pointer
+    Product* chosen;  // Chosen product pointer
 
     while (getNextProduct(temp) == true) 
     {
+        product_list[0] = *temp;
+
         // Loop to display product list and select a product
         cout << "For which product you want to add a new release to: \n";
         cout << "Product    \n";
+        cout << "1) " << temp->product_name << "\n";
+
         int i;
-        for (i = 0; i < 20; i++) 
+        for (i = 1; i < 20; i++) 
         {
-            temp = getProduct();    // Get the next product from the file
-            if (temp != NULL)
+            if (getNextProduct(temp) == true)
             {
                 product_list[i] = *temp;    // Add product to the list
-                cout << i + 1 << ") " << temp->getProduct_name() << "\n";   // Display product name
+                cout << i + 1 << ") " << temp->product_name << "\n";   // Display product name
             }
             else
                 break;  // Exit loop if no more products
@@ -99,6 +93,7 @@ void createReleaseControl()
 
         int user_input;
         cin >> user_input;
+
         // Check if user input is within valid range
         if (1 <= user_input <= i + 1)
         {
@@ -126,12 +121,12 @@ void createReleaseControl()
     if (sure_input == "y" || sure_input == "Y")
     {   
         // Create new release and write to file
-        Release new_release = Release(release_ID, chosen->getProduct_name(), release_date);
-        createRelease(&new_release);
+        Release new_release = Release(release_ID, chosen->product_name, release_date);
+        addRelease(&new_release);
     }
     else if (sure_input == "n" || sure_input == "N")
     {
-        return; // Return if user cancels
+        return; // Return to the main menu if user cancels
     }
 }
 
@@ -143,20 +138,26 @@ void createChangeRequestControl()
 
     // Array to store a list of requesters
     Requester requester_list[20];
-    Requester *temp = getRequester();    // Temporary requester pointer
+    Requester *temp;    // Temporary requester pointer
     Requester *chosen_requester;   // Chosen requester pointer
 
-    cout << "Select a requester that reports this change request: \n";
-    cout << "Requester name                " << "Phone      " << "Email                   " << "Department  ";
-    
     // Loop to display requester list and select a requester
     int i;
-    while (temp != NULL) // question
+    while (getNextRequester(temp) == true) // question
     {
+        requester_list[0] = *temp;
+        cout << "Select a requester that reports this change request: \n";
+        cout << "Requester name                " << "Phone      " << "Email                   " << "Department  ";  
+
+        cout << "1) " << temp->requester_name
+                     << temp->phone_number
+                     << temp->email
+                     << temp->department
+                     << "\n";
+        
         for (i = 1; i < 20; i++) // problem
         {
-            *temp = getNextRequester();  // Get the next requester from the file
-            if (temp != NULL)
+            if (getNextRequester(temp) == true)
             {
                 requester_list[i] = *temp;  // Add requester to the list
                 cout << i + 1 << ") " << temp->requester_name
@@ -175,6 +176,7 @@ void createChangeRequestControl()
 
         int user_input;
         cin >> user_input;   // Get user input for selection
+
         // Check if user input is within valid range
         if (1 <= user_input <= i + 1)
         {
@@ -185,11 +187,25 @@ void createChangeRequestControl()
         {   
             // Prompt user to create a new requester
             cout << "Creating a new requester: \n"
-                 << "Enter requester's name ('Last name, First name’, max 30 chars): ";
+                 << "Enter requester's name ('Last name, First name', max 30 chars): ";
+            cin >> chosen_requester->requester_name;
+            
+            // Ask for phone number
+            cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
+            cin >> *chosen_requester->phone_number; // ??
 
-            // Ask for all necessary information, create a requester object, and add to file
-            // cin >> requester details...
+            // Ask for email
+            cout << "Enter the requester's email (max 24 chars): ";
+            cin >> chosen_requester->email;
 
+            // Ask if it's employee
+            char user_input[1];
+            cin >> user_input;
+            if (user_input == "y" || user_input == "Y")
+            {
+                cout << "Enter new requester's department (max 12 chars): ";
+                cin >> chosen_requester->department;
+            }
 
             cout << "The new requester has been successfully added. \n";
         }
@@ -200,26 +216,28 @@ void createChangeRequestControl()
 
     // Array to store a list of products
     Product product_list[20]; 
-    Product *temp1 = getProduct();     // Temporary product pointer
+    Product *temp1;     // Temporary product pointer
     Product *chosen_product;    // Chosen product pointer
 
-    cout << "Select a product that corresponds to this change request: \n";
-    cout << "Product    ";
-
     // Loop to display product list and select a product
-    while (temp1 != NULL) // question
+    while (getNextProduct(temp1)) // question
     {
+        product_list[0] = *temp1;
+        cout << "Select a product that corresponds to this change request: \n";
+        cout << "Product    ";
+        cout << "1) " << temp1->product_name;
+
         for (int i = 1; i < 20; i++) // problem
         {
-            temp1 = getProduct();   // Get the next product from the file
-            if (temp1 != NULL)
+            if (getNextProduct(temp1))
             {
                 product_list[i] = *temp1;   // Add product to the list
-                cout << i + 1 << ") " << temp1->getProduct_name() << "\n"; // Add product to the list
+                cout << i + 1 << ") " << temp1->product_name << "\n"; // Add product to the list
             }
             else
                 break;  // Exit loop if no more products
         }
+
         // Display options for more products or exit
         cout << i + 2 << ") More\n";
         cout << "0) Exit\n";
@@ -242,11 +260,11 @@ void createChangeRequestControl()
 
     // Array to store a list of changes
     Change change_list[20];
-    Change *temp2 = filterChange(chosen_product->getProduct_name()); // Temporary change pointer
+    Change *temp2; // Temporary change pointer
     Change *chosen_change; // Chosen change pointer
 
     // Loop to display change list and select a change
-    while (temp2 != NULL) // question
+    while (filterNextChange(temp1->product_name, temp2)) // question
     {
         cout << "Which change corresponds to the change request? \n";
         // change formats later
@@ -297,7 +315,7 @@ void createChangeRequestControl()
             chosen_change->anticipated_release_ID = "None";
             // Confirm the creation of the new change and add to file
             cout << "The new change has been successfully created. ";
-            createChange(chosen_change);
+            addChange(chosen_change);
         }
     }
 
@@ -354,7 +372,7 @@ void createChangeRequestControl()
     new_changeRequest->setChange_ID(chosen_change->getChange_ID());
     new_changeRequest->reported_release_ID = chosen_release->getRelease_ID();
     // Create the new change request (Write the record to the file) and confirm success
-    createChangeRequest(new_changeRequest);
+    addChangeRequest(new_changeRequest);
     cout << "The new change request has been successfully created. \n";
 }
 

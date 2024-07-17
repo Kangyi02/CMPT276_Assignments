@@ -15,8 +15,6 @@ straightforward interface for interaction.
 #ifndef ChangeRequest_H
 #define ChangeRequest_H
 
-extern int changeRequestPosition;
-
 /*
 ----------------------------------------------------------
 // Exported constants/types/variables
@@ -38,18 +36,18 @@ public:
 };
 
 // Initialize the change request file
-void initChangeRequest();
+bool initChangeRequest();
 
 // Shut down the change request file
-void closeChangeRequest();
+bool closeChangeRequest();
+
+void seekToBeginningOfChangeRequestFile();
 
 // Create a new change request 
-void createChangeRequest(ChangeRequest* new_cr);
+bool addChangeRequest(ChangeRequest* chreq);
 
 // Get a single change request record
 bool getNextChangeRequest(ChangeRequest* chreq);
 
-void seekToBeginningOfChangeRequestFile();
-
-ChangeRequest* filterChangeRequest(int change_ID, char* release_ID);
+bool filterNextChangeRequest(ChangeRequest* chreq, int* change_ID, char* release_ID);
 #endif

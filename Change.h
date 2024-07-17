@@ -28,51 +28,37 @@ int CID = 0;
 // Change class
 class Change
 {
-private:
-    int change_ID; // max 6 digits
 public:
-    int priority; // 1 digit from 1 to 5
-    char* status; // 'reported’, ‘evaluate’, ‘in process’, ‘cancelled’ or ‘done’
-    char* description; // max 30 chars
-    char* product_name; // max 10 chars
-    char* anticipated_release_ID; // max 8 chars
+    int change_ID[7]; // max 6 digits
+    int priority[2]; // 1 digit from 1 to 5
+    char status[11]; // 'reported’, ‘evaluate’, ‘in process’, ‘cancelled’ or ‘done’
+    char description[31]; // max 30 chars
+    char product_name[11]; // max 10 chars
+    char anticipated_release_ID[9]; // max 8 chars
 
     // constructors
     Change();
     Change(const char* id, const int prio, const char* status, const char* desc, const char* pname, const char* arid);
-    Change(const Change& other);
-    // destructor
-    ~Change();
-
-    int getChange_ID()
-    {
-        return change_ID;
-    }
-
-    int setChange_ID()
-    {
-        change_ID = CID++;
-    }
 };
 
 // Initialize the change file
-void initChange();
+bool initChange();
 
 // Shut down the change file
-void closeChange();
-
-// Get change ID
-Change* getChange(char* product_name);
-
-// Create a new change for a product
-int createChange(Change* change);  
-
-// Update a change except for its release ID
-void updateChange(Change* new_change);
+bool closeChange();
 
 void seekToBeginningOfChangeFile();
 
-Change* filterChange(char* product_name);
+// Get change ID
+bool getNextChange(char* product_name, Change* change);
 
-Change* filterChange_DoneOrCancelled(char* product_name);
+// Create a new change for a product
+bool addChange(Change* change);  
+
+// Update a change except for its release ID
+bool updateChange(Change* change);
+
+bool filterNextChange(Change* ch, char* product_name);
+
+bool filterNextChange_DoneOrCancelled(Change* ch, char* product_name);
 #endif

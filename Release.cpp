@@ -7,30 +7,18 @@ using namespace std;
 fstream ReleaseFileStream;
 
 Release::Release() {
-    release_ID = new char[9];
-    product_name = new char[11];
-    release_date = new char[11];
+    release_ID[0] = '\0';
+    product_name[0] = '\0';
+    release_date[0] = '\0';
 }
 
-Release::Release(const char* id, const char* name, const char* date) : Release() {
-    strcpy(release_ID, id);
-    strcpy(product_name, name);
-    strcpy(release_date, date);
+// Parameterized constructor implementation
+Release::Release(const char* relID, const char* prodname, const char* reldate) 
+{
+    
 }
 
-Release::Release(const Release& other) : Release() {
-    strcpy(release_ID, other.release_ID);
-    strcpy(product_name, other.product_name);
-    strcpy(release_date, other.release_date);
-}
-
-Release::~Release() {
-    delete[] release_ID;
-    delete[] product_name;
-    delete[] release_date;
-}
-
-void initRelease() {
+bool initRelease() {
     ReleaseFileStream.open("file location", ios::in | ios::out | ios::binary | ios::app);
     if (!ReleaseFileStream) {
         cerr << "Error: Could not open file." << endl;

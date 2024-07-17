@@ -19,8 +19,6 @@ providing a clean and straightforward interface for interaction.
 // Exported constants/types/variables
 */
 
-extern int releasePosition;
-
 // Release class
 class Release
 {
@@ -34,18 +32,24 @@ public:
 };
 
 // Initialize the release file
-void initRelease();
+bool initRelease();
 
 // Shut down the release file
-void closeRelease();
+bool closeRelease();
+
+void seekToBeginningOfReleaseFile();
 
 // Create a new release for a product
-void createRelease(Release* new_release);
+bool addRelease(Release* new_release);
 
 // Get release ID 
 bool getNextRelease(char* product_name);
 
+<<<<<<< HEAD
 void seekToBeginningOfReleaseFile();
 
 Release* filterRelease(char* product_name);
+=======
+bool filterNextRelease(Release rel, char* product_name);
+>>>>>>> 04d3e2bad9b3c0ca70fbe826e72de0be4b263b44
 #endif

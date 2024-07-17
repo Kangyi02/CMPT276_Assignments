@@ -14,8 +14,6 @@ straightforward interface for interaction.
 #ifndef Requester_H
 #define Requester_H
 
-extern int requesterPosition;
-
 /*
 ----------------------------------------------------------
 // Exported constants/types/variables
@@ -30,22 +28,22 @@ public:
     char department[13];
 
     Requester();
-    Requester(const char* name, const int* phone, const char* email_addr, const char* dept);
+    Requester(const char* name, const int phone, const char* email_addr, const char* dept);
 };
 
 // Initialize the requester file
-void initRequester();
+bool initRequester();
 
 // Shut down the requester file
-void closeRequester();
+bool closeRequester();
+
+void seekToBeginningOfRequesterFile();
 
 // Get requester name 
 bool getNextRequester(Requester* req);
 
 // Create a new requester
-char createRequester();
+bool addRequester(Requester* req);
 
-void seekToBeginningOfRequesterFile();
-
-Requester filterRequester(char requester_name);
+bool filterRequester(Requester* req, char* requester_name);
 #endif

@@ -22,7 +22,7 @@ of products is hidden, providing a clean and straightforward interface for inter
 class Product {
 public:
     char product_name[11]; // max 10 chars
-    char* release_date[11]; // YYYY-MM-DD
+    char release_date[11]; // YYYY-MM-DD
 
     // Constructors
     Product();
@@ -30,18 +30,18 @@ public:
 };
 
 // Initialize the product file
-void initProduct();
+bool initProduct();
 
 // Shut down the product file
-void closeProduct();
-
-// Create a new product. Write the product into file. 
-// Return false if it failed, otherwise true.
-void createProduct(char* product_name);
-
-// Get the product by reading from the product file 
-bool getNextProduct(Product* prod);
+bool closeProduct();
 
 // Search a product in the product file from the beginning of the file
 void seekToBeginningOfProductFile();
+
+// Create a new product. Write the product into file. 
+// Return false if it failed, otherwise true.
+bool addProduct(char* product_name);
+
+// Get the product by reading from the product file 
+bool getNextProduct(Product* prod);
 #endif 
