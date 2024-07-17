@@ -74,7 +74,11 @@ bool getNextRequester(Requester* req)
     {
         return true;
     }
-    return false;
+    else
+    {
+        cout << "No additional records, this is the end of the file." << endl;
+        return false;
+    }
 }
 
 // Store a new requester to file
@@ -97,5 +101,6 @@ bool filterNextRequester(Requester* req, char* req_name)
             return true;
         }        
     }
+    cout << "No additional records, this is the end of the file." << endl;
     return false; //return false if reach the end of the file
 }

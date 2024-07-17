@@ -322,7 +322,7 @@ void createChangeRequestControl()
 
             // Add to file
             if (addChange(&chosen_change))
-                cout << "The new change has been successfully created. ";       
+                cout << "The new change has been successfully added. ";       
         }
     }
 
@@ -1003,7 +1003,7 @@ void allRequestersReportControl()
          << "Release ID: " << chosen_release.release_ID
          << "State: " << chosen_change.status;
 
-    while (filterNextChangeRequest(&temp5, chosen_change.change_ID, chosen_release.release_ID)) 
+    while (filterNextChangeRequest(&temp5, chosen_change.change_ID)) 
     {
         int i;
         cout << "Requester" << "Email";
@@ -1013,7 +1013,7 @@ void allRequestersReportControl()
 
         for (i = 1; i < 20; i++)
         {
-            if (filterNextChangeRequest(&temp5, chosen_change.change_ID, chosen_release.release_ID))
+            if (filterNextChangeRequest(&temp5, chosen_change.change_ID))
             {
                 filterNextRequester(&temp4, temp5.requester_name);    // Get the requester by name
                 requester_list[i] = temp4;
