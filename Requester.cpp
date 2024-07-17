@@ -39,22 +39,29 @@ Requester::Requester(const char* name, const int* phone, const char* email_addr,
 }
 
 // Initialize the requester file
-void initRequester() 
+bool initRequester() 
 {
     requesterFileStream.open("requesters.bin", ios::in | ios::out | ios::binary | ios::ate);
     if (!requesterFileStream) 
     {
-        cerr << "Error opening Requester file for initialization." << endl;
+        return false;
     }
+    return true;
 }
 
 // Shut down the requester file
-void closeRequester()
+bool closeRequester()
 {
     if(requesterFileStream.is_open()) 
     {
         requesterFileStream.close();
+        if(requesterFileStream.is_open())
+        {
+            return false;
+        }
+        return true;
     }
+    return true;
 }
 
 // Get the next requester

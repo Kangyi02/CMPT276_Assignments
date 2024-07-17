@@ -36,10 +36,10 @@ public:
 };
 
 // Initialize the change request file
-void initChangeRequest();
+bool initChangeRequest();
 
 // Shut down the change request file
-void closeChangeRequest();\
+bool closeChangeRequest();
 
 void seekToBeginningOfChangeRequestFile();
 
@@ -49,5 +49,5 @@ bool addChangeRequest(ChangeRequest* chreq);
 // Get a single change request record
 bool getNextChangeRequest(ChangeRequest* chreq);
 
-bool filterNextChangeRequest(ChangeRequest* chreq, int change_ID, char* release_ID);
+bool filterNextChangeRequest(ChangeRequest* chreq, int* change_ID, char* release_ID);
 #endif

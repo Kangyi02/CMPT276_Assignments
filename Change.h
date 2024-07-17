@@ -42,10 +42,10 @@ public:
 };
 
 // Initialize the change file
-void initChange();
+bool initChange();
 
 // Shut down the change file
-void closeChange();
+bool closeChange();
 
 void seekToBeginningOfChangeFile();
 
@@ -58,7 +58,7 @@ bool addChange(Change* change);
 // Update a change except for its release ID
 bool updateChange(Change* change);
 
-bool filterNextChange(Change ch, char* product_name);
+bool filterNextChange(Change* ch, char* product_name);
 
-bool filterNextChange_DoneOrCancelled(Change ch, char* product_name);
+bool filterNextChange_DoneOrCancelled(Change* ch, char* product_name);
 #endif

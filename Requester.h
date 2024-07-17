@@ -28,14 +28,14 @@ public:
     char department[13];
 
     Requester();
-    Requester(const char* name, const int* phone, const char* email_addr, const char* dept);
+    Requester(const char* name, const int phone, const char* email_addr, const char* dept);
 };
 
 // Initialize the requester file
-void initRequester();
+bool initRequester();
 
 // Shut down the requester file
-void closeRequester();
+bool closeRequester();
 
 void seekToBeginningOfRequesterFile();
 
@@ -45,5 +45,5 @@ bool getNextRequester(Requester* req);
 // Create a new requester
 bool addRequester(Requester* req);
 
-bool filterRequester(Requester* req, char requester_name);
+bool filterRequester(Requester* req, char* requester_name);
 #endif

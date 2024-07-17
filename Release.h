@@ -32,10 +32,10 @@ public:
 };
 
 // Initialize the release file
-void initRelease();
+bool initRelease();
 
 // Shut down the release file
-void closeRelease();
+bool closeRelease();
 
 void seekToBeginningOfReleaseFile();
 

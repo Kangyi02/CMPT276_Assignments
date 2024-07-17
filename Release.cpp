@@ -18,7 +18,7 @@ Release::Release(const char* relID, const char* prodname, const char* reldate)
     
 }
 
-void initRelease() {
+bool initRelease() {
     ReleaseFileStream.open("file location", ios::in | ios::out | ios::binary | ios::app);
     if (!ReleaseFileStream) {
         cerr << "Error: Could not open file." << endl;
