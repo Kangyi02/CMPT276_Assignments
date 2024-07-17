@@ -4,211 +4,104 @@
 
 using namespace std;
 
-fstream ChangeFileStream;
+fstream changeFileStream;
 
-Change::Change() : priority(1), status(new char[10]), description(new char[31]), product_name(new char[11]), anticipated_release_ID(new char[9]) {
-    setChange_ID();
-    strcpy(status, "reported");
-}
-
-Change::Change(const char* id, const int prio, const char* stat, const char* desc, const char* pname, const char* arid) : Change() 
+Change::Change()
 {
-    setChange_ID();
-    priority = prio;
-    strcpy(status, stat);
-    strcpy(description, desc);
-    strcpy(product_name, pname);
-    strcpy(anticipated_release_ID, arid);
+    change_ID[0] = '\0';
+    priority[0] = '\0';
+    status[0] = '\0';
+    description[0] = '\0';
+    product_name[0] = '\0';
+    anticipated_release_ID[0] = '\0';
 }
-
-Change::Change(const Change& other) : Change() 
+    
+Change::Change(const char* id, const int* prio, const char* stat, const char* desc, const char* prodname, const char* arid)
 {
-    change_ID = other.change_ID;
-    priority = other.priority;
-    strcpy(status, other.status);
-    strcpy(description, other.description);
-    strcpy(product_name, other.product_name);
-    strcpy(anticipated_release_ID, other.anticipated_release_ID);
-}
-
-Change::~Change() 
-{
-    delete[] status;
-    delete[] description;
-    delete[] product_name;
-    delete[] anticipated_release_ID;
-}
-
-void initChange() 
-{
-    ChangeFileStream.open("file location", ios::in | ios::out | ios::binary | ios::app);
-    if (!ChangeFileStream) 
+    for(int i = 0; i < sizeof(change_ID); ++i) 
     {
-        cerr << "Error: Could not open file." << endl;
+        change_ID[i] = id[i];
     }
-}
 
-void closeChange() 
-{
-    if (ChangeFileStream.is_open()) 
+    for(int i = 0; i < sizeof(priority); ++i) 
     {
-        ChangeFileStream.close();
+        priority[i] = prio[i];
     }
+
+    strncpy(status, stat, sizeof(status));
+
+    strncpy(description, desc, sizeof(description));
+
+    strncpy(product_name, prodname, sizeof(product_name));
+
+    strncpy(anticipated_release_ID, arid, sizeof(anticipated_release_ID));
 }
 
-Change* getChange(char* product_name) 
+bool initChange()
 {
-    if (ChangeFileStream.is_open()) 
+    changeFileStream.open("Change.bin", ios::in | ios::out | ios::binary | ios::ate);
+    if (!changeFileStream) 
     {
-        seekToBeginningOfChangeFile();
-        char pname[11];
-        int id, prio;
-        char stat[10];
-        char desc[31];
-        char arid[9];
+        return false;
+    }
+    return true;
+}
 
-        while (ChangeFileStream >> pname >> id >> prio >> stat >> desc >> arid) 
+bool closeChange()
+{
+    if(changeFileStream.is_open()) 
+    {
+        changeFileStream.close();
+        if(changeFileStream.is_open())
         {
-            if (strcmp(pname, product_name) == 0) 
-            {
-                return new Change(pname, prio, stat, desc, pname, arid);
-            }
+            return false;
         }
-    } else 
-    {
-        cerr << "Error: File not open." << endl;
+        return true;
     }
-    return nullptr;
+    return true;
 }
 
-int createChange(Change* change) 
+void seekToBeginningOfChangeFile()
 {
-    if (ChangeFileStream.is_open()) 
-    {
-        ChangeFileStream << change->product_name << " "
-                         << change->getChange_ID() << " "
-                         << change->priority << " "
-                         << change->status << " "
-                         << change->description << " "
-                         << change->anticipated_release_ID << endl;
-        return change->getChange_ID();
-    } else 
-    {
-        cerr << "Error: File not open." << endl;
-        return -1;
-    }
+    changeFileStream.seekg(0, ios::beg);
 }
 
-void updateChange(Change* new_change) 
+bool getNextChange(Change* ch)
 {
-    if (ChangeFileStream.is_open()) 
+    if(changeFileStream.read(reinterpret_cast<char*>(ch), sizeof(Change)))
     {
-        // Temporary file to store updated records
-        fstream tempFileStream;
-        tempFileStream.open("TempChange.txt", ios::out);
+        return true;
+    }
+    return false;
+}
 
-        if (!tempFileStream) 
+bool addChange(Change* ch)
+{
+    if(changeFileStream.write(reinterpret_cast<char*>(ch), sizeof(Change)))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool updateChange(Change* ch)
+{
+
+}
+
+bool filterNextChange(Change* ch, char* prod_name)
+{
+    while(changeFileStream.read(reinterpret_cast<char*>(ch), sizeof(Change))) 
+    {
+        if(strcmp(ch->product_name, prod_name) == 0) 
         {
-            cerr << "Error: Could not create temporary file." << endl;
-            return;
-        }
-
-        seekToBeginningOfChangeFile();
-        char pname[11];
-        int id, prio;
-        char stat[10];
-        char desc[31];
-        char arid[9];
-
-        while (ChangeFileStream >> pname >> id >> prio >> stat >> desc >> arid) 
-        {
-            if (id == new_change->getChange_ID()) 
-            {
-                tempFileStream << new_change->product_name << " "
-                               << new_change->getChange_ID() << " "
-                               << new_change->priority << " "
-                               << new_change->status << " "
-                               << new_change->description << " "
-                               << new_change->anticipated_release_ID << endl;
-            } else 
-            {
-                tempFileStream << pname << " " << id << " " << prio << " " << stat << " " << desc << " " << arid << endl;
-            }
-        }
-
-        ChangeFileStream.close();
-        tempFileStream.close();
-
-        // Replace the old file with the updated file
-        remove("Change.txt");
-        rename("TempChange.txt", "Change.txt");
-
-        // Reopen the original file stream
-        ChangeFileStream.open("Change.txt", ios::in | ios::out | ios::app);
-    } else 
-    {
-        cerr << "Error: File not open." << endl;
+            return true;
+        }        
     }
+    return false;
 }
 
-void seekToBeginningOfChangeFile() 
+bool filterNextChange_DoneOrCancelled(Change* ch, char* product_name)
 {
-    if (ChangeFileStream.is_open()) 
-    {
-        ChangeFileStream.clear(); // Clear any error flags
-        ChangeFileStream.seekg(0, ios::beg);
-    } else 
-    {
-        cerr << "Error: File not open." << endl;
-    }
-}
 
-Change* filterChange(char* product_name) 
-{
-    if (ChangeFileStream.is_open()) 
-    {
-        seekToBeginningOfChangeFile();
-        char pname[11];
-        int id, prio;
-        char stat[10];
-        char desc[31];
-        char arid[9];
-
-        while (ChangeFileStream >> pname >> id >> prio >> stat >> desc >> arid) 
-        {
-            if (strcmp(pname, product_name) == 0) 
-            {
-                return new Change(pname, prio, stat, desc, pname, arid);
-            }
-        }
-    } else 
-    {
-        cerr << "Error: File not open." << endl;
-    }
-    return nullptr;
-}
-
-Change* filterChange_doneOrCancelled(char* product_name) 
-{
-    if (ChangeFileStream.is_open()) 
-    {
-        seekToBeginningOfChangeFile();
-        char pname[11];
-        int id, prio;
-        char stat[10];
-        char desc[31];
-        char arid[9];
-
-        while (ChangeFileStream >> pname >> id >> prio >> stat >> desc >> arid) 
-        {
-            if (strcmp(pname, product_name) == 0 && (strcmp(stat, "done") == 0 || strcmp(stat, "cancelled") == 0)) 
-            {
-                return new Change(pname, prio, stat, desc, pname, arid);
-            }
-        }
-    } else 
-    {
-        cerr << "Error: File not open." << endl;
-    }
-    return nullptr;
 }

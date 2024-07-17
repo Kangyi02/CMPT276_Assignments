@@ -32,7 +32,7 @@ public:
 
     // Constructors
     ChangeRequest();
-    ChangeRequest(const char* name, const int id, const char* date, const char* releaseID);
+    ChangeRequest(const int* id, const char* name, const char* date, const char* releaseID);
 };
 
 // Initialize the change request file
@@ -43,11 +43,11 @@ bool closeChangeRequest();
 
 void seekToBeginningOfChangeRequestFile();
 
-// Create a new change request 
-bool addChangeRequest(ChangeRequest* chreq);
-
 // Get a single change request record
 bool getNextChangeRequest(ChangeRequest* chreq);
+
+// Create a new change request 
+bool addChangeRequest(ChangeRequest* chreq);
 
 bool filterNextChangeRequest(ChangeRequest* chreq, int* change_ID, char* release_ID);
 #endif

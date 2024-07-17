@@ -1,5 +1,4 @@
 #include "Requester.h"
-#include <cstring>
 #include <iostream>
 #include <fstream>
 
@@ -20,8 +19,8 @@ Requester::Requester()
 Requester::Requester(const char* name, const int* phone, const char* email_addr, const char* dept) 
 {
     // Initialize requester_name with the provided name, ensuring it does not exceed the max length
-    strncpy(requester_name, name, sizeof(name) - 1);
-    requester_name[sizeof(name) - 1] = '\0'; // Ensure null termination
+    strncpy(requester_name, name, sizeof(requester_name) - 1);
+    requester_name[sizeof(requester_name) - 1] = '\0'; // Ensure null termination
 
     // Initialize phone_number with the provided phone number
     for(int i = 0; i < 11; ++i) 
@@ -30,18 +29,18 @@ Requester::Requester(const char* name, const int* phone, const char* email_addr,
     }
 
     // Initialize email with the provided email address, ensuring it does not exceed the max length
-    strncpy(email, email_addr, sizeof(email_addr) - 1);
-    email[sizeof(email_addr) - 1] = '\0'; // Ensure null termination
+    strncpy(email, email_addr, sizeof(email) - 1);
+    email[sizeof(email) - 1] = '\0'; // Ensure null termination
 
     // Initialize department with the provided department, ensuring it does not exceed the max length
-    strncpy(department, dept, sizeof(dept) - 1);
-    department[sizeof(dept) - 1] = '\0'; // Ensure null termination
+    strncpy(department, dept, sizeof(department) - 1);
+    department[sizeof(department) - 1] = '\0'; // Ensure null termination
 }
 
 // Initialize the requester file
 bool initRequester() 
 {
-    requesterFileStream.open("requesters.bin", ios::in | ios::out | ios::binary | ios::ate);
+    requesterFileStream.open("Requester.bin", ios::in | ios::out | ios::binary | ios::ate);
     if (!requesterFileStream) 
     {
         return false;
@@ -64,6 +63,11 @@ bool closeRequester()
     return true;
 }
 
+void seekToBeginningOfRequesterFile() 
+{
+    requesterFileStream.seekg(0, ios::beg);
+}
+
 // Get the next requester
 bool getNextRequester(Requester* req) 
 {
@@ -84,21 +88,15 @@ bool addRequester(Requester* req)
     return false;
 }
 
-void seekToBeginningOfRequesterFile() 
-{
-    requesterFileStream.seekg(0, ios::beg);
-}
-
 // Filter requesters by name
-Requester filterRequester(char* requester_name) 
+bool filterNextRequester(Requester* req, char* name) 
 {
-    Requester req;
-    while(requesterFileStream.read(reinterpret_cast<char*>(&req), sizeof(Requester))) 
+    while(requesterFileStream.read(reinterpret_cast<char*>(req), sizeof(Requester))) 
     {
-        if(strcmp(req.requester_name, requester_name) == 0) 
+        if(strcmp(req->requester_name, name) == 0) 
         {
-            return req;
-        }
+            return true;
+        }        
     }
-    return req; // Return an empty requester if not found
+    return false;
 }

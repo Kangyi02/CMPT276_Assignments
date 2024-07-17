@@ -23,7 +23,6 @@ data without affecting the external interface.
 ----------------------------------------------------------
 //Exported constants/types/variables
 */
-int CID = 0;
 
 // Change class
 class Change
@@ -38,7 +37,7 @@ public:
 
     // constructors
     Change();
-    Change(const char* id, const int prio, const char* status, const char* desc, const char* pname, const char* arid);
+    Change(const char* id, const int* prio, const char* status, const char* desc, const char* prodname, const char* arid);
 };
 
 // Initialize the change file
@@ -50,15 +49,16 @@ bool closeChange();
 void seekToBeginningOfChangeFile();
 
 // Get change ID
-bool getNextChange(char* product_name, Change* change);
+bool getNextChange(char* prod_name, Change* ch);
 
 // Create a new change for a product
-bool addChange(Change* change);  
+bool addChange(Change* change); 
 
 // Update a change except for its release ID
 bool updateChange(Change* change);
 
-bool filterNextChange(Change* ch, char* product_name);
+bool filterNextChange(Change* ch, char* prod_name);
 
-bool filterNextChange_DoneOrCancelled(Change* ch, char* product_name);
+bool filterNextChange_DoneOrCancelled(Change* ch, char* prod_name);
+
 #endif

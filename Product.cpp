@@ -24,18 +24,11 @@ Product::Product(const char* name, const char* date)
     product_name[sizeof(date) - 1] = '\0';
 }
 
-//deconstructor
-Product::~Product() 
-{
-    delete[] product_name;
-    delete[] release_date;
-}
-
 // Initialize the product file
 //FIX FILE PATH BEFORE SUBMITTING
 bool initProduct() 
 {
-    productFileStream.open(/*file path*/, ios::in | ios::out | ios::binary | ios::ate);
+    productFileStream.open("Product.bin", ios::in | ios::out | ios::binary | ios::ate);
     if (!productFileStream) 
     {
         return false;
@@ -64,9 +57,9 @@ void seekToBeginningOfProductFile()
 }
 
 // Store a new product to file
-bool addProduct(char* product_name)
+bool addProduct(char* prod_name)
 {
-    if (productFileStream.write(reinterpret_cast<char*>(product_name), sizeof(Product)))
+    if (productFileStream.write(reinterpret_cast<char*>(prod_name), sizeof(Product)))
     {
         return true;
     }

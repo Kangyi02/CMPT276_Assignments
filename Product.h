@@ -40,7 +40,7 @@ void seekToBeginningOfProductFile();
 
 // Create a new product. Write the product into file. 
 // Return false if it failed, otherwise true.
-bool addProduct(char* product_name);
+bool addProduct(char* prod_name);
 
 // Get the product by reading from the product file 
 bool getNextProduct(Product* prod);
