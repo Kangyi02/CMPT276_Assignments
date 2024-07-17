@@ -6,44 +6,16 @@ using namespace std;
 
 fstream ReleaseFileStream;
 
-Release::Release() 
-{
-    // Initialize requester_name with an empty string
-    strcpy(release_ID, "");
-
-    // Initialize phone_number with zeroes
-    for (int i = 0; i < 11; ++i) 
-    {
-        phone_number[i] = 0;
-    }
-
-    // Initialize email with an empty string
-    strcpy(email, "");
-
-    // Initialize department with an empty string
-    strcpy(department, "");
+Release::Release() {
+    release_ID[0] = '\0';
+    product_name[0] = '\0';
+    release_date[0] = '\0';
 }
 
 // Parameterized constructor implementation
-Release::Release(const char* name, const int* phone, const char* email_addr, const char* dept) 
+Release::Release(const char* relID, const char* prodname, const char* reldate) 
 {
-    // Initialize requester_name with the provided name, ensuring it does not exceed the max length
-    strncpy(requester_name, name, sizeof(name) - 1);
-    requester_name[sizeof(name) - 1] = '\0'; // Ensure null termination
-
-    // Initialize phone_number with the provided phone number
-    for(int i = 0; i < 11; ++i) 
-    {
-        phone_number[i] = phone[i];
-    }
-
-    // Initialize email with the provided email address, ensuring it does not exceed the max length
-    strncpy(email, email_addr, sizeof(email_addr) - 1);
-    email[sizeof(email_addr) - 1] = '\0'; // Ensure null termination
-
-    // Initialize department with the provided department, ensuring it does not exceed the max length
-    strncpy(department, dept, sizeof(dept) - 1);
-    department[sizeof(dept) - 1] = '\0'; // Ensure null termination
+    
 }
 
 void initRelease() {

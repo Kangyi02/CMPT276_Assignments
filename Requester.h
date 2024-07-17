@@ -37,13 +37,13 @@ void initRequester();
 // Shut down the requester file
 void closeRequester();
 
+void seekToBeginningOfRequesterFile();
+
 // Get requester name 
 bool getNextRequester(Requester* req);
 
 // Create a new requester
 bool addRequester(Requester* req);
-
-void seekToBeginningOfRequesterFile();
 
 bool filterRequester(Requester* req, char requester_name);
 #endif

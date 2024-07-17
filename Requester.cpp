@@ -10,20 +10,10 @@ fstream requesterFileStream;
 // Default constructor implementation
 Requester::Requester() 
 {
-    // Initialize requester_name with an empty string
-    strcpy(requester_name, "");
-
-    // Initialize phone_number with zeroes
-    for (int i = 0; i < 11; ++i) 
-    {
-        phone_number[i] = 0;
-    }
-
-    // Initialize email with an empty string
-    strcpy(email, "");
-
-    // Initialize department with an empty string
-    strcpy(department, "");
+    requester_name[0] = '\0';
+    phone_number[0] = '\0';
+    email[0] = '\0';
+    department[0] = '\0';
 }
 
 // Parameterized constructor implementation

@@ -39,7 +39,9 @@ public:
 void initChangeRequest();
 
 // Shut down the change request file
-void closeChangeRequest();
+void closeChangeRequest();\
+
+void seekToBeginningOfChangeRequestFile();
 
 // Create a new change request 
 bool addChangeRequest(ChangeRequest* chreq);
@@ -47,7 +49,5 @@ bool addChangeRequest(ChangeRequest* chreq);
 // Get a single change request record
 bool getNextChangeRequest(ChangeRequest* chreq);
 
-void seekToBeginningOfChangeRequestFile();
-
-ChangeRequest filterNextChangeRequest(int change_ID, char* release_ID);
+bool filterNextChangeRequest(ChangeRequest* chreq, int change_ID, char* release_ID);
 #endif

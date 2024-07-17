@@ -47,6 +47,8 @@ void initChange();
 // Shut down the change file
 void closeChange();
 
+void seekToBeginningOfChangeFile();
+
 // Get change ID
 bool getNextChange(char* product_name, Change* change);
 
@@ -56,9 +58,7 @@ bool addChange(Change* change);
 // Update a change except for its release ID
 bool updateChange(Change* change);
 
-void seekToBeginningOfChangeFile();
+bool filterNextChange(Change ch, char* product_name);
 
-Change filterNextChange(char* product_name);
-
-Change filterNextChange_DoneOrCancelled(char* product_name);
+bool filterNextChange_DoneOrCancelled(Change ch, char* product_name);
 #endif

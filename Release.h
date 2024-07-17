@@ -37,13 +37,13 @@ void initRelease();
 // Shut down the release file
 void closeRelease();
 
+void seekToBeginningOfReleaseFile();
+
 // Create a new release for a product
 bool addRelease(Release* new_release);
 
 // Get release ID 
 bool getNextRelease(char* product_name);
 
-void seekToBeginningOfReleaseFile();
-
-Release filterNextRelease(char* product_name);
+bool filterNextRelease(Release rel, char* product_name);
 #endif
