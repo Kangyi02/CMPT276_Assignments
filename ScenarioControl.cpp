@@ -143,7 +143,7 @@ void createChangeRequestControl()
 
     // Loop to display requester list and select a requester
     int i;
-    while (getNextRequester(temp) == true) // question
+    while (getNextRequester(temp) == true) 
     {
         requester_list[0] = *temp;
         cout << "Select a requester that reports this change request: \n";
@@ -155,7 +155,7 @@ void createChangeRequestControl()
                      << temp->department
                      << "\n";
         
-        for (i = 1; i < 20; i++) // problem
+        for (i = 1; i < 20; i++) 
         {
             if (getNextRequester(temp) == true)
             {
@@ -207,7 +207,8 @@ void createChangeRequestControl()
                 cin >> chosen_requester->department;
             }
 
-            cout << "The new requester has been successfully added. \n";
+            if (addRequester(chosen_requester))
+                cout << "The new requester has been successfully added. \n";
         }
     }
 
@@ -220,14 +221,14 @@ void createChangeRequestControl()
     Product *chosen_product;    // Chosen product pointer
 
     // Loop to display product list and select a product
-    while (getNextProduct(temp1)) // question
+    while (getNextProduct(temp1))
     {
         product_list[0] = *temp1;
         cout << "Select a product that corresponds to this change request: \n";
         cout << "Product    ";
         cout << "1) " << temp1->product_name;
 
-        for (int i = 1; i < 20; i++) // problem
+        for (int i = 1; i < 20; i++) 
         {
             if (getNextProduct(temp1))
             {
@@ -264,25 +265,28 @@ void createChangeRequestControl()
     Change *chosen_change; // Chosen change pointer
 
     // Loop to display change list and select a change
-    while (filterNextChange(temp1->product_name, temp2)) // question
+    while (filterNextChange(temp2, temp1->product_name))
     {
         cout << "Which change corresponds to the change request? \n";
-        // change formats later
         cout << "Description                     "
              << "change ID   "
              << "State      "
              << "Priority     "
              << "Anticipated Release\n";
 
-        for (i = 1; i < 20; i++) // problem
+        cout << "1) " << temp2->description
+                     << temp2->change_ID
+                     << temp2->status
+                     << temp2->priority
+                     << temp2->anticipated_release_ID << "\n";
+
+        for (i = 1; i < 20; i++) 
         {
-            temp2 = filterChange(chosen_product->getProduct_name());  // Filter changes by product name 
-            if (temp2 != NULL)
+            if (filterNextChange(temp2, temp1->product_name))
             {
                 change_list[i] = *temp2;    // Add change to the list
-                // change format later
                 cout << i + 1 << ") " << temp2->description
-                     << temp2->getChange_ID()
+                     << temp2->change_ID
                      << temp2->status
                      << temp2->priority
                      << temp2->anticipated_release_ID << "\n";
@@ -308,14 +312,15 @@ void createChangeRequestControl()
             // Prompt user to create a new change
             cout << "Enter the description of the new change (max 30 chars): ";
             cin >> chosen_change->description;
-            chosen_change->priority = 0; // if 0 print out N/A
-            chosen_change->status = "Reported";
+            *chosen_change->priority = 0; // if 0 print out N/A
+            *chosen_change->status = *"Reported";
             chosen_change->setChange_ID(); 
-            chosen_change->product_name = chosen_product->getProduct_name();
-            chosen_change->anticipated_release_ID = "None";
-            // Confirm the creation of the new change and add to file
-            cout << "The new change has been successfully created. ";
-            addChange(chosen_change);
+            *chosen_change->product_name = *chosen_product->product_name;
+            *chosen_change->anticipated_release_ID = *"None";
+
+            // Add to file
+            if (addChange(chosen_change))
+                cout << "The new change has been successfully created. ";       
         }
     }
 
@@ -328,23 +333,24 @@ void createChangeRequestControl()
     seekToBeginningOfReleaseFile();
 
     // Loop to display release list and select a release
-    while (temp3 != NULL) // question
+    while (filterNextRelease(*temp3, temp1->product_name)) 
     {
+        release_list[0] = *temp3;
         cout << "Select a reported release that corresponds to this change request: \n";
 
-        // change formats later
         cout << "Release ID"
              << "Release date\n";
+        
+        cout << "1) " << temp3->release_ID
+                     << temp3->release_date << "\n";
 
         int i;
-        for (i = 0; i < 20; i++) // problem
+        for (i = 1; i < 20; i++) 
         {
-            temp3 = filterRelease(chosen_product->getProduct_name());   // Filter releases by product name
-            if (temp2 != NULL)
+            if (filterNextRelease(*temp3, temp1->product_name))
             {
                 release_list[i] = *temp3;   // Add release to the list
-                // change format later
-                cout << i + 1 << ") " << temp3->getRelease_ID()
+                cout << i + 1 << ") " << temp3->release_ID
                      << temp3->release_date << "\n";
             }
             else
@@ -369,11 +375,12 @@ void createChangeRequestControl()
     ChangeRequest *new_changeRequest;
     cin >> new_changeRequest->request_date;
     *new_changeRequest->requester_name = *chosen_requester->requester_name;
-    new_changeRequest->setChange_ID(chosen_change->getChange_ID());
-    new_changeRequest->reported_release_ID = chosen_release->getRelease_ID();
+    *new_changeRequest->change_ID = *chosen_change->change_ID;
+    *new_changeRequest->reported_release_ID = *chosen_release->release_ID;
+
     // Create the new change request (Write the record to the file) and confirm success
-    addChangeRequest(new_changeRequest);
-    cout << "The new change request has been successfully created. \n";
+    if (addChangeRequest(new_changeRequest))
+        cout << "The new change request has been successfully created. \n";
 }
 
 // Function to control the querying of a change
@@ -381,23 +388,23 @@ void queryChangeControl()
 {
     // Array to store a list of products
     Product product_list[20]; 
-    Product *temp1; // Temporary product pointer
-    Product *chosen_product; // Chosen product pointer
-    // Move the file pointer to the beginning of the product file
-    seekToBeginningOfProductFile();
+    Product *temp1;     // Temporary product pointer
+    Product *chosen_product;    // Chosen product pointer
 
     // Loop to display product list and select a product
-    while (temp1 != NULL) // question
+    while (getNextProduct(temp1)) 
     {
-        cout << "Select a product: \n";
+        product_list[0] = *temp1;
+        cout << "Select a product:\n";
+        cout << "1) " << temp1->product_name;
+
         int i;
-        for (i = 0; i < 20; i++) // problem
+        for (i = 1; i < 20; i++) 
         {
-            temp1 = getProduct();   // Get the next product from the file
-            if (temp1 != NULL)
+            if (getNextProduct(temp1))
             {
                 product_list[i] = *temp1;   // Add product to the list
-                cout << i + 1 << ") " << temp1->getProduct_name() << "\n";
+                cout << i + 1 << ") " << temp1->product_name << "\n";
             }
             else
                 break;  // Exit loop if no more products
@@ -429,23 +436,24 @@ void queryChangeControl()
     seekToBeginningOfChangeFile();
 
     // Loop to display change list and select a change
-    while (temp2 != NULL) // question
+    while (filterNextChange(temp2, chosen_product->product_name)) 
     {
-        cout << "Changes in the product '" << chosen_product->getProduct_name() << "':\n";
-        // change formats later
+        cout << "Changes in the product '" << chosen_product->product_name << "':\n";
         cout << "Description                     "
              << "change ID   \n";
 
+        cout << "1) " << temp2->description
+                     << temp2->change_ID
+                     << "\n";
+
         int i;
-        for (i = 0; i < 20; i++) // problem
+        for (i = 1; i < 20; i++) 
         {
-            temp2 = filterChange(chosen_product->getProduct_name()); // Filter changes by product name
-            if (temp2 != NULL)
+            if (filterNextChange(temp2, chosen_product->product_name))
             {
                 change_list[i] = *temp2;    // Add change to the list
-                // change format later
                 cout << i + 1 << ") " << temp2->description
-                     << temp2->getChange_ID()
+                     << temp2->change_ID
                      << "\n";
             }
             else
@@ -477,9 +485,9 @@ void queryChangeControl()
          << "Priority     "
          << "Anticipated Release\n";
 
-    cout << chosen_product->getProduct_name()
+    cout << chosen_product->product_name
          << chosen_change->description
-         << chosen_change->getChange_ID()
+         << chosen_change->change_ID
          << chosen_change->status
          << chosen_change->priority
          << chosen_change->anticipated_release_ID;
@@ -489,26 +497,26 @@ void queryChangeControl()
 void updateChangeControl()
 {
      // Step 1: Get the product
-    Product product_list[20]; // Array to store product list
-    Product *temp1; // Temporary pointer for product
-    Product *chosen_product;    // Pointer for chosen product
+    Product product_list[20]; 
+    Product *temp1;     // Temporary product pointer
+    Product *chosen_product;    // Chosen product pointer
 
-    // Function to set file cursor to the beginning of the product file
-    seekToBeginningOfProductFile();
-    // Loop until a valid product is chosen
-    while (temp1 != NULL) // question
+    // Loop to display product list and select a product
+    while (getNextProduct(temp1)) 
     {
+        product_list[0] = *temp1;
         cout << "Select a product that corresponds to the change you want to update: \n";
         cout << "Product    ";
+        cout << "1) " << temp1->product_name;
+
         int i;
         // Display product options
-        for (i = 0; i < 20; i++) // problem
+        for (i = 1; i < 20; i++) 
         {
-            temp1 = getProduct();   // Function to get next product
-            if (temp1 != NULL)
+            if (getNextProduct(temp1))
             {
                 product_list[i] = *temp1;   // Store product in array
-                cout << i + 1 << ") " << temp1->getProduct_name() << "\n";  // Display product
+                cout << i + 1 << ") " << temp1->product_name << "\n";  // Display product
             }
             else
                 break;  // Exit loop if no more products
@@ -531,33 +539,36 @@ void updateChangeControl()
     }
 
     // Step 2: Get the changes
+    seekToBeginningOfChangeFile();  // Function to set file cursor to the beginning of the change file
+
     Change change_list[20]; // Array to store change list
     Change *temp2;  // Temporary pointer for change
     Change *chosen_change;  // Pointer for chosen change
 
-    seekToBeginningOfChangeFile();  // Function to set file cursor to the beginning of the change file
     // Loop until a valid change is chosen
-    while (temp2 != NULL) // question
+    while (filterNextChange(temp2, chosen_product->product_name)) 
     {
         cout << "Select a change you want to update: \n";
-        // change formats later
         cout << "Description                     "
              << "change ID   "
              << "State      "
              << "Priority     "
              << "Anticipated Release\n";
+        cout << "1) " << temp2->description
+                     << temp2->change_ID
+                     << temp2->status
+                     << temp2->priority
+                     << temp2->anticipated_release_ID << "\n"; 
 
         int i;
         // Display change options
-        for (i = 0; i < 20; i++) // problem
+        for (i = 1; i < 20; i++) 
         {
-            temp2 = filterChange(chosen_product->getProduct_name());    // Function to filter changes by product
-            if (temp2 != NULL)
+            if (filterNextChange(temp2, chosen_product->product_name))
             {
                 change_list[i] = *temp2;    // Store change in array
-                // change format later
                 cout << i + 1 << ") " << temp2->description
-                     << temp2->getChange_ID()
+                     << temp2->change_ID
                      << temp2->status
                      << temp2->priority
                      << temp2->anticipated_release_ID << "\n";  // Display change
@@ -587,7 +598,7 @@ void updateChangeControl()
 
     // Update description
     cout << "Updating the change with the change ID '1234' in the product '"
-         << chosen_product->getProduct_name() << "':\n"
+         << chosen_product->product_name << "':\n"
          << "Do you want to replace the description (Y/N)? ";
     char user_input1[1];
     cin >> user_input1;
@@ -599,7 +610,7 @@ void updateChangeControl()
              << "New description is: ";
         char* new_description;
         cin >> new_description; // Get new description
-        chosen_change->description = new_description; // Update description
+        *chosen_change->description = *new_description; // Update description
     }
 
     // Update status
@@ -642,7 +653,7 @@ void updateChangeControl()
 
     cin >> user_input2;
     if (user_input2 != 0)
-        chosen_change->priority = user_input2;  // Update priority
+        *chosen_change->priority = user_input2;  // Update priority
 
     // Update anticipated release ID
     cout << "The current 'anticipated release' is " << chosen_change->anticipated_release_ID;
@@ -654,24 +665,24 @@ void updateChangeControl()
 
     seekToBeginningOfReleaseFile(); // Function to set file cursor to the beginning of the release file
     // Loop until a valid release is chosen
-    while (temp3 != NULL) // question
+    while (filterNextRelease(*temp3, temp1->product_name)) 
     {
         cout << "Select an anticipated release that you want to update to: \n";
 
-        // change formats later
         cout << "Release ID"
              << "Release date\n";
 
+        cout << "1) " << temp3->release_ID
+                     << temp3->release_date << "\n";    // Display release
+
         int i;
          // Display release options
-        for (i = 0; i < 20; i++)
+        for (i = 1; i < 20; i++)
         {
-            temp3 = filterRelease(chosen_product->getProduct_name()); // Function to filter releases by product
-            if (temp2 != NULL)
+            if (filterNextRelease(*temp3, temp1->product_name))
             {
                 release_list[i] = *temp3;   // Store release in array
-                // change format later
-                cout << i + 1 << ") " << temp3->getRelease_ID()
+                cout << i + 1 << ") " << temp3->release_ID
                      << temp3->release_date << "\n";    // Display release
             }
             else
@@ -689,7 +700,7 @@ void updateChangeControl()
         {
             chosen_release = &release_list[user_input - 1]; // Assign chosen release
             // update the release id
-            chosen_change->anticipated_release_ID = chosen_release->getRelease_ID();    // Update anticipated release ID
+            *chosen_change->anticipated_release_ID = *chosen_release->release_ID;    // Update anticipated release ID
             break;
         }
         else if (user_input == 0)   // Keep current release
@@ -698,7 +709,7 @@ void updateChangeControl()
 
     updateChange(chosen_change);    // Function to update the change in the system
     // Display updated change info
-     cout << "Change '" << chosen_change->getChange_ID() << "' has been updated:\n"
+     cout << "Change '" << chosen_change->change_ID << "' has been updated:\n"
          << "Description                     "
          << "change ID   "
          << "State      "
@@ -706,7 +717,7 @@ void updateChangeControl()
          << "Anticipated Release\n";
 
     cout << chosen_change->description
-         << chosen_change->getChange_ID()
+         << chosen_change->change_ID
          << chosen_change->status
          << chosen_change->priority
          << chosen_change->anticipated_release_ID;
@@ -722,19 +733,21 @@ void allChangesReportControl()
 
     // Function to set file cursor to the beginning of the product file
     seekToBeginningOfProductFile();
+
     // Loop until a valid product is chosen
-    while (temp1 != NULL) // question
+    while (getNextProduct(temp1)) 
     {
         cout << "Select a product to print its report: \n";
+        cout << "1) " << temp1->product_name << "\n";  // Display product
+
         int i;
          // Display product options
-        for (i = 0; i < 20; i++) // problem
+        for (i = 1; i < 20; i++) 
         {
-            temp1 = getProduct();   // Function to get next product
-            if (temp1 != NULL)
+            if (getNextProduct(temp1))
             {
                 product_list[i] = *temp1;   // Store product in array
-                cout << i + 1 << ") " << temp1->getProduct_name() << "\n";  // Display product
+                cout << i + 1 << ") " << temp1->product_name << "\n";  // Display product
             }
             else
                 break;  // Exit loop if no more products
@@ -760,31 +773,35 @@ void allChangesReportControl()
     Change change_list[20]; // Array to store change list
     Change *temp2;   // Temporary pointer for change
     Change *chosen_change; // Pointer for chosen change
+
     // Function to set file cursor to the beginning of the change file
     seekToBeginningOfChangeFile();
+
     // Loop until there are no more changes to display
-    while (temp2 != NULL) // question
+    while (filterNextChange_DoneOrCancelled(temp2, chosen_product->product_name)) 
     {
-        cout << "Change report for the product '" << chosen_product->getProduct_name() << "': \n";
+        cout << "Change report for the product '" << chosen_product->product_name << "': \n";
         // Display header for the changes report
-        // change formats later
         cout << "Description                     "
              << "change ID   "
              << "State      "
              << "Priority     "
              << "Anticipated Release\n";
 
+        cout << "1) " << temp2->description
+                         << temp2->change_ID
+                         << temp2->status
+                         << temp2->priority
+                         << temp2->anticipated_release_ID << "\n";
         int i;
-        for (i = 0; i < 20; i++) // problem
+        for (i = 1; i < 20; i++) 
         {
-            temp2 = filterChange_DoneOrCancelled(chosen_product->getProduct_name()); // Filter changes by product name and status
-            if (temp2 != NULL)
+            if (filterNextChange_DoneOrCancelled(temp2, chosen_product->product_name))
             {
                     change_list[i] = *temp2;
-                    // change format later
                     // Display each change
                     cout << i + 1 << ") " << temp2->description
-                         << temp2->getChange_ID()
+                         << temp2->change_ID
                          << temp2->status
                          << temp2->priority
                          << temp2->anticipated_release_ID << "\n";
@@ -815,19 +832,21 @@ void allRequestersReportControl()
 
      // Function to set file cursor to the beginning of the product file
     seekToBeginningOfProductFile();
+
     // Loop until a valid product is chosen
-    while (temp1 != NULL) // question
+    while (getNextProduct(temp1))
     {
         cout << "Select a product to print its report: \n";
+        cout << "1) " << temp1->product_name << "\n";  // Display product
+
         int i;
         // Display product options
-        for (i = 0; i < 20; i++) // problem
+        for (i = 1; i < 20; i++) 
         {
-            temp1 = getProduct(); // Function to get the next product   
-            if (temp1 != NULL)
+            if (getNextProduct(temp1))
             {
                 product_list[i] = *temp1;   // Store product in array
-                cout << i + 1 << ") " << temp1->getProduct_name() << "\n";  // Display product
+                cout << i + 1 << ") " << temp1->product_name << "\n";  // Display product
             }
             else
                 break;  // Exit loop if no more products
@@ -853,14 +872,15 @@ void allRequestersReportControl()
     Change change_list[20]; // Array to store change list
     Change *temp2;  // Temporary pointer for change
     Change *chosen_change;  // Pointer for choosen change
+
     // Function to set file cursor to the beginning of the change file
     seekToBeginningOfChangeFile();
+    
     // Loop until there are no more changes to display
-    while (temp2 != NULL) // question
+    while (filterNextChange(temp2, chosen_product->product_name)) 
     {
-        cout << "Change report for the product '" << chosen_product->getProduct_name() << "': \n";
+        cout << "Change report for the product '" << chosen_product->product_name << "': \n";
 
-        // change formats later
         // Display header for the changes report
         cout << "Description                     "
              << "change ID   "
@@ -868,17 +888,20 @@ void allRequestersReportControl()
              << "Priority     "
              << "Anticipated Release\n";
 
+        cout << "1) " << temp2->description
+                         << temp2->change_ID
+                         << temp2->status
+                         << temp2->priority
+                         << temp2->anticipated_release_ID << "\n";
         int i;
-        for (i = 0; i < 20; i++) // problem
+        for (i = 1; i < 20; i++) 
         {
-            temp2 = filterChange(chosen_product->getProduct_name()); // Filter changes by product name
-            if (temp2 != NULL)
+            if (filterNextChange(temp2, chosen_product->product_name))
             {
                     change_list[i] = *temp2;
-                    // change format later
                     // Display each change
                     cout << i + 1 << ") " << temp2->description
-                         << temp2->getChange_ID()
+                         << temp2->change_ID
                          << temp2->status
                          << temp2->priority
                          << temp2->anticipated_release_ID << "\n";
@@ -912,26 +935,27 @@ void allRequestersReportControl()
 
      // Function to set file cursor to the beginning of the release file
     seekToBeginningOfReleaseFile();
+
      // Loop until a valid release is chosen
-    while (temp3 != NULL) // question
+    while (filterNextRelease(*temp3, chosen_product->product_name)) 
     {
         cout << "Select an anticipated release that you want to update to: \n";
 
-        // change formats later
         // Display header for the release options
         cout << "Release ID"
              << "Release date\n";
 
+        cout << "1) " << temp3->release_ID
+                     << temp3->release_date << "\n";
+
         int i;
-        for (i = 0; i < 20; i++)
+        for (i = 1; i < 20; i++)
         {
-            temp3 = filterRelease(chosen_product->getProduct_name());   // Filter releases by product name
-            if (temp2 != NULL)
+            if (filterNextRelease(*temp3, chosen_product->product_name))
             {
                 release_list[i] = *temp3;
-                // change format later
                 // Display each release
-                cout << i + 1 << ") " << temp3->getRelease_ID()
+                cout << i + 1 << ") " << temp3->release_ID
                      << temp3->release_date << "\n";
             }
             else
@@ -958,6 +982,7 @@ void allRequestersReportControl()
     Requester requester_list[20]; // Array to store requester list
     Requester *temp4;   // Temporary pointer for requester
     Requester *chosen_requester;    // Pointer for chosen requester
+
     // Get the change requests
     ChangeRequest changeRequester_list[20];  // Array to store change requests
     ChangeRequest *temp5;   // Temporary pointer for change request
@@ -970,25 +995,28 @@ void allRequestersReportControl()
 
     // Print header info
     cout << "Here is the report: \n" 
-         << "Product: " << chosen_product->getProduct_name()
+         << "Product: " << chosen_product->product_name
          << "Change description: " << chosen_change->description
-         << "Change ID: " << chosen_change->getChange_ID()
-         << "Release ID: " << chosen_release->getRelease_ID()
+         << "Change ID: " << chosen_change->change_ID
+         << "Release ID: " << chosen_release->release_ID
          << "State: " << chosen_change->status;
 
-    while (temp5 != NULL) // question
+    while (filterNextChangeRequest(temp5, chosen_change->change_ID, chosen_release->release_ID)) 
     {
         int i;
         cout << "Requester" << "Email";
-        for (i = 0; i < 20; i++)
+        filterRequester(temp4, temp5->requester_name);
+        requester_list[0] = *temp4;
+        cout << "1) " << temp4->requester_name << temp4->email;
+
+        for (i = 1; i < 20; i++)
         {
-            temp5 = filterChangeRequest(chosen_change->getChange_ID(), chosen_release->getRelease_ID()); // Filter change requests by change ID and release ID
-            if (temp5 != NULL)
+            if (filterNextChangeRequest(temp5, chosen_change->change_ID, chosen_release->release_ID))
             {
-                *temp4 = filterRequester(*temp5->requester_name);    // Get the requester by name
+                filterRequester(temp4, temp5->requester_name);    // Get the requester by name
                 requester_list[i] = *temp4;
                 // Display each requester
-                cout << i+1 << temp4->requester_name << temp4->email;
+                cout << i+1 << ") " << temp4->requester_name << temp4->email;
             }
             else
                 break;  // Exit loop if no more change requests
@@ -1013,6 +1041,13 @@ void allRequestersReportControl()
 }
 
 // Function to control the shutdown process
-void shutDownControl();
+void shutDownControl()
+{
+    closeChange();
+    closeChangeRequest();
+    closeProduct();
+    closeRelease();
+    closeRequester();
+}
 
 #endif
