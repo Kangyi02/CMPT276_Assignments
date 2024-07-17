@@ -25,41 +25,16 @@ extern int changeRequestPosition;
 // Change request class
 class ChangeRequest
 {
-private:
-    char* requester_name; // max 30 chars
-    int change_ID;  // max 6 digits
 public:
-    char* request_date; // YYYY-MM-DD
-    char* reported_release_ID; // max 8 chars
+    //char* requester_name; // max 30 chars
+    int change_ID[7];  // max 6 digits
+    char requester_name[21]; // max 20 chars: last name, first name
+    char request_date[9]; // YYYY-MM-DD
+    char reported_release_ID[9]; // max 8 chars
 
     // Constructors
     ChangeRequest();
     ChangeRequest(const char* name, const int id, const char* date, const char* releaseID);
-    ChangeRequest(const ChangeRequest& other);
-
-    // Destructor
-    ~ChangeRequest();
-
-    //will move to cpp file
-    void setRequester_name(char* req_name)
-    {
-        requester_name = req_name;
-    }
-
-    void setChange_ID(int c_ID)
-    {
-        change_ID = c_ID;
-    }
-
-    char* getRequester_name()
-    {
-        return requester_name;
-    }
-
-    int getChange_ID()
-    {
-        return change_ID;
-    }
 };
 
 // Initialize the change request file
@@ -72,7 +47,7 @@ void closeChangeRequest();
 void createChangeRequest(ChangeRequest* new_cr);
 
 // Get a single change request record
-ChangeRequest* getChangeRequest();
+bool getNextChangeRequest(ChangeRequest* chreq);
 
 void seekToBeginningOfChangeRequestFile();
 

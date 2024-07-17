@@ -155,11 +155,11 @@ void createChangeRequestControl()
     {
         for (i = 1; i < 20; i++) // problem
         {
-            temp = getRequester();  // Get the next requester from the file
+            *temp = getNextRequester();  // Get the next requester from the file
             if (temp != NULL)
             {
                 requester_list[i] = *temp;  // Add requester to the list
-                cout << i + 1 << ") " << temp->get_RequesterName()
+                cout << i + 1 << ") " << temp->requester_name
                      << temp->phone_number
                      << temp->email
                      << temp->department
@@ -350,7 +350,7 @@ void createChangeRequestControl()
     cout << "Enter the request date of the change request (YYYY-MM-DD): ";
     ChangeRequest *new_changeRequest;
     cin >> new_changeRequest->request_date;
-    new_changeRequest->setRequester_name(chosen_requester->get_RequesterName());
+    *new_changeRequest->requester_name = *chosen_requester->requester_name;
     new_changeRequest->setChange_ID(chosen_change->getChange_ID());
     new_changeRequest->reported_release_ID = chosen_release->getRelease_ID();
     // Create the new change request (Write the record to the file) and confirm success
@@ -967,10 +967,10 @@ void allRequestersReportControl()
             temp5 = filterChangeRequest(chosen_change->getChange_ID(), chosen_release->getRelease_ID()); // Filter change requests by change ID and release ID
             if (temp5 != NULL)
             {
-                temp4 = filerRequester(temp5->getRequester_name());    // Get the requester by name
+                *temp4 = filterRequester(*temp5->requester_name);    // Get the requester by name
                 requester_list[i] = *temp4;
                 // Display each requester
-                cout << i+1 << temp4->get_RequesterName() << temp4->email;
+                cout << i+1 << temp4->requester_name << temp4->email;
             }
             else
                 break;  // Exit loop if no more change requests

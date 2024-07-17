@@ -40,7 +40,7 @@ void initRequester();
 void closeRequester();
 
 // Get requester name 
-Requester getNextRequester();
+bool getNextRequester(Requester* req);
 
 // Create a new requester
 char createRequester();

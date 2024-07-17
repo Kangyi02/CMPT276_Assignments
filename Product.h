@@ -20,23 +20,13 @@ of products is hidden, providing a clean and straightforward interface for inter
 
 // Product class
 class Product {
-private:
-    char* product_name; // max 10 chars
 public:
-    char* release_date; // YYYY-MM-DD
+    char product_name[11]; // max 10 chars
+    char* release_date[11]; // YYYY-MM-DD
 
     // Constructors
     Product();
-    Product(const char name[11], const char date[11]);
-    Product(const Product& other);
-
-    // Destructor
-    ~Product();
-
-    char* getProduct_name()
-    {
-        return product_name;
-    }
+    Product(const char* name, const char* date);
 };
 
 // Initialize the product file
@@ -50,7 +40,7 @@ void closeProduct();
 void createProduct(char* product_name);
 
 // Get the product by reading from the product file 
-Product* getProduct();
+bool getNextProduct(Product* prod);
 
 // Search a product in the product file from the beginning of the file
 void seekToBeginningOfProductFile();

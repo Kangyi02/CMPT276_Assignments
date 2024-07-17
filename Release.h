@@ -24,24 +24,13 @@ extern int releasePosition;
 // Release class
 class Release
 {
-private:
-    char* release_ID; // max 8 chars
 public:
-    char* product_name; // max 10 chars
-    char* release_date; // YYYY-MM-DD
+    char release_ID[9]; // max 8 chars
+    char product_name[11]; // max 10 chars
+    char release_date[11]; // YYYY-MM-DD
 
-    // Constructors
     Release();
     Release(const char* id, const char* name, const char* date);
-    Release(const Release& other);
-    
-    // Destructor
-    ~Release();
-
-    char* getRelease_ID()
-    {
-        return release_ID;
-    }
 };
 
 // Initialize the release file
@@ -54,7 +43,7 @@ void closeRelease();
 void createRelease(Release* new_release);
 
 // Get release ID 
-Release* getRelease(char* product_name);
+bool getNextRelease(char* product_name);
 
 void seekToBeginningOfReleaseFile();
 
