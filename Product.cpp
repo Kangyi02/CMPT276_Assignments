@@ -62,6 +62,7 @@ bool addProduct(char* prod_name)
 {
     if (productFileStream.write(reinterpret_cast<char*>(prod_name), sizeof(Product)))
     {
+        productFileStream.flush();
         return true;
     }
     return false;

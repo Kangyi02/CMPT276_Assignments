@@ -33,3 +33,6 @@
 
 *.vscode
 *.bin
+
+program
+.DS_Store
