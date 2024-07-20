@@ -1,23 +1,22 @@
 // DEFINITION MODULE Release;
-/* Revision History:
-Rev. 1 - 24/07/03 Original by Group 24
-----------------------------------------------------------
-This module encapsulates the implementation details of managing releases
-associated with products. The exported functions provide an interface to
-create, initialize, and manage product releases. Each release is identified
-by a unique ID and is associated with a specific product and release date.
-This abstraction ensures that the underlying management of releases is hidden,
-providing a clean and straightforward interface for interaction.
-----------------------------------------------------------
-*/
+// Revision History:
+// Rev. 2 - 24/07/17 Modified by Group 24
+//        - Add seek to beginning of file function
+//        - Add filter function
+//        - Update Function Naming: Rename the get function to getNext
+//        - Modify Function Parameters: adjust get and filter function's parameters
+// Rev. 1 - 24/07/03 Original by Group 24
+// ----------------------------------------------------------
+// This module encapsulates the implementation details of managing releases
+// associated with products. The exported functions provide an interface to
+// create, initialize, and manage product releases. Each release is identified
+// by a unique ID and is associated with a specific product and release date.
+// This abstraction ensures that the underlying management of releases is hidden,
+// providing a clean and straightforward interface for interaction.
+// ----------------------------------------------------------
 
 #ifndef Release_H
 #define Release_H
-
-/*
-----------------------------------------------------------
-// Exported constants/types/variables
-*/
 
 // Release class
 class Release

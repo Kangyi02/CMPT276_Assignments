@@ -1,24 +1,23 @@
 
 // DEFINITION MODULE ChangeRequest;
-/* Revision History:
-Rev. 1 - 24/07/03 Original by Group 24
-----------------------------------------------------------
-This module encapsulates the implementation details of managing change requests
-associated with products and releases. The exported functions provide an interface to
-create and manage change requests. Change requests are identified by a unique ID and
-can be associated with specific products and releases. This abstraction ensures that
-the underlying management of change requests is hidden, providing a clean and
-straightforward interface for interaction.
-----------------------------------------------------------
-*/
+// Revision History:
+// Rev. 2 - 24/07/17 Modified by Group 24
+//        - Add seek to beginning of file function
+//       - Add filter function
+//        - Update Function Naming: Rename the get function to getNext
+//        - Modify Function Parameters: adjust get and filter function's parameters
+// Rev. 1 - 24/07/03 Original by Group 24
+// ----------------------------------------------------------
+// This module encapsulates the implementation details of managing change requests
+// associated with products and releases. The exported functions provide an interface to
+// create and manage change requests. Change requests are identified by a unique ID and
+// can be associated with specific products and releases. This abstraction ensures that
+// the underlying management of change requests is hidden, providing a clean and
+// straightforward interface for interaction.
+// ----------------------------------------------------------
 
 #ifndef ChangeRequest_H
 #define ChangeRequest_H
-
-/*
-----------------------------------------------------------
-// Exported constants/types/variables
-*/
 
 // Change request class
 class ChangeRequest

@@ -1,22 +1,21 @@
 // DEFINITION MODULE Product;
-/* Revision History:
-Rev. 1 - 24/07/03 Original by Group 24
-----------------------------------------------------------
-This module encapsulates the implementation details of managing products and their
-releases. The exported functions provide an interface to create and manage products
-and their release dates. Products are identified by their name, and their associated
-release dates are tracked. This abstraction ensures that the underlying management
-of products is hidden, providing a clean and straightforward interface for interaction.
-----------------------------------------------------------
-*/
+// Revision History:
+// Rev. 2 - 24/07/17 Modified by Group 24
+//        - Add seek to beginning of file function
+//        - Add filter function
+//        - Update Function Naming: Rename the get function to getNext
+//        - Modify Function Parameters: adjust get and filter function's parameters
+// Rev. 1 - 24/07/03 Original by Group 24
+// ----------------------------------------------------------
+// This module encapsulates the implementation details of managing products and their
+// releases. The exported functions provide an interface to create and manage products
+// and their release dates. Products are identified by their name, and their associated
+// release dates are tracked. This abstraction ensures that the underlying management
+// of products is hidden, providing a clean and straightforward interface for interaction.
+// ----------------------------------------------------------
 
 #ifndef Product_H
 #define Product_H
-
-/*----------------------------------------------------------*/
-// Exported constants/types/variables
-// Define the file stream object
-/*----------------------------------------------------------*/
 
 // Product class
 class Product {

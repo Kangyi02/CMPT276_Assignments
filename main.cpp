@@ -1,3 +1,7 @@
+// main.cpp;
+// Revision History:
+// Rev. 1 - 24/07/03 Original by Group 24
+
 #include "StartUp.h"
 #include "UI.h"
 #include <iostream>
@@ -14,19 +18,14 @@ int main()
 }
 
 // Coding Convention for error tracking system
-
 // a. Module Headers
 // Module name at the top of each module header file (`module.h`). The first letter of each 
 // word should be captlized
-
 // b. Revision history format: Latest version first, indented with date and brief description.
-
 // c. Above each function, put a small dividing line. the function comment
 // come right after the dividing line.
-
 // d. Function prototypes
 // all parameters for one function per line and a comment to the right.
-
 // e. 4-character indenting of blocks
 
 // f. Put opening braces on a line by themselves.

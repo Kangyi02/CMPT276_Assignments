@@ -1,28 +1,25 @@
 // DEFINITION MODULE Change;
-/* Revision History:
-Rev. 2 - 24/07/02 Modified by Group 24
-       - to add one parameter to displaySingleChange.
-Rev. 1 - 24/07/19 Original by Group 24
-----------------------------------------------------------
-This module encapsulates the implementation details of managing changes
-associated with products. The exported functions provide an interface to create,
-update, and display changes. Changes are identified by a unique ID and can be
-associated with specific products and releases. The functions also allow for
-reporting the status of changes, with specific handling for changes that are not
-completed or canceled. This abstraction ensures that the underlying management
-of changes is hidden, providing a clean and straightforward interface for
-interaction. The design supports future modifications to the handling of change
-data without affecting the external interface.
-----------------------------------------------------------
-*/
+// Revision History:
+// Rev. 2 - 24/07/17 Modified by Group 24
+//        - Add seek to beginning of file function
+//        - Add filter function
+//        - Update Function Naming: Rename the get function to getNext
+//        - Modify Function Parameters: adjust get and filter function's parameters
+// Rev. 1 - 24/07/19 Original by Group 24
+// ----------------------------------------------------------
+// This module encapsulates the implementation details of managing changes
+// associated with products. The exported functions provide an interface to create,
+// update, and display changes. Changes are identified by a unique ID and can be
+// associated with specific products and releases. The functions also allow for
+// reporting the status of changes, with specific handling for changes that are not
+// completed or canceled. This abstraction ensures that the underlying management
+// of changes is hidden, providing a clean and straightforward interface for
+// interaction. The design supports future modifications to the handling of change
+// data without affecting the external interface.
+// ----------------------------------------------------------
 
 #ifndef Change_H
 #define Change_H
-
-/*
-----------------------------------------------------------
-//Exported constants/types/variables
-*/
 
 // Change class
 class Change

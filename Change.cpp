@@ -1,3 +1,9 @@
+// Version History:
+// Rev. 1 - 24/07/17 Original by Group 24
+// ----------------------------------------------------------
+// Implement Change.h
+// ----------------------------------------------------------
+
 #include "Change.h"
 #include <iostream>
 #include <fstream>

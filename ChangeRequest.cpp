@@ -1,3 +1,9 @@
+// Version History:
+// Rev. 1 - 24/07/17 Original by Group 24
+// ----------------------------------------------------------
+// Implement ChangeRequest.h
+// ----------------------------------------------------------
+
 #include "ChangeRequest.h"
 #include <iostream>
 #include <fstream>

@@ -1,14 +1,9 @@
 // DEFINITION MODULE ScenarioControl;
-/* Revision History:
-Rev. 1 - 24/07/03 Original by Group 24
-----------------------------------------------------------
-This module defines the control functions for managing scenarios
-related to product changes, releases, change requests, queries,
-updates, reports, and shutdown operations. Each function provides
-an interface to perform specific actions within the application,
-ensuring clear separation of concerns and ease of maintenance.
-----------------------------------------------------------
-*/
+// Revision History:
+// Rev. 1 - 24/07/17 Original by Group 24
+// ----------------------------------------------------------
+// Implement ScenarioControl.h
+// ----------------------------------------------------------
 
 #ifndef ScenarioControl_H
 #define ScenarioControl_H
@@ -24,9 +19,6 @@ ensuring clear separation of concerns and ease of maintenance.
 
 using std::cin;
 using std::cout;
-
-/*----------------------------------------------------------*/
-// Exported constants/types/variables
 
 // Function to control the creation of a product done
 void createProductControl()

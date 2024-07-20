@@ -1,23 +1,22 @@
 // DEFINITION MODULE Requester;
-/* Revision History:
-Rev. 1 - 24/07/03 Original by Group 24
-----------------------------------------------------------
-This module encapsulates the implementation details of managing requesters.
-The exported functions provide an interface to create, initialize, and manage
-requesters, including their contact details. Each requester is identified by
-their name, phone number, and email address. This abstraction ensures that
-the underlying management of requesters is hidden, providing a clean and
-straightforward interface for interaction.
-----------------------------------------------------------
-*/
+// Revision History:
+// Rev. 2 - 24/07/17 Modified by Group 24
+//        - Add seek to beginning of file function
+//        - Add filter function
+//        - Update Function Naming: Rename the get function to getNext
+//        - Modify Function Parameters: adjust get and filter function's parameters
+// Rev. 1 - 24/07/03 Original by Group 24
+// ----------------------------------------------------------
+// This module encapsulates the implementation details of managing requesters.
+// The exported functions provide an interface to create, initialize, and manage
+// requesters, including their contact details. Each requester is identified by
+// their name, phone number, and email address. This abstraction ensures that
+// the underlying management of requesters is hidden, providing a clean and
+// straightforward interface for interaction.
+// ----------------------------------------------------------
 
 #ifndef Requester_H
 #define Requester_H
-
-/*
-----------------------------------------------------------
-// Exported constants/types/variables
-*/
 
 // Requester class
 class Requester 
