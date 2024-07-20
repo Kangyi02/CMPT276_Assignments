@@ -67,6 +67,7 @@ bool addRelease(Release* rel)
 {
     if(ReleaseFileStream.write(reinterpret_cast<char*>(rel), sizeof(Release)))
     {
+        ReleaseFileStream.flush();
         return true;
     }
     return false;

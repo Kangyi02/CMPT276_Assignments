@@ -92,6 +92,7 @@ bool addRequester(Requester* req)
 {
     if(RequesterFileStream.write(reinterpret_cast<char*>(req), sizeof(Requester)))
     {
+        RequesterFileStream.flush();
         return true;
     }
     return false;

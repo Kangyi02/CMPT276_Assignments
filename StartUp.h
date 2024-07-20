@@ -20,4 +20,5 @@
 #include "Release.h"
 
 bool initStart();
+
 #endif
