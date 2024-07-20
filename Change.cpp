@@ -1,6 +1,7 @@
 #include "Change.h"
 #include <iostream>
 #include <fstream>
+#include <cstring> // Added this line
 
 using namespace std;
 
@@ -45,8 +46,6 @@ Change::Change(const char* id, const int* prio, const char* stat, const char* de
 // Initialize the change file
 bool initChange()
 {
-    // Enable to create Change.bin file when not exist while other module can.
-    // Probably because only change uses ios::ate mode.
     ChangeFileStream.open("Change.bin", ios::in | ios::out | ios::binary | ios::ate);
     if (!ChangeFileStream) 
     {
@@ -91,7 +90,6 @@ bool addChange(Change* ch)
 {
     if(ChangeFileStream.write(reinterpret_cast<char*>(ch), sizeof(Change)))
     {
-        ChangeFileStream.flush();
         updateChangeIDrec();
         return true;
     }

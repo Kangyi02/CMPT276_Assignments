@@ -1,6 +1,7 @@
 #include "Release.h"
 #include <iostream>
 #include <fstream>
+#include <cstring> // Added this line
 
 using namespace std;
 
