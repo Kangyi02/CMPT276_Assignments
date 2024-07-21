@@ -7,6 +7,7 @@
 #include "Requester.h"
 #include <iostream>
 #include <fstream>
+#include <cstring> // Add this line
 
 using namespace std;
 
