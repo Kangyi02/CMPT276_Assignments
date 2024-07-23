@@ -79,7 +79,7 @@ void createReleaseControl()
         }
 
         // Display options for more products or exit
-        cout << i + 2 << ") More\n";
+        cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";    // Get user input for selection
 
@@ -110,9 +110,11 @@ void createReleaseControl()
     cout << "Are you sure you want to add the release(Y/N)? ";
     // Check user input and proceed accordingly
     char sure_input[1];
-    if (sure_input == "y" || sure_input == "Y")
+    cin >> sure_input;
+    if (strcmp(sure_input, "y")==0  || strcmp(sure_input, "y")==0 )
     {   
         // Create new release and write to file
+        cout << "I AM HERE";
         Release new_release = Release(release_ID, chosen.product_name, release_date);
         addRelease(&new_release);
     }
