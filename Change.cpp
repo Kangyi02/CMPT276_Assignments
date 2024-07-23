@@ -7,7 +7,7 @@
 #include "Change.h"
 #include <iostream>
 #include <fstream>
-#include <cstring> // Added this line
+#include <cstring>
 
 using namespace std;
 
@@ -52,7 +52,12 @@ Change::Change(const char* id, const int* prio, const char* stat, const char* de
 // Initialize the change file
 bool initChange()
 {
-    ChangeFileStream.open("Change.bin", ios::in | ios::out | ios::binary | ios::ate);
+    // First, try to create the file if it doesn't exist.
+    std::ofstream file("Change.bin", std::ios::app | std::ios::binary);
+    file.close();
+
+    // Now open the file in the desired mode.
+    ChangeFileStream.open("Change.bin", std::ios::in | std::ios::out | std::ios::binary | std::ios::ate);
     if (!ChangeFileStream) 
     {
         return false;

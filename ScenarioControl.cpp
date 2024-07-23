@@ -1033,12 +1033,12 @@ void allRequestersReportControl()
         else if (user_input == 0)
             break;
     }
-
 }
 
 // Function to control the shutdown process
 void shutDownControl() {
     bool allClosed = true;
+    cout << "\n";
 
     // Close Change
     if (closeChange()) {

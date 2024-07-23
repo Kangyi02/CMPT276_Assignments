@@ -9,10 +9,10 @@
 int main()
 {
     if (initStart()) {
-        std::cout << "All modules initialized successfully." << std::endl;
+        std::cout << "All modules initialized successfully. \n\n";
         activateUI();
     } else {
-        std::cout << "Failed to initialize one or more modules." << std::endl;
+        std::cout << "Failed to initialize one or more modules. \n";
     }
     return 0;
 }

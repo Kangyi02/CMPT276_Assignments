@@ -7,7 +7,7 @@
 #include "Requester.h"
 #include <iostream>
 #include <fstream>
-#include <cstring> // Add this line
+#include <cstring>
 
 using namespace std;
 
@@ -81,11 +81,7 @@ bool getNextRequester(Requester* req)
     {
         return true;
     }
-    else
-    {
-        cout << "No additional records, this is the end of the file." << endl;
-        return false;
-    }
+    return false;
 }
 
 // Store a new requester to file
