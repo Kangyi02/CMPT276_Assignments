@@ -20,6 +20,29 @@
 using std::cin;
 using std::cout;
 
+bool isValidDateFormat(const char* date)
+{
+    // Check length
+    if (strlen(date) != 10)
+        return false;
+
+    // Check format YYYY-MM-DD
+    for (int i = 0; i < 10; i++)
+    {
+        if (i == 4 || i == 7) // Check for dashes
+        {
+            if (date[i] != '-')
+                return false;
+        }
+        else // Check for digits
+        {
+            if (!isdigit(date[i]))
+                return false;
+        }
+    }
+
+    return true;
+}
 // Function to control the creation of a product done
 void createProductControl()
 {
@@ -119,10 +142,29 @@ void createReleaseControl()
     char release_ID[8]; // should it be global??
     cin >> release_ID;
 
+     if (strlen(release_ID) > 8)
+    {
+        cout << "Release ID exceeds the maximum length of 8 characters. Returning to the main menu.\n";
+        return;
+    }
+
     // Prompt user to enter release date
     cout << "Enter a release date of the release (YYYY-MM-DD): ";
     char release_date[10]; // should it be global??
     cin >> release_date;
+
+    // Validate release date format
+    if (!isValidDateFormat(release_date))
+    {
+        cout << "Invalid release date format. Please enter in YYYY-MM-DD format. Returning to the main menu.\n";
+        return;
+    }
+
+    if (strlen(release_date) > 10)
+    {
+        cout << "Release date exceeds the maximum length of 10 characters. Returning to the main menu.\n";
+        return;
+    }
 
     // Confirm adding the release
     cout << "Are you sure you want to add the release(Y/N)? ";
