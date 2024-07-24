@@ -9,7 +9,7 @@
 int main()
 {
     if (initStart()) {
-        std::cout << "All modules initialized successfully. \n\n";
+        std::cout << "All modules initialized successfully. \n";
         activateUI();
     } else {
         std::cout << "Failed to initialize one or more modules. \n";
@@ -27,6 +27,5 @@ int main()
 // d. Function prototypes
 // all parameters for one function per line and a comment to the right.
 // e. 4-character indenting of blocks
-
 // f. Put opening braces on a line by themselves.
 

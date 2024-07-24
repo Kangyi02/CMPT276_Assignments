@@ -25,6 +25,7 @@ void activateUI()
     while (userInput)
     {
         // Print the main menu
+        cout << "\n";
         cout << "Main menu:\n";
         cout << "1) Create\n";
         cout << "2) Update\n";
