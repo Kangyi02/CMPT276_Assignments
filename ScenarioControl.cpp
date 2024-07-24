@@ -50,14 +50,31 @@ void createProductControl()
     cout << "Enter product's name (max 10 chars): ";
 
     // Get user input for the product name
-    char product_name[10];
+    char product_name[11];
     cin >> product_name;
 
+     // Check if the input is empty
+    if (strlen(product_name) == 0)
+    {
+        cout << "Product name cannot be empty. Returning to the main menu.\n";
+        return;
+    }
     // Check if the input exceeds the character limit
     if (strlen(product_name) > 10)
     {
         cout << "Product name exceeds the maximum length of 10 characters. Returning to the main menu.\n";
         return;
+    }
+
+
+    // Check if the product name contains only alphabetic characters
+    for (int i = 0; i < strlen(product_name); i++)
+    {
+        if (!isalpha(product_name[i]))
+        {
+            cout << "Product name should only contain alphabetic characters. Returning to the main menu.\n";
+            return;
+        }
     }
 
     // Prompt the user to confirm adding the product
