@@ -29,7 +29,14 @@ void createProductControl()
     // Get user input for the product name
     char product_name[10];
     cin >> product_name;
-    
+
+    // Check if the input exceeds the character limit
+    if (strlen(product_name) > 10)
+    {
+        cout << "Product name exceeds the maximum length of 10 characters. Returning to the main menu.\n";
+        return;
+    }
+
     // Prompt the user to confirm adding the product
     cout << "Are you sure you want to add the product " << product_name << "(Y/N)? ";
     char userInput[2];
