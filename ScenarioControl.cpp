@@ -56,8 +56,16 @@ void createReleaseControl()
     Product product_list[20];
     Product temp;   // Temporary product pointer
     Product chosen; // Chosen product pointer
+    //*chosen.product_name = NULL;
 
-    while (getNextProduct(&temp) == true)
+    bool getFlag = getNextProduct(&temp);
+    if (getFlag == false)
+    {
+        cout << "No additional records, this is the end of the file. \n";
+        return;
+    }
+
+    while (getFlag == true)
     {
         product_list[0] = temp;
 
@@ -75,8 +83,8 @@ void createReleaseControl()
                 cout << i + 1 << ") " << temp.product_name << "\n"; // Display product name
             }
             else
-            {    
-                *chosen.product_name = NULL;
+            {
+                getFlag == false;
                 break; // Exit loop if no more products
             }
         }
@@ -93,46 +101,39 @@ void createReleaseControl()
         if (1 <= user_input <= i + 1)
         {
             chosen = product_list[user_input - 1]; // Select the chosen product
-            
+
             break;
         }
         else if (user_input == 0)
             return; // Return if user chooses to exit
     }
 
-    if (*chosen.product_name == NULL)
+    // Prompt user to enter release ID
+    cout << "Enter a release ID of the new release(max 8 chars): ";
+    char release_ID[8]; // should it be global??
+    cin >> release_ID;
+
+    // Prompt user to enter release date
+    cout << "Enter a release date of the release (YYYY-MM-DD): ";
+    char release_date[10]; // should it be global??
+    cin >> release_date;
+
+    // Confirm adding the release
+    cout << "Are you sure you want to add the release(Y/N)? ";
+    // Check user input and proceed accordingly
+    char sure_input[2];
+    cin >> sure_input;
+
+    if (strcmp(sure_input, "y") == 0 || strcmp(sure_input, "Y") == 0)
     {
-        cout << "No additional records, this is the end of the file. \n";
+        // Create new release and write to file
+        Release new_release = Release(release_ID, chosen.product_name, release_date);
+        if (addRelease(&new_release))
+            cout << "The new release has been successfully added.\n";
     }
-    else
+    else if (sure_input == "n" || sure_input == "N")
     {
-        // Prompt user to enter release ID
-        cout << "Enter a release ID of the new release(max 8 chars): ";
-        char release_ID[8]; // should it be global??
-        cin >> release_ID;
-
-        // Prompt user to enter release date
-        cout << "Enter a release date of the release (YYYY-MM-DD): ";
-        char release_date[10]; // should it be global??
-        cin >> release_date;
-
-        // Confirm adding the release
-        cout << "Are you sure you want to add the release(Y/N)? ";
-        // Check user input and proceed accordingly
-        char sure_input[2];
-        cin >> sure_input;
-
-        if (strcmp(sure_input, "y") == 0 || strcmp(sure_input, "Y") == 0)
-        {
-            // Create new release and write to file
-            Release new_release = Release(release_ID, chosen.product_name, release_date);
-            if (addRelease(&new_release))
-                cout << "The new release has been successfully added.\n";
-        }
-        else if (sure_input == "n" || sure_input == "N")
-        {
-            return; // Return to the main menu if user cancels
-        }
+        return; // Return to the main menu if user cancels
     }
 }
 
