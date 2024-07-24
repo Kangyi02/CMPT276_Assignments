@@ -29,7 +29,7 @@ void createProductControl()
     // Get user input for the product name
     char product_name[10];
     cin >> product_name;
-
+    
     // Prompt the user to confirm adding the product
     cout << "Are you sure you want to add the product " << product_name << "(Y/N)? ";
     char userInput[2];
@@ -98,13 +98,12 @@ void createReleaseControl()
         cin >> user_input;
 
         // Check if user input is within valid range
-        if (1 <= user_input <= i + 1)
+        if (user_input >= 1 && user_input <= i + 1)
         {
             chosen = product_list[user_input - 1]; // Select the chosen product
-
             break;
         }
-        else if (user_input == 0)
+        else 
             return; // Return if user chooses to exit
     }
 

@@ -61,6 +61,7 @@ bool closeProduct()
 // Move the get pointer to the beginning of the product file
 void seekToBeginningOfProductFile() 
 {
+    productFileStream.clear();
     productFileStream.seekg(0, ios::beg);
 }
 
