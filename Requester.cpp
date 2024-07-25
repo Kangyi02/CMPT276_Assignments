@@ -8,9 +8,9 @@ using namespace std;
 fstream RequesterFileStream;
 
 // Default constructor implementation
-Requester::Requester() 
+Requester::Requester()
 {
-    //initialize all the attributes
+    // initialize all the attributes
     requester_name[0] = '\0';
     phone_number[0] = '\0';
     email[0] = '\0';
@@ -18,13 +18,13 @@ Requester::Requester()
 }
 
 // Parameterized constructor implementation
-Requester::Requester(const char name[31], const int* phone, const char* email_addr, const char* dept) 
+Requester::Requester(const char name[31], const int *phone, const char *email_addr, const char *dept)
 {
     // Initialize all the attribute with provided data
     strncpy(requester_name, name, sizeof(requester_name) - 1);
     requester_name[sizeof(requester_name) - 1] = '\0'; // Ensure null termination
 
-    for(int i = 0; i < 11; ++i) 
+    for (int i = 0; i < 11; ++i)
     {
         phone_number[i] = phone[i];
     }
@@ -33,14 +33,14 @@ Requester::Requester(const char name[31], const int* phone, const char* email_ad
     email[sizeof(email) - 1] = '\0';
 
     strncpy(department, dept, sizeof(department) - 1);
-    department[sizeof(department) - 1] = '\0'; 
+    department[sizeof(department) - 1] = '\0';
 }
 
 // Initialize the requester file
-bool initRequester() 
+bool initRequester()
 {
     RequesterFileStream.open("Requester.bin", ios::in | ios::out | ios::binary | ios::app);
-    if (!RequesterFileStream) 
+    if (!RequesterFileStream)
     {
         return false;
     }
@@ -50,10 +50,10 @@ bool initRequester()
 // Shut down the requester file
 bool closeRequester()
 {
-    if(RequesterFileStream.is_open()) 
+    if (RequesterFileStream.is_open())
     {
         RequesterFileStream.close();
-        if(RequesterFileStream.is_open())
+        if (RequesterFileStream.is_open())
         {
             return false;
         }
@@ -63,15 +63,15 @@ bool closeRequester()
 }
 
 // Move the get pointer to the beginning of the requester file
-void seekToBeginningOfRequesterFile() 
+void seekToBeginningOfRequesterFile()
 {
     RequesterFileStream.seekg(0, ios::beg);
 }
 
 // Get a next requester
-bool getNextRequester(Requester* req) 
+bool getNextRequester(Requester *req)
 {
-    if(RequesterFileStream.read(reinterpret_cast<char*>(req), sizeof(Requester)))
+    if (RequesterFileStream.read(reinterpret_cast<char *>(req), sizeof(Requester)))
     {
         return true;
     }
@@ -83,15 +83,20 @@ bool getNextRequester(Requester* req)
 }
 
 // Store a new requester to file
-bool addRequester(Requester* req) 
+bool addRequester(Requester *req)
 {
     cout << "Requester details in lower modular:\n";
-        cout << "Name: " << req->requester_name << "\n"
-             << "Phone Number: " << (int)*req->phone_number << "\n"
-             << "Email: " << req->email << "\n"
-             << "Department: " << req->department << "\n";
+    cout << "Name: " << req->requester_name << "\n"
+         << "Phone Number: ";
+    for (size_t i = 0; i < 11; i++)
+    {
+        cout << req->phone_number[i];
+    }
+    cout << "\n";
+    cout << "Email: " << req->email << "\n"
+         << "Department: " << req->department << "\n";
 
-    if(RequesterFileStream.write(reinterpret_cast<char*>(req), sizeof(Requester)))
+    if (RequesterFileStream.write(reinterpret_cast<char *>(req), sizeof(Requester)))
     {
         RequesterFileStream.flush();
         return true;
@@ -100,15 +105,15 @@ bool addRequester(Requester* req)
 }
 
 // Filter requesters by name
-bool filterNextRequester(Requester* req, char* req_name) 
+bool filterNextRequester(Requester *req, char *req_name)
 {
-    while(RequesterFileStream.read(reinterpret_cast<char*>(req), sizeof(Requester))) 
+    while (RequesterFileStream.read(reinterpret_cast<char *>(req), sizeof(Requester)))
     {
-        if(strcmp(req->requester_name, req_name) == 0) 
+        if (strcmp(req->requester_name, req_name) == 0)
         {
             return true;
-        }        
+        }
     }
     cout << "No additional records, this is the end of the file." << endl;
-    return false; //return false if reach the end of the file
+    return false; // return false if reach the end of the file
 }

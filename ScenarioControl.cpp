@@ -207,8 +207,9 @@ void createReleaseControl()
 // Function to validate email format
 bool isValidEmail(const char *email)
 {
-    regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
-    return regex_match(email, emailPattern);
+    //regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
+    //return regex_match(email, emailPattern);
+    return true;
 }
 
 // Function to validate phone number format
@@ -283,6 +284,7 @@ void createChangeRequestControl()
                 return;
             }
             chosen_requester.phone_number[i] = phone_number_input[i] - '0'; // Convert char to int
+            cout << chosen_requester.phone_number[i] << endl;
         }
 
         if (!isValidPhoneNumber(chosen_requester.phone_number))
@@ -290,6 +292,7 @@ void createChangeRequestControl()
             cout << "Invalid phone number. The first digit must be 1. Returning to the main menu.\n";
             return;
         }
+
         // Ask for email
         cout << "Enter the requester's email (max 24 chars): ";
         cin >> chosen_requester.email;
@@ -403,7 +406,14 @@ void createChangeRequestControl()
     Product chosen_product; // Chosen product pointer
 
     // Loop to display product list and select a product
-    while (getNextProduct(&temp1))
+    bool getFlag = getNextProduct(&temp1);
+    if (getFlag == false)
+    {
+        cout << "No additional records, this is the end of the file. \n";
+        return;
+    }
+
+    while (getFlag == true)
     {
         product_list[0] = temp1;
         cout << "Select a product that corresponds to this change request: \n";
@@ -418,7 +428,10 @@ void createChangeRequestControl()
                 cout << i + 1 << ") " << temp1.product_name << "\n"; // Add product to the list
             }
             else
+            {
+                getFlag = false;
                 break; // Exit loop if no more products
+            }
         }
 
         // Display options for more products or exit
