@@ -218,10 +218,10 @@ void createReleaseControl()
 }
 
 // Function to validate email format
-bool isValidEmail(const char *email)
+bool isValidEmail(const string& email)
 {
-    const regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
-    return regex_match(email, emailPattern);
+    const std::regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
+    return std::regex_match(email, emailPattern);
 }
 
 // Function to validate phone number format
@@ -444,7 +444,8 @@ void createChangeRequestControl()
         cout << "Product    ";
         cout << "1) " << temp1.product_name;
 
-        for (int i = 1; i < 20; i++)
+        int i;
+        for (i = 1; i < 20; i++)
         {
             if (getNextProduct(&temp1))
             {
@@ -499,6 +500,7 @@ void createChangeRequestControl()
              << temp2.priority
              << temp2.anticipated_release_ID << "\n";
 
+        int i;
         for (i = 1; i < 20; i++)
         {
             if (filterNextChange(&temp2, temp1.product_name))
