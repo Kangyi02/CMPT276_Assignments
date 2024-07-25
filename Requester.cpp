@@ -1,13 +1,7 @@
-// Version History:
-// Rev. 1 - 24/07/17 Original by Group 24
-// ----------------------------------------------------------
-// Implement Requester.h
-// ----------------------------------------------------------
-
 #include "Requester.h"
 #include <iostream>
 #include <fstream>
-#include <cstring>
+#include <cstring> // Added this line
 
 using namespace std;
 
@@ -71,7 +65,6 @@ bool closeRequester()
 // Move the get pointer to the beginning of the requester file
 void seekToBeginningOfRequesterFile() 
 {
-    RequesterFileStream.clear();
     RequesterFileStream.seekg(0, ios::beg);
 }
 
@@ -82,7 +75,11 @@ bool getNextRequester(Requester* req)
     {
         return true;
     }
-    return false;
+    else
+    {
+        cout << "No additional records, this is the end of the file." << endl;
+        return false;
+    }
 }
 
 // Store a new requester to file
