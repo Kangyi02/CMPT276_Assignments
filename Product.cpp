@@ -68,6 +68,7 @@ void seekToBeginningOfProductFile()
 // Store a new product to file
 bool addProduct(char* prod_name)
 {
+    productFileStream.clear();
     if (productFileStream.write(reinterpret_cast<char*>(prod_name), sizeof(Product)))
     {
         productFileStream.flush();

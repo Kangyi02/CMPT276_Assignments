@@ -85,17 +85,7 @@ bool getNextRequester(Requester *req)
 // Store a new requester to file
 bool addRequester(Requester *req)
 {
-    cout << "Requester details in lower modular:\n";
-    cout << "Name: " << req->requester_name << "\n"
-         << "Phone Number: ";
-    for (size_t i = 0; i < 11; i++)
-    {
-        cout << req->phone_number[i];
-    }
-    cout << "\n";
-    cout << "Email: " << req->email << "\n"
-         << "Department: " << req->department << "\n";
-
+    RequesterFileStream.clear();
     if (RequesterFileStream.write(reinterpret_cast<char *>(req), sizeof(Requester)))
     {
         RequesterFileStream.flush();

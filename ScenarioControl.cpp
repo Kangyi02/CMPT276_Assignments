@@ -220,9 +220,8 @@ void createReleaseControl()
 // Function to validate email format
 bool isValidEmail(const char *email)
 {
-    //regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
-    //return regex_match(email, emailPattern);
-    return true;
+    const regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
+    return regex_match(email, emailPattern);
 }
 
 // Function to validate phone number format
@@ -242,59 +241,47 @@ bool isValidPhoneNumber(const int *phone_number)
     return true;
 }
 
-// Function to validate requester name format
-bool isValidRequesterNameLength(const char *name)
+// Function to validate requester name length
+bool isValidRequesterNameLength(const string& name)
 {
-    return strlen(name) <= 30; // Check length constraint
+    return name.length() <= 30;
 }
 
-bool isValidRequesterName(const char* name) {
-    // Check if name length is within the limit
-    // if (strlen(name) > 30) {
-    //     return false;
-    // }
+// Function to validate requester name format
+bool isValidRequesterName(const string& name) 
+{
+    // Split the name into last name and first name
+    size_t commaPos = name.find(',');
+    if (commaPos == string::npos) {
+        return false; // No comma found
+    }
 
-    // // Split the name into last name and first name
-    // char last_name[31];
-    // char first_name[31];
-    // if (sscanf(name, "%30[^,], %30[^\n]", last_name, first_name) != 2) {
-    //     return false; // Incorrect format
-    // }
+    string lastName = name.substr(0, commaPos);
+    string firstName = name.substr(commaPos + 2); // Skip ", "
 
-    // Validate that last name and first name contain only alphabetic characters
-    // auto isAlphaOnly = [](const char* str) -> bool {
-    //     for (size_t i = 0; i < strlen(str); i++) {
-    //         if (!isalpha(str[i])) {
-    //             return false; // Contains non-alphabetic character
-    //         }
-    //     }
+    // Check if both names contain only alphabetic characters
+    auto isAlphaOnly = [](const string& str) -> bool {
+        for (char c : str) {
+            if (!isalpha(c)) {
+                return false;
+            }
+        }
         return true;
-   // };
+    };
 
-    //return isAlphaOnly(last_name) && isAlphaOnly(first_name);
+    return isAlphaOnly(lastName) && isAlphaOnly(firstName);
 }
 
 // Function to format the name from "Last name, First name" to "First name Last name"
-void formatRequesterName(const char* input_name, char* formatted_name) {
+void formatRequesterName(const string& input_name, char* formatted_name) 
+{
     char last_name[31];
     char first_name[31];
     
     // Split the input_name into last_name and first_name
-    sscanf(input_name, "%30[^,], %30[^\n]", last_name, first_name);
+    sscanf(input_name.c_str(), "%30[^,], %30[^\n]", last_name, first_name);
 
     // Ensure the total length is within 30 characters
-    if (strlen(first_name) + strlen(last_name) + 1 > 30) {
-        // If too long, truncate first_name or last_name
-        if (strlen(first_name) + strlen(last_name) + 1 > 30) {
-            if (strlen(last_name) > 15) {
-                last_name[15] = '\0'; // Truncate last name
-            }
-            if (strlen(first_name) > 14) {
-                first_name[14] = '\0'; // Truncate first name
-            }
-        }
-    }
-    // Format as "First name Last name"
     snprintf(formatted_name, 31, "%s %s", first_name, last_name);
 }
 // Function to control the creation of a change request
@@ -308,162 +295,129 @@ void createChangeRequestControl()
     Requester temp;             // Temporary requester pointer
     Requester chosen_requester; // Chosen requester pointer
 
-    // Loop to display requester list and select a requester
-    int i;
-
     bool getFlag = getNextRequester(&temp);
-    if (getFlag == false)
-    {
+    if (!getFlag) {
         // Prompt user to create a new requester
-        cout << "Creating a new requester: \n"
-             << "Enter requester's name ('Last name, First name', max 30 chars): ";
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        char inputname[31];
-        cin >> inputname;
-    
-        if (!isValidRequesterNameLength(chosen_requester.requester_name))
-        {
-            cout << "Requester name exceeds the maximum length of 30 characters. Returning to the main menu.\n";
-            return;
-        }
-        if (!isValidRequesterName(chosen_requester.requester_name))
-        {
-            cout << "Requester name must be in the format 'Last name, First name' with both names containing only alphabetic characters. Please enter a valid name. \n";
-            return;
-        }
+        cout << "Creating a new requester:\n";
+        string inputname;
 
-        formatRequesterName(inputname, chosen_requester.requester_name);
-        //cout << "Requester name: " << chosen_requester.requester_name << endl;
-        // Ask for phone number
-        cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
-        char phone_number_input[12]; // Temporary buffer for phone number input
-        cin >> phone_number_input;
+        while (true) {
+            cout << "Enter requester's name ('Last name, First name', max 30 chars): ";
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            getline(cin, inputname);
 
-        // Convert input to integer array
-        if (strlen(phone_number_input) != 11)
-        {
-            cout << "Phone number must be exactly 11 digits. Returning to the main menu.\n";
-            return;
-        }
-
-        for (size_t i = 0; i < 11; i++)
-        {
-            if (!isdigit(phone_number_input[i]))
-            {
-                cout << "Phone number must contain only digits. Returning to the main menu.\n";
-                return;
+            if (!isValidRequesterNameLength(inputname)) {
+                cout << "Requester name exceeds the maximum length of 30 characters. Please enter a valid name.\n";
+                continue;
             }
-            chosen_requester.phone_number[i] = phone_number_input[i] - '0'; // Convert char to int
-            cout << chosen_requester.phone_number[i] << endl;
+            if (!isValidRequesterName(inputname)) {
+                cout << "Requester name must be in the format 'Last name, First name' with both names containing only alphabetic characters. Please enter a valid name.\n";
+                continue;
+            }
+
+            formatRequesterName(inputname, chosen_requester.requester_name);
+            break;
         }
 
-        if (!isValidPhoneNumber(chosen_requester.phone_number))
-        {
-            cout << "Invalid phone number. The first digit must be 1. Returning to the main menu.\n";
-            return;
+        while (true) {
+            cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
+            string phone_number_input;
+            cin >> phone_number_input;
+
+            if (phone_number_input.length() != 11) {
+                cout << "Phone number must be exactly 11 digits. Please enter a valid number.\n";
+                continue;
+            }
+
+            bool valid = true;
+            for (size_t i = 0; i < 11; i++) {
+                if (!isdigit(phone_number_input[i])) {
+                    valid = false;
+                    break;
+                }
+                chosen_requester.phone_number[i] = phone_number_input[i] - '0';
+            }
+
+            if (!valid) {
+                cout << "Phone number must contain only digits. Please enter a valid number.\n";
+                continue;
+            }
+
+            if (!isValidPhoneNumber(chosen_requester.phone_number)) {
+                cout << "Invalid phone number. The first digit must be 1. Please enter a valid number.\n";
+                continue;
+            }
+
+            break;
         }
 
-        // Ask for email
-        cout << "Enter the requester's email (max 24 chars): ";
-        cin >> chosen_requester.email;
+        while (true) {
+            cout << "Enter the requester's email (max 24 chars): ";
+            string email_input;
+            cin >> email_input;
 
-        if (strlen(chosen_requester.email) > 24 || !isValidEmail(chosen_requester.email))
-        {
-            cout << "Invalid email format or exceeds the maximum length of 24 characters. Returning to the main menu.\n";
-            return;
+            if (!isValidEmail(email_input)) {
+                cout << "Invalid email format or exceeds the maximum length of 24 characters. Please enter a valid email.\n";
+                continue;
+            }
+
+            strncpy(chosen_requester.email, email_input.c_str(), sizeof(chosen_requester.email) - 1);
+            chosen_requester.email[sizeof(chosen_requester.email) - 1] = '\0';
+            break;
         }
 
-        // Ask for department (if necessary)
-        // Ask if it's employee
         cout << "Is the requester an employee (Y/N)? ";
-        char user_input[1];
+        string user_input;
         cin >> user_input;
-        if (strcmp(user_input, "y") == 0 || strcmp(user_input, "Y") == 0)
-        {
-            cout << "Enter the requester's department (max 12 chars): ";
-            cin >> chosen_requester.department;
+        if (user_input == "y" || user_input == "Y") {
+            while (true) {
+                cout << "Enter the requester's department (max 12 chars): ";
+                string department_input;
+                cin >> department_input;
 
-            if (strlen(chosen_requester.department) > 12)
-            {
-                cout << "Department name exceeds the maximum length of 12 characters. Returning to the main menu.\n";
-                return;
+                if (department_input.length() > 12) {
+                    cout << "Department name exceeds the maximum length of 12 characters. Please enter a valid department.\n";
+                    continue;
+                }
+
+                strncpy(chosen_requester.department, department_input.c_str(), sizeof(chosen_requester.department) - 1);
+                chosen_requester.department[sizeof(chosen_requester.department) - 1] = '\0';
+                break;
             }
         }
 
-        if (addRequester(&chosen_requester))
-            cout << "The new requester has been successfully added. \n";
-        return;
-    }
-
-    while (getFlag == true)
-    {
-        requester_list[0] = temp;
-        cout << "Select a requester that reports this change request: \n";
-        cout << "Requester name                " << "Phone      " << "Email                   " << "Department  ";
-
-        cout << "1) " << temp.requester_name
-             << temp.phone_number
-             << temp.email
-             << temp.department
-             << "\n";
-
-        for (i = 1; i < 20; i++)
-        {
-            if (getNextRequester(&temp) == true)
-            {
-                requester_list[i] = temp; // Add requester to the list
-                cout << i + 1 << ") " << temp.requester_name
-                     << temp.phone_number
-                     << temp.email
-                     << temp.department
-                     << "\n";
-            }
-            else
-            {
-                *chosen_requester.requester_name = NULL;
-                break; // Exit loop if no more requesters
-            }
+        if (addRequester(&chosen_requester)) {
+            cout << "The new requester has been successfully added.\n";
         }
-        // Display options for more requesters or to create a new one
-        cout << i + 2 << ") Show more requesters\n";
-        cout << "0) Create a new requester\n";
+    } else {
+        // Requester exists, show list and let user select one
+        int i = 0;
+        while (getFlag) {
+            requester_list[i] = temp;
+            cout << i + 1 << ") " << temp.requester_name << "\n";
+
+            i++;
+            if (i >= 20) {
+                break;
+            }
+
+            getFlag = getNextRequester(&temp);
+        }
+
+        cout << "Select a requester that reports this change request:\n";
+        for (int j = 0; j < i; j++) {
+            cout << j + 1 << ") " << requester_list[j].requester_name << "\n";
+        }
         cout << "Enter selection: ";
 
         int user_input;
-        cin >> user_input; // Get user input for selection
+        cin >> user_input;
 
-        // Check if user input is within valid range
-        if (1 <= user_input <= i + 1)
-        {
-            chosen_requester = requester_list[user_input - 1]; // Select the chosen requester
-            break;
-        }
-        else if (user_input == 0)
-        {
-            // Prompt user to create a new requester
-            cout << "Creating a new requester: \n"
-                 << "Enter requester's name ('Last name, First name', max 30 chars): ";
-            cin >> chosen_requester.requester_name;
-
-            // Ask for phone number
-            cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
-            cin >> *chosen_requester.phone_number; // ??
-
-            // Ask for email
-            cout << "Enter the requester's email (max 24 chars): ";
-            cin >> chosen_requester.email;
-
-            // Ask if it's employee
-            char user_input[1];
-            cin >> user_input;
-            if (user_input == "y" || user_input == "Y")
-            {
-                cout << "Enter new requester's department (max 12 chars): ";
-                cin >> chosen_requester.department;
-            }
-
-            if (addRequester(&chosen_requester))
-                cout << "The new requester has been successfully added. \n";
+        if (user_input >= 1 && user_input <= i) {
+            chosen_requester = requester_list[user_input - 1];
+        } else {
+            cout << "Invalid selection. Returning to the main menu.\n";
+            return;
         }
     }
 
