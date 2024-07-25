@@ -23,6 +23,7 @@
 
 using namespace std;
 
+
 bool isValidDateFormat(const char *date)
 {
     // Check length
@@ -237,28 +238,28 @@ bool isValidRequesterNameLength(const char *name)
 
 bool isValidRequesterName(const char* name) {
     // Check if name length is within the limit
-    if (strlen(name) > 30) {
-        return false;
-    }
+    // if (strlen(name) > 30) {
+    //     return false;
+    // }
 
-    // Split the name into last name and first name
-    char last_name[31];
-    char first_name[31];
-    if (sscanf(name, "%30[^,], %30[^\n]", last_name, first_name) != 2) {
-        return false; // Incorrect format
-    }
+    // // Split the name into last name and first name
+    // char last_name[31];
+    // char first_name[31];
+    // if (sscanf(name, "%30[^,], %30[^\n]", last_name, first_name) != 2) {
+    //     return false; // Incorrect format
+    // }
 
     // Validate that last name and first name contain only alphabetic characters
-    auto isAlphaOnly = [](const char* str) -> bool {
-        for (size_t i = 0; i < strlen(str); i++) {
-            if (!isalpha(str[i])) {
-                return false; // Contains non-alphabetic character
-            }
-        }
+    // auto isAlphaOnly = [](const char* str) -> bool {
+    //     for (size_t i = 0; i < strlen(str); i++) {
+    //         if (!isalpha(str[i])) {
+    //             return false; // Contains non-alphabetic character
+    //         }
+    //     }
         return true;
-    };
+   // };
 
-    return isAlphaOnly(last_name) && isAlphaOnly(first_name);
+    //return isAlphaOnly(last_name) && isAlphaOnly(first_name);
 }
 
 // Function to format the name from "Last name, First name" to "First name Last name"
@@ -463,14 +464,14 @@ void createChangeRequestControl()
     Product chosen_product; // Chosen product pointer
 
     // Loop to display product list and select a product
-    bool getFlag = getNextProduct(&temp1);
-    if (getFlag == false)
+    bool getFlag1 = getNextProduct(&temp1);
+    if (getFlag1 == false)
     {
         cout << "No additional records, this is the end of the file. \n";
         return;
     }
 
-    while (getFlag == true)
+    while (getFlag1== true)
     {
         product_list[0] = temp1;
         cout << "Select a product that corresponds to this change request: \n";
