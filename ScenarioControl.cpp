@@ -312,7 +312,7 @@ void createChangeRequestControl()
     int i;
 
     bool getFlag = getNextRequester(&temp);
-    if (!getFlag)
+    if (getFlag == false)
     {
         // Prompt user to create a new requester
         cout << "Creating a new requester: \n"
@@ -342,7 +342,7 @@ void createChangeRequestControl()
         // Convert input to integer array
         if (strlen(phone_number_input) != 11)
         {
-            cout << "\nPhone number must be exactly 11 digits. Returning to the main menu.\n";
+            cout << "Phone number must be exactly 11 digits. Returning to the main menu.\n";
             return;
         }
 
@@ -395,7 +395,7 @@ void createChangeRequestControl()
         return;
     }
 
-    while (getFlag)
+    while (getFlag == true)
     {
         requester_list[0] = temp;
         cout << "Select a requester that reports this change request: \n";
