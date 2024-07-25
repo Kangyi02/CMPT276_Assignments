@@ -50,18 +50,21 @@ void createProductControl()
     cout << "Enter product's name (max 10 chars): ";
 
     // Get user input for the product name
-    char product_name[100];
+    char product_name[11];
     cin >> product_name;
-    // product_name[11] = '\0';
 
-    cout << product_name;
+     // Check if the input is empty
+    if (strlen(product_name) == 0)
+    {
+        cout << "Product name cannot be empty. Returning to the main menu.\n";
+        return;
+    }
     // Check if the input exceeds the character limit
-    if (strlen(product_name) >= 10)
+    if (strlen(product_name) > 10)
     {
         cout << "Product name exceeds the maximum length of 10 characters. Returning to the main menu.\n";
         return;
     }
-
 
     // Check if the product name contains only alphabetic characters
     for (int i = 0; i < strlen(product_name); i++)
@@ -104,7 +107,7 @@ void createReleaseControl()
     bool getFlag = getNextProduct(&temp);
     if (getFlag == false)
     {
-        cout << "No additional records, this is the end of the product file. \n";
+        cout << "No additional records, this is the end of the file. \n";
         return;
     }
 
@@ -146,7 +149,7 @@ void createReleaseControl()
             chosen = product_list[user_input - 1]; // Select the chosen product
             break;
         }
-        else
+        else 
             return; // Return if user chooses to exit
     }
 
@@ -211,38 +214,7 @@ void createChangeRequestControl()
 
     // Loop to display requester list and select a requester
     int i;
-
-    bool getFlag = getNextRequester(&temp);
-    if (getFlag == false)
-    {
-        // Prompt user to create a new requester
-        cout << "Creating a new requester: \n"
-             << "Enter requester's name ('Last name, First name', max 30 chars): ";
-        cin >> *chosen_requester.requester_name;
-
-        // Ask for phone number
-        cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
-        cin >> *chosen_requester.phone_number; // ??
-
-        // Ask for email
-        cout << "Enter the requester's email (max 24 chars): ";
-        cin >> chosen_requester.email;
-
-        // Ask if it's employee
-        char user_input[1];
-        cin >> user_input;
-        if (user_input == "y" || user_input == "Y")
-        {
-            cout << "Enter new requester's department (max 12 chars): ";
-            cin >> chosen_requester.department;
-        }
-
-        if (addRequester(&chosen_requester))
-            cout << "The new requester has been successfully added. \n";
-        return;
-    }
-
-    while (getFlag == true)
+    while (getNextRequester(&temp) == true)
     {
         requester_list[0] = temp;
         cout << "Select a requester that reports this change request: \n";
@@ -267,7 +239,7 @@ void createChangeRequestControl()
             }
             else
             {
-                getFlag == false;
+                *chosen_requester.requester_name = NULL;
                 break; // Exit loop if no more requesters
             }
         }
@@ -280,7 +252,7 @@ void createChangeRequestControl()
         cin >> user_input; // Get user input for selection
 
         // Check if user input is within valid range
-        if (user_input >= 1 && user_input <= i + 1)
+        if (1 <= user_input <= i + 1)
         {
             chosen_requester = requester_list[user_input - 1]; // Select the chosen requester
             break;
