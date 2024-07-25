@@ -230,11 +230,60 @@ bool isValidPhoneNumber(const int *phone_number)
 }
 
 // Function to validate requester name format
-bool isValidRequesterName(const char *name)
+bool isValidRequesterNameLength(const char *name)
 {
     return strlen(name) <= 30; // Check length constraint
 }
 
+bool isValidRequesterName(const char* name) {
+    // Check if name length is within the limit
+    if (strlen(name) > 30) {
+        return false;
+    }
+
+    // Split the name into last name and first name
+    char last_name[31];
+    char first_name[31];
+    if (sscanf(name, "%30[^,], %30[^\n]", last_name, first_name) != 2) {
+        return false; // Incorrect format
+    }
+
+    // Validate that last name and first name contain only alphabetic characters
+    auto isAlphaOnly = [](const char* str) -> bool {
+        for (size_t i = 0; i < strlen(str); i++) {
+            if (!isalpha(str[i])) {
+                return false; // Contains non-alphabetic character
+            }
+        }
+        return true;
+    };
+
+    return isAlphaOnly(last_name) && isAlphaOnly(first_name);
+}
+
+// Function to format the name from "Last name, First name" to "First name Last name"
+void formatRequesterName(const char* input_name, char* formatted_name) {
+    char last_name[31];
+    char first_name[31];
+    
+    // Split the input_name into last_name and first_name
+    sscanf(input_name, "%30[^,], %30[^\n]", last_name, first_name);
+
+    // Ensure the total length is within 30 characters
+    if (strlen(first_name) + strlen(last_name) + 1 > 30) {
+        // If too long, truncate first_name or last_name
+        if (strlen(first_name) + strlen(last_name) + 1 > 30) {
+            if (strlen(last_name) > 15) {
+                last_name[15] = '\0'; // Truncate last name
+            }
+            if (strlen(first_name) > 14) {
+                first_name[14] = '\0'; // Truncate first name
+            }
+        }
+    }
+    // Format as "First name Last name"
+    snprintf(formatted_name, 31, "%s %s", first_name, last_name);
+}
 // Function to control the creation of a change request
 void createChangeRequestControl()
 {
@@ -256,14 +305,22 @@ void createChangeRequestControl()
         cout << "Creating a new requester: \n"
              << "Enter requester's name ('Last name, First name', max 30 chars): ";
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cin >> chosen_requester.requester_name;
+        char inputname[31];
+        cin >> inputname;
     
-        if (!isValidRequesterName(chosen_requester.requester_name))
+        if (!isValidRequesterNameLength(chosen_requester.requester_name))
         {
             cout << "Requester name exceeds the maximum length of 30 characters. Returning to the main menu.\n";
             return;
         }
+        if (!isValidRequesterName(chosen_requester.requester_name))
+        {
+            cout << "Requester name must be in the format 'Last name, First name' with both names containing only alphabetic characters. Please enter a valid name. \n";
+            return;
+        }
 
+        formatRequesterName(inputname, chosen_requester.requester_name);
+        //cout << "Requester name: " << chosen_requester.requester_name << endl;
         // Ask for phone number
         cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
         char phone_number_input[12]; // Temporary buffer for phone number input
