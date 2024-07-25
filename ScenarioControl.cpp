@@ -302,6 +302,7 @@ void createChangeRequestControl()
 
         // Ask for department (if necessary)
         // Ask if it's employee
+        cout << "Is the requester an employee (Y/N)? ";
         char user_input[1];
         cin >> user_input;
         if (strcmp(user_input, "y") == 0 || strcmp(user_input, "Y") == 0)
