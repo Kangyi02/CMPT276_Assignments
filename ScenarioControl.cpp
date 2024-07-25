@@ -17,6 +17,9 @@
 #include "Release.h"
 #include "ChangeRequest.h"
 #include "Change.h"
+#include <cctype> // For isalpha
+#include <regex>  // For regex validation
+#include <limits> // For std::numeric_limits
 
 using namespace std;
 
@@ -201,6 +204,30 @@ void createReleaseControl()
     }
 }
 
+// Function to validate email format
+bool isValidEmail(const char* email) {
+    regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
+    return regex_match(email, emailPattern);
+}
+
+// Function to validate phone number format
+bool isValidPhoneNumber(const int* phone_number) {
+    if (phone_number[0] != 1) {
+        return false;
+    }
+    for (size_t i = 1; i < 11; i++) {
+        if (phone_number[i] < 0 || phone_number[i] > 9) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Function to validate requester name format
+bool isValidRequesterName(const char* name) {
+    return strlen(name) <= 30; // Check length constraint
+}
+
 // Function to control the creation of a change request
 void createChangeRequestControl()
 {
@@ -222,32 +249,58 @@ void createChangeRequestControl()
         cout << "Creating a new requester: \n"
              << "Enter requester's name ('Last name, First name', max 30 chars): ";
         cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
-        cin.getline(chosen_requester.requester_name, 31);
-        cout << chosen_requester.requester_name << endl; 
-
-        // Ask for phone number
-        cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
-        cin >> *chosen_requester.phone_number; // ??
-
-        // Ask for email
-        cout << "Enter the requester's email (max 24 chars): ";
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
-        cin >> chosen_requester.email;
-
-        // Ask if it's employee
-        cout << "Is the requester employee (Y/N)? ";
-        char user_input[1];
-        cin >> user_input;
-        if (strcmp(user_input, "y") == 0 || strcmp(user_input, "Y") == 0)
-        {
-            cout << "Enter new requester's department (max 12 chars): ";
-            cin >> chosen_requester.department;
+        cin >> chosen_requester.requester_name;
+        //cin.getline(chosen_requester.requester_name, sizeof(chosen_requester.requester_name));
+        //cout << chosen_requester.requester_name << endl; 
+        if (!isValidRequesterName(chosen_requester.requester_name)) {
+            cout << "Requester name exceeds the maximum length of 30 characters. Returning to the main menu.\n";
+            return;
         }
 
+        // Ask for phone number
+    cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
+    char phone_number_input[12]; // Temporary buffer for phone number input
+    cin >> phone_number_input;
 
-        if (addRequester(&chosen_requester))
-            cout << "The new requester has been successfully added. \n";
+    // Convert input to integer array
+    if (strlen(phone_number_input) != 11) {
+        cout << "Phone number must be exactly 11 digits. Returning to the main menu.\n";
+        return;
+    }
+
+    for (size_t i = 0; i < 11; i++) {
+        if (!isdigit(phone_number_input[i])) {
+            cout << "Phone number must contain only digits. Returning to the main menu.\n";
+            return;
+        }
+        chosen_requester.phone_number[i] = phone_number_input[i] - '0'; // Convert char to int
+    }
+
+    if (!isValidPhoneNumber(chosen_requester.phone_number)) {
+        cout << "Invalid phone number. The first digit must be 1. Returning to the main menu.\n";
+        return;
+    }
+     // Ask for email
+    cout << "Enter the requester's email (max 24 chars): ";
+    cin >> chosen_requester.email;
+
+    if (strlen(chosen_requester.email) > 24 || !isValidEmail(chosen_requester.email)) {
+        cout << "Invalid email format or exceeds the maximum length of 24 characters. Returning to the main menu.\n";
+        return;
+    }
+
+    // Ask for department (if necessary)
+    cout << "Enter the requester's department (max 12 chars): ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+    cin.getline(chosen_requester.department, sizeof(chosen_requester.department));
+    
+    if (strlen(chosen_requester.department) > 12) {
+        cout << "Department name exceeds the maximum length of 12 characters. Returning to the main menu.\n";
+        return;
+    }
+
+    if (addRequester(&chosen_requester))
+        cout << "The new requester has been successfully added. \n";
         return;
     }
 
