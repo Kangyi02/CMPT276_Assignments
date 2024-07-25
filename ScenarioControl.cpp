@@ -44,56 +44,68 @@ bool isValidDateFormat(const char *date)
                 return false;
         }
     }
-
     return true;
 }
 // Function to control the creation of a product done
 void createProductControl()
 {
     // Prompt user to enter the product name
-    cout << "Enter product's name (max 10 chars): ";
-
-    // Get user input for the product name
     char product_name[11];
-    cin >> product_name;
+    string tempProductName;
 
-    // Check if the input is empty
-    if (strlen(product_name) == 0)
+    while (true) 
     {
-        cout << "Product name cannot be empty. Returning to the main menu.\n";
-        return;
-    }
-    // Check if the input exceeds the character limit
-    if (strlen(product_name) > 10)
-    {
-        cout << "Product name exceeds the maximum length of 10 characters. Returning to the main menu.\n";
-        return;
-    }
+        cout << "Enter product's name (max 10 chars): ";
+        cin >> tempProductName;
 
-    // Check if the product name contains only alphabetic characters
-    for (int i = 0; i < strlen(product_name); i++)
-    {
-        if (!isalpha(product_name[i]))
-        {
-            cout << "Product name should only contain alphabetic characters. Returning to the main menu.\n";
-            return;
+        bool is10digits = tempProductName.length() > 10;
+        bool isAlphabet = true;
+
+        for (size_t i = 0; i < tempProductName.length(); i++) {
+            if (!isalpha(tempProductName[i])) {
+                isAlphabet = false;
+                break;
+            }
         }
+
+        if (is10digits) 
+        {
+            cout << "Product name exceeds the maximum length of 10 characters. Please enter a valid name.\n";
+            continue;
+        }
+
+        if (!isAlphabet) 
+        {
+            cout << "Product name should only contain alphabetic characters. Please enter a valid name.\n";
+            continue;
+        }
+
+        break; // Exit the loop if the name is valid
     }
+    
+    // Copy the string to the fixed-size character array
+    tempProductName.copy(product_name, tempProductName.length());
+    product_name[tempProductName.length()] = '\0';
 
     // Prompt the user to confirm adding the product
-    cout << "Are you sure you want to add the product " << product_name << "(Y/N)? ";
-    char userInput[2];
-    cin >> userInput;
+    string userInput;
+    while (true) {
+        cout << "Are you sure you want to add the product " << product_name << " (Y/N)? ";
+        cin >> userInput;
 
-    // Check user input and proceed accordingly
-    if (strcmp(userInput, "y") == 0 || strcmp(userInput, "Y") == 0)
-    {
-        // add the product(Writing product record to the file) and confirm success
-        if (addProduct(product_name))
-            cout << "The new product has been successfully added. \n";
+        if (userInput == "y" || userInput == "Y") {
+            // Add the product (Writing product record to the file) and confirm success
+            if (addProduct(product_name)) {
+                cout << "The new product has been successfully added. \n";
+            }
+            break;
+        } else if (userInput == "n" || userInput == "N") {
+            cout << "Product addition cancelled. Returning to the main menu.\n";
+            return; // Return to the main menu if user cancels
+        } else {
+            cout << "Invalid input. Please enter 'Y' for yes or 'N' for no.\n";
+        }
     }
-    else
-        return; // Return to the main menu if user cancels
 }
 
 // Function to control the creation of a release done
@@ -300,7 +312,7 @@ void createChangeRequestControl()
     int i;
 
     bool getFlag = getNextRequester(&temp);
-    if (getFlag == false)
+    if (!getFlag)
     {
         // Prompt user to create a new requester
         cout << "Creating a new requester: \n"
@@ -330,7 +342,7 @@ void createChangeRequestControl()
         // Convert input to integer array
         if (strlen(phone_number_input) != 11)
         {
-            cout << "Phone number must be exactly 11 digits. Returning to the main menu.\n";
+            cout << "\nPhone number must be exactly 11 digits. Returning to the main menu.\n";
             return;
         }
 
@@ -383,7 +395,7 @@ void createChangeRequestControl()
         return;
     }
 
-    while (getFlag == true)
+    while (getFlag)
     {
         requester_list[0] = temp;
         cout << "Select a requester that reports this change request: \n";
