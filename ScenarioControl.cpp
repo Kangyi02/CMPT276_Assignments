@@ -218,7 +218,7 @@ void createChangeRequestControl()
         // Prompt user to create a new requester
         cout << "Creating a new requester: \n"
              << "Enter requester's name ('Last name, First name', max 30 chars): ";
-        cin >> chosen_requester.requester_name;
+        cin >> *chosen_requester.requester_name;
 
         // Ask for phone number
         cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
