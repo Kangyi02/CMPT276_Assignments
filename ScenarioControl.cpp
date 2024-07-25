@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <string>
 #include "ScenarioControl.h"
 #include "Requester.h"
 #include "Product.h"
@@ -17,8 +18,7 @@
 #include "ChangeRequest.h"
 #include "Change.h"
 
-using std::cin;
-using std::cout;
+using namespace std;
 
 bool isValidDateFormat(const char* date)
 {
@@ -214,7 +214,44 @@ void createChangeRequestControl()
 
     // Loop to display requester list and select a requester
     int i;
-    while (getNextRequester(&temp) == true)
+
+    bool getFlag = getNextRequester(&temp);
+    if (getFlag == false)
+    {
+        // Prompt user to create a new requester
+        cout << "Creating a new requester: \n"
+             << "Enter requester's name ('Last name, First name', max 30 chars): ";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        cin.getline(chosen_requester.requester_name, 31);
+        cout << chosen_requester.requester_name << endl; 
+
+        // Ask for phone number
+        cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        cin >> *chosen_requester.phone_number; // ??
+
+        // Ask for email
+        cout << "Enter the requester's email (max 24 chars): ";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        cin >> chosen_requester.email;
+
+        // Ask if it's employee
+        cout << "Is the requester employee (Y/N)? ";
+        char user_input[1];
+        cin >> user_input;
+        if (strcmp(user_input, "y") == 0 || strcmp(user_input, "Y") == 0)
+        {
+            cout << "Enter new requester's department (max 12 chars): ";
+            cin >> chosen_requester.department;
+        }
+
+
+        if (addRequester(&chosen_requester))
+            cout << "The new requester has been successfully added. \n";
+        return;
+    }
+
+    while (getFlag == true)
     {
         requester_list[0] = temp;
         cout << "Select a requester that reports this change request: \n";
