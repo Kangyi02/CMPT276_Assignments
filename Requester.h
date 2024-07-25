@@ -22,7 +22,7 @@
 class Requester 
 {
 public:
-    char requester_name[21]; // max 20 chars: last name, first name
+    char requester_name[31]; // max 20 chars: last name, first name
     int phone_number[11]; //
     char email[25]; // max 24 chars
     char department[13];
