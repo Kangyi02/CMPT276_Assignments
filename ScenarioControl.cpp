@@ -218,33 +218,39 @@ void createChangeRequestControl()
         // Prompt user to create a new requester
         cout << "Creating a new requester: \n"
              << "Enter requester's name ('Last name, First name', max 30 chars): ";
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
         cin.getline(chosen_requester.requester_name, 31);
-        cout << chosen_requester.requester_name << endl; 
 
         // Ask for phone number
         cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
-        cin >> *chosen_requester.phone_number; // ??
+        cin.getline((char*)chosen_requester.phone_number, 12);
 
         // Ask for email
         cout << "Enter the requester's email (max 24 chars): ";
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
-        cin >> chosen_requester.email;
+        cin.getline(chosen_requester.email, 25);
 
         // Ask if it's employee
-        cout << "Is the requester employee (Y/N)? ";
-        char user_input[1];
-        cin >> user_input;
+        cout << "Is the requester an employee (Y/N)? ";
+        char user_input[2];
+        cin.getline(user_input, 2);
+
         if (strcmp(user_input, "y") == 0 || strcmp(user_input, "Y") == 0)
         {
             cout << "Enter new requester's department (max 12 chars): ";
-            cin >> chosen_requester.department;
+            cin.getline(chosen_requester.department, 13);
+        } else {
+            strcpy(chosen_requester.department, "NULL");
         }
 
+        cout << "Requester details:\n";
+        cout << "Name: " << chosen_requester.requester_name << "\n"
+             << "Phone Number: " << (int)*chosen_requester.phone_number << "\n"
+             << "Email: " << chosen_requester.email << "\n"
+             << "Department: " << chosen_requester.department << "\n";
 
-        if (addRequester(&chosen_requester))
-            cout << "The new requester has been successfully added. \n";
+        if (addRequester(&chosen_requester)) {
+            cout << "The new requester has been successfully added.\n";
+        }
         return;
     }
 

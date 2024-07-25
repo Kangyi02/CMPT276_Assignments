@@ -24,7 +24,7 @@ Requester::Requester()
 }
 
 // Parameterized constructor implementation
-Requester::Requester(const char* name, const int* phone, const char* email_addr, const char* dept) 
+Requester::Requester(const char name[31], const int* phone, const char* email_addr, const char* dept) 
 {
     // Initialize all the attribute with provided data
     strncpy(requester_name, name, sizeof(requester_name) - 1);
@@ -88,6 +88,12 @@ bool getNextRequester(Requester* req)
 // Store a new requester to file
 bool addRequester(Requester* req) 
 {
+    cout << "Requester details in lower modular:\n";
+        cout << "Name: " << req->requester_name << "\n"
+             << "Phone Number: " << (int)*req->phone_number << "\n"
+             << "Email: " << req->email << "\n"
+             << "Department: " << req->department << "\n";
+
     if(RequesterFileStream.write(reinterpret_cast<char*>(req), sizeof(Requester)))
     {
         RequesterFileStream.flush();
