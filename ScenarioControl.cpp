@@ -304,11 +304,10 @@ void createChangeRequestControl()
         // Ask if it's employee
         char user_input[1];
         cin >> user_input;
-        if (user_input == "y" || user_input == "Y")
+        if (strcmp(user_input, "y") == 0 || strcmp(user_input, "Y") == 0)
         {
             cout << "Enter the requester's department (max 12 chars): ";
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
-            cin.getline(chosen_requester.department, sizeof(chosen_requester.department));
+            cin >> chosen_requester.department;
 
             if (strlen(chosen_requester.department) > 12)
             {
