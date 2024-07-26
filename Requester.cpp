@@ -71,8 +71,10 @@ void seekToBeginningOfRequesterFile()
 // Get a next requester
 bool getNextRequester(Requester *req)
 {
+    RequesterFileStream.clear();
     if (RequesterFileStream.read(reinterpret_cast<char *>(req), sizeof(Requester)))
     {
+        RequesterFileStream.flush();
         return true;
     }
     else

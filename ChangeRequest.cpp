@@ -11,7 +11,7 @@
 
 using namespace std;
 
-fstream changeRequestFileStream;
+fstream ChangeRequestFileStream;
 
 //constructor
 ChangeRequest::ChangeRequest()
@@ -43,8 +43,8 @@ ChangeRequest::ChangeRequest(const int* id, const char* name, const char* date, 
 // Initialize the change request file
 bool initChangeRequest() 
 {
-    changeRequestFileStream.open("ChangeRequest.bin", ios::in | ios::out | ios::binary | ios::app);
-    if (!changeRequestFileStream) 
+    ChangeRequestFileStream.open("ChangeRequest.bin", ios::in | ios::out | ios::binary | ios::app);
+    if (!ChangeRequestFileStream) 
     {
         return false;
     }
@@ -54,10 +54,10 @@ bool initChangeRequest()
 // Shut down the change requst file
 bool closeChangeRequest() 
 {
-    if(changeRequestFileStream.is_open()) 
+    if(ChangeRequestFileStream.is_open()) 
     {
-        changeRequestFileStream.close();
-        if(changeRequestFileStream.is_open())
+        ChangeRequestFileStream.close();
+        if(ChangeRequestFileStream.is_open())
         {
             return false;
         }
@@ -69,13 +69,14 @@ bool closeChangeRequest()
 // Move the get pointer to the beginning of the chnage request file
 void seekToBeginningOfChangeRequestFile() 
 {
-        changeRequestFileStream.seekg(0, ios::beg);
+    ChangeRequestFileStream.seekg(0, ios::beg);
 }
 
 // Get a next change request
 bool getNextChangeRequest(ChangeRequest* chreq) 
 {
-    if(changeRequestFileStream.read(reinterpret_cast<char*>(chreq), sizeof(ChangeRequest)))
+    ChangeRequestFileStream.clear();
+    if(ChangeRequestFileStream.read(reinterpret_cast<char*>(chreq), sizeof(ChangeRequest)))
     {
         return true;
     }
@@ -85,8 +86,9 @@ bool getNextChangeRequest(ChangeRequest* chreq)
 // Add a new change request to file
 bool addChangeRequest(ChangeRequest* chreq)
 {
-    if(changeRequestFileStream.write(reinterpret_cast<char*>(chreq), sizeof(ChangeRequest)))
+    if(ChangeRequestFileStream.write(reinterpret_cast<char*>(chreq), sizeof(ChangeRequest)))
     {
+        ChangeRequestFileStream.flush();
         return true;
     }
     return false;
@@ -95,7 +97,7 @@ bool addChangeRequest(ChangeRequest* chreq)
 // Search for change request with provided change ID, return one at a time. false if reach the end of the file
 bool filterNextChangeRequest(ChangeRequest* chreq, int* ch_ID)
 {
-    while(changeRequestFileStream.read(reinterpret_cast<char*>(chreq), sizeof(ChangeRequest)))
+    while(ChangeRequestFileStream.read(reinterpret_cast<char*>(chreq), sizeof(ChangeRequest)))
     {
         for(int i = 0; i < sizeof(chreq->change_ID); ++i)
         {
