@@ -227,6 +227,7 @@ void createReleaseControl()
         {
             // Create new release and write to file
             Release new_release = Release(release_ID, chosen.product_name, release_date);
+            cout << "release id in sc:" << new_release.release_ID << endl;
             if (addRelease(&new_release))
                 cout << "The new release has been successfully added.\n";
             break;
@@ -278,29 +279,30 @@ bool isValidRequesterNameLength(const string &name)
 bool isValidRequesterName(const string &name)
 {
     // Split the name into last name and first name
-    size_t commaPos = name.find(',');
-    if (commaPos == string::npos)
-    {
-        return false; // No comma found
-    }
+    // size_t commaPos = name.find(',');
+    // if (commaPos == string::npos)
+    // {
+    //     return false; // No comma found
+    // }
 
-    string lastName = name.substr(0, commaPos);
-    string firstName = name.substr(commaPos + 2); // Skip ", "
+    // string lastName = name.substr(0, commaPos);
+    // string firstName = name.substr(commaPos + 2); // Skip ", "
 
-    // Check if both names contain only alphabetic characters
-    auto isAlphaOnly = [](const string &str) -> bool
-    {
-        for (char c : str)
-        {
-            if (!isalpha(c))
-            {
-                return false;
-            }
-        }
-        return true;
-    };
+    // // Check if both names contain only alphabetic characters
+    // auto isAlphaOnly = [](const string &str) -> bool
+    // {
+    //     for (char c : str)
+    //     {
+    //         if (!isalpha(c))
+    //         {
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+    // };
 
-    return isAlphaOnly(lastName) && isAlphaOnly(firstName);
+    // return isAlphaOnly(lastName) && isAlphaOnly(firstName);
+    return true;
 }
 
 // Function to format the name from "Last name, First name" to "First name Last name"
@@ -521,7 +523,8 @@ void createChangeRequestControl()
         cout << "   Product    \n";
         cout << "1) " << temp1.product_name << "\n";
 
-        for (int i = 1; i < 20; i++)
+        int i;
+        for (i = 1; i < 20; i++)
         {
             if (getNextProduct(&temp1))
             {
@@ -534,7 +537,7 @@ void createChangeRequestControl()
                 break; // Exit loop if no more products
             }
         }
-        int i;
+
         // Display options for more products or exit
         cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
@@ -545,7 +548,7 @@ void createChangeRequestControl()
         // Check if user input is within valid range
         if (user_input >= 1 && user_input < i + 1)
         {
-            chosen_product = product_list[user_input]; // Select the chosen product
+            chosen_product = product_list[user_input-1]; // Select the chosen product
             break;
         }
         else if (user_input == 0)
@@ -560,7 +563,7 @@ void createChangeRequestControl()
     Change temp2;         // Temporary change pointer
     Change chosen_change; // Chosen change pointer
 
-    bool getChangeFlag = filterNextChange(&temp2, temp1.product_name);
+    bool getChangeFlag = filterNextChange(&temp2, chosen_product.product_name);
     if (getChangeFlag == false)
     {
         // Prompt user to create a new change
@@ -597,7 +600,7 @@ void createChangeRequestControl()
 
         for (int i = 1; i < 20; i++)
         {
-            if (filterNextChange(&temp2, temp1.product_name))
+            if (filterNextChange(&temp2, chosen_product.product_name))
             {
                 change_list[i] = temp2; // Add change to the list
                 cout << i + 1 << ") " << temp2.description
@@ -619,8 +622,7 @@ void createChangeRequestControl()
 
         int user_input;
         cin >> user_input;                              // Get user input for selection
-        cout << "i is " << i << endl;                   // !!
-        cout << "user input is " << user_input << endl; // !!
+   
         if (user_input >= 1 && user_input < i + 1)
         {
             cout << "The user selects: " << i << endl;
@@ -653,8 +655,8 @@ void createChangeRequestControl()
 
     // Move the file pointer to the beginning of the release file
     seekToBeginningOfReleaseFile();
-    cout << "product name" << temp1.product_name;
-    bool getReleaseFlag = filterNextRelease(&temp3, temp1.product_name);
+
+    bool getReleaseFlag = filterNextRelease(&temp3, chosen_product.product_name);
 
     if (getReleaseFlag == false)
     {
@@ -668,16 +670,16 @@ void createChangeRequestControl()
         release_list[0] = temp3;
         cout << "Select a reported release that corresponds to this change request: \n";
 
-        cout << "Release ID"
+        cout << "Release ID  "
              << "Release date\n";
 
         cout << "1) " << temp3.release_ID
-             << temp3.release_date << "\n";
+                << temp3.release_date << "\n";
 
         int i;
         for (i = 1; i < 20; i++)
         {
-            if (filterNextRelease(&temp3, temp1.product_name))
+            if (filterNextRelease(&temp3, chosen_product.product_name))
             {
                 release_list[i] = temp3; // Add release to the list
                 cout << i + 1 << ") " << temp3.release_ID
@@ -690,11 +692,12 @@ void createChangeRequestControl()
             }
         }
         // Display options for more releases
-        cout << i + 2 << ") More\n";
+        cout << i + 1 << ") More\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input; // Get user input for selection
+
         // Check if user input is within valid range
         if (user_input >= 1 && user_input < i + 1)
         {
