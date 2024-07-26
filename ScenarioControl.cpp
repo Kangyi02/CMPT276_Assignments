@@ -23,6 +23,7 @@
 
 using namespace std;
 
+
 bool isValidDateFormat(const char *date)
 {
     // Check length
@@ -52,7 +53,7 @@ void createProductControl()
     char product_name[11];
     string tempProductName;
 
-    while (true)
+    while (true) 
     {
         cout << "Enter product's name (max 10 chars): ";
         cin >> tempProductName;
@@ -60,22 +61,20 @@ void createProductControl()
         bool is10digits = tempProductName.length() > 10;
         bool isAlphabet = true;
 
-        for (size_t i = 0; i < tempProductName.length(); i++)
-        {
-            if (!isalpha(tempProductName[i]))
-            {
+        for (size_t i = 0; i < tempProductName.length(); i++) {
+            if (!isalpha(tempProductName[i])) {
                 isAlphabet = false;
                 break;
             }
         }
 
-        if (is10digits)
+        if (is10digits) 
         {
             cout << "Product name exceeds the maximum length of 10 characters. Please enter a valid name.\n";
             continue;
         }
 
-        if (!isAlphabet)
+        if (!isAlphabet) 
         {
             cout << "Product name should only contain alphabetic characters. Please enter a valid name.\n";
             continue;
@@ -83,34 +82,27 @@ void createProductControl()
 
         break; // Exit the loop if the name is valid
     }
-
+    
     // Copy the string to the fixed-size character array
     tempProductName.copy(product_name, tempProductName.length());
     product_name[tempProductName.length()] = '\0';
 
     // Prompt the user to confirm adding the product
     string userInput;
-    while (true)
-    {
+    while (true) {
         cout << "Are you sure you want to add the product " << product_name << " (Y/N)? ";
         cin >> userInput;
 
-        if (userInput == "y" || userInput == "Y")
-        {
+        if (userInput == "y" || userInput == "Y") {
             // Add the product (Writing product record to the file) and confirm success
-            if (addProduct(product_name))
-            {
+            if (addProduct(product_name)) {
                 cout << "The new product has been successfully added. \n";
             }
             break;
-        }
-        else if (userInput == "n" || userInput == "N")
-        {
+        } else if (userInput == "n" || userInput == "N") {
             cout << "Product addition cancelled. Returning to the main menu.\n";
             return; // Return to the main menu if user cancels
-        }
-        else
-        {
+        } else {
             cout << "Invalid input. Please enter 'Y' for yes or 'N' for no.\n";
         }
     }
@@ -126,43 +118,39 @@ void createReleaseControl()
     Product product_list[20];
     Product temp;   // Temporary product pointer
     Product chosen; // Chosen product pointer
-    //*chosen.product_name = NULL;
 
     bool getFlag = getNextProduct(&temp);
-    if (getFlag == false)
+    if (!getFlag)
     {
         cout << "No additional records, this is the end of the file. \n";
         return;
     }
 
-    while (getFlag == true)
+    cout << "For which product you want to add a new release to: \n";
+    while (true) 
     {
         product_list[0] = temp;
-
-        // Loop to display product list and select a product
-        cout << "For which product you want to add a new release to: \n";
         cout << "   Product    \n";
         cout << "1) " << temp.product_name << "\n";
-
+        
         int i;
         for (i = 1; i < 20; i++)
         {
             if (getNextProduct(&temp) == true)
             {
                 product_list[i] = temp;                             // Add product to the list
-                cout << i + 1 << ") " << temp.product_name << "\n"; // Display product name
+                cout << i + 1 << ") " << temp.product_name << "\n"; // Display product name            
             }
             else
             {
-                getFlag == false;
                 break; // Exit loop if no more products
             }
         }
-
+        
         // Display options for more products or exit
         cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
-        cout << "Enter selection: "; // Get user input for selection
+        cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input;
@@ -182,55 +170,74 @@ void createReleaseControl()
     char release_ID[8]; // should it be global??
     cin >> release_ID;
 
-    if (strlen(release_ID) > 8)
-    {
-        cout << "Release ID exceeds the maximum length of 8 characters. Returning to the main menu.\n";
-        return;
+        if (tempReleaseID.length() <= 8)
+        {
+            break;
+        }
+        else
+        {
+            cout << "Release ID exceeds the maximum length of 8 characters. Please enter again.\n";
+        }
     }
 
-    // Prompt user to enter release date
-    cout << "Enter a release date of the release (YYYY-MM-DD): ";
-    char release_date[10]; // should it be global??
-    cin >> release_date;
+    // Copy the string to the fixed-size character array
+    tempReleaseID.copy(release_ID, tempReleaseID.length());
+    release_ID[tempReleaseID.length()] = '\0';
 
-    // Validate release date format
-    if (!isValidDateFormat(release_date))
+    char release_date[11]; // Adjusted size to account for null-terminator
+    string tempDate;
+    while (true)
     {
-        cout << "Invalid release date format. Please enter in YYYY-MM-DD format. Returning to the main menu.\n";
-        return;
+        cout << "Enter a release date for the release (YYYY-MM-DD): ";
+        cin >> tempDate;
+
+        // if (isValidDateFormat(release_date) && tempDate.length() <= 10)
+        // {
+        //     break;
+        // }
+        // else
+        // {
+        //     cout << "Invalid release date format or exceeds the maximum length of 10 characters. Please enter again in YYYY-MM-DD format.\n";
+        // }
+        break;
     }
 
-    if (strlen(release_date) > 10)
-    {
-        cout << "Release date exceeds the maximum length of 10 characters. Returning to the main menu.\n";
-        return;
-    }
+    // Copy the string to the fixed-size character array
+    tempDate.copy(release_date, tempDate.length());
+    release_date[tempDate.length()] = '\0';
 
     // Confirm adding the release
-    cout << "Are you sure you want to add the release(Y/N)? ";
-    // Check user input and proceed accordingly
-    char sure_input[2];
-    cin >> sure_input;
+    string userInput;
+    while (true)
+    {
+        cout << "Are you sure you want to add the release " << release_ID << " (Y/N)? ";
+        cin >> userInput;
 
-    if (strcmp(sure_input, "y") == 0 || strcmp(sure_input, "Y") == 0)
-    {
-        // Create new release and write to file
-        Release new_release = Release(release_ID, chosen.product_name, release_date);
-        if (addRelease(&new_release))
+        if (userInput == "y" || userInput == "Y")
+        {
+            // Create new release and write to file
+            Release new_release = Release(release_ID, chosen.product_name, release_date);
+            if (addRelease(&new_release))
             cout << "The new release has been successfully added.\n";
-    }
-    else if (sure_input == "n" || sure_input == "N")
-    {
-        return; // Return to the main menu if user cancels
+            break;
+        }
+        else if (userInput == "n" || userInput == "N")
+        {
+            cout << "Release addition cancelled. Returning to the main menu.\n";
+            return; // Return to the main menu if user cancels
+        }
+        else
+        {
+            cout << "Invalid input. Please enter 'Y' for yes or 'N' for no.\n";
+        }
     }
 }
 
 // Function to validate email format
-bool isValidEmail(const string &email)
+bool isValidEmail(string email)
 {
-    // const std::regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
-    // return std::regex_match(email, emailPattern);
-    return true;
+    const regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
+    return regex_match(email, emailPattern);
 }
 
 // Function to validate phone number format
@@ -251,43 +258,42 @@ bool isValidPhoneNumber(const int *phone_number)
 }
 
 // Function to validate requester name length
-bool isValidRequesterNameLength(const string &name)
+bool isValidRequesterNameLength(const string& name)
 {
     return name.length() <= 30;
 }
 
 // Function to validate requester name format
-bool isValidRequesterName(const string &name)
+bool isValidRequesterName(const string& name) 
 {
     // Split the name into last name and first name
-    // size_t commaPos = name.find(',');
-    // if (commaPos == string::npos) {
-    //     return false; // No comma found
-    // }
+    size_t commaPos = name.find(',');
+    if (commaPos == string::npos) {
+        return false; // No comma found
+    }
 
-    // string lastName = name.substr(0, commaPos);
-    // string firstName = name.substr(commaPos + 2); // Skip ", "
+    string lastName = name.substr(0, commaPos);
+    string firstName = name.substr(commaPos + 2); // Skip ", "
 
-    // // Check if both names contain only alphabetic characters
-    // auto isAlphaOnly = [](const string& str) -> bool {
-    //     for (char c : str) {
-    //         if (!isalpha(c)) {
-    //             return false;
-    //         }
-    //     }
-    //     return true;
-    // };
+    // Check if both names contain only alphabetic characters
+    auto isAlphaOnly = [](const string& str) -> bool {
+        for (char c : str) {
+            if (!isalpha(c)) {
+                return false;
+            }
+        }
+        return true;
+    };
 
-    // return isAlphaOnly(lastName) && isAlphaOnly(firstName);
-    return true;
+    return isAlphaOnly(lastName) && isAlphaOnly(firstName);
 }
 
 // Function to format the name from "Last name, First name" to "First name Last name"
-void formatRequesterName(const string &input_name, char *formatted_name)
+void formatRequesterName(const string& input_name, char* formatted_name) 
 {
     char last_name[31];
     char first_name[31];
-
+    
     // Split the input_name into last_name and first_name
     sscanf(input_name.c_str(), "%30[^,], %30[^\n]", last_name, first_name);
 
@@ -500,8 +506,7 @@ void createChangeRequestControl()
         cout << "   Product    \n";
         cout << "1) " << temp1.product_name << "\n";
 
-        int i;
-        for (i = 1; i < 20; i++)
+        for (int i = 1; i < 20; i++)
         {
             if (getNextProduct(&temp1))
             {
@@ -514,7 +519,7 @@ void createChangeRequestControl()
                 break; // Exit loop if no more products
             }
         }
-
+        int i ;
         // Display options for more products or exit
         cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
@@ -575,8 +580,7 @@ void createChangeRequestControl()
              << temp2.priority
              << temp2.anticipated_release_ID << "\n";
 
-        int i;
-        for (i = 1; i < 20; i++)
+        for (int i = 1; i < 20; i++)
         {
             if (filterNextChange(&temp2, temp1.product_name))
             {

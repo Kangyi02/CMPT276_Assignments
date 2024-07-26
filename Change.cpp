@@ -89,6 +89,7 @@ void seekToBeginningOfChangeFile()
 // Get a next change 
 bool getNextChange(Change* ch)
 {
+    ChangeFileStream.clear();
     if(ChangeFileStream.read(reinterpret_cast<char*>(ch), sizeof(Change)))
     {
         return true;
@@ -102,6 +103,7 @@ bool addChange(Change* ch)
     ChangeFileStream.clear();
     if(ChangeFileStream.write(reinterpret_cast<char*>(ch), sizeof(Change)))
     {
+        ChangeFileStream.flush();
         updateChangeIDrec();
         return true;
     }
