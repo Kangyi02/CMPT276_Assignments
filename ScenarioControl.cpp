@@ -173,7 +173,7 @@ void createReleaseControl()
             chosen = product_list[user_input - 1]; // Select the chosen product
             break;
         }
-        else if (user_input == 0) 
+        else if (user_input == 0)
             return; // Return if user chooses to exit
     }
 
@@ -294,6 +294,119 @@ void formatRequesterName(const string &input_name, char *formatted_name)
     // Ensure the total length is within 30 characters
     snprintf(formatted_name, 31, "%s %s", first_name, last_name);
 }
+
+// create requester control
+void createRequester(Requester temp, Requester chosen_requester)
+{
+    // Prompt user to create a new requester
+    cout << "Creating a new requester:\n";
+    string inputname;
+
+    while (true)
+    {
+        cout << "Enter requester's name ('Last name, First name', max 30 chars): ";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+        getline(cin, inputname);
+
+        if (!isValidRequesterNameLength(inputname))
+        {
+            cout << "Requester name exceeds the maximum length of 30 characters. Please enter a valid name.\n";
+            continue;
+        }
+        if (!isValidRequesterName(inputname))
+        {
+            cout << "Requester name must be in the format 'Last name, First name' with both names containing only alphabetic characters. Please enter a valid name.\n";
+            continue;
+        }
+
+        formatRequesterName(inputname, chosen_requester.requester_name);
+        break;
+    }
+
+    while (true)
+    {
+        cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
+        string phone_number_input;
+        cin >> phone_number_input;
+
+        if (phone_number_input.length() != 11)
+        {
+            cout << "Phone number must be exactly 11 digits. Please enter a valid number.\n";
+            continue;
+        }
+
+        bool valid = true;
+        for (size_t i = 0; i < 11; i++)
+        {
+            if (!isdigit(phone_number_input[i]))
+            {
+                valid = false;
+                break;
+            }
+            chosen_requester.phone_number[i] = phone_number_input[i] - '0';
+        }
+
+        if (!valid)
+        {
+            cout << "Phone number must contain only digits. Please enter a valid number.\n";
+            continue;
+        }
+
+        if (!isValidPhoneNumber(chosen_requester.phone_number))
+        {
+            cout << "Invalid phone number. The first digit must be 1. Please enter a valid number.\n";
+            continue;
+        }
+
+        break;
+    }
+
+    while (true)
+    {
+        cout << "Enter the requester's email (max 24 chars): ";
+        string email_input;
+        cin >> email_input;
+
+        if (!isValidEmail(email_input))
+        {
+            cout << "Invalid email format or exceeds the maximum length of 24 characters. Please enter a valid email.\n";
+            continue;
+        }
+
+        strncpy(chosen_requester.email, email_input.c_str(), sizeof(chosen_requester.email) - 1);
+        chosen_requester.email[sizeof(chosen_requester.email) - 1] = '\0';
+        break;
+    }
+
+    cout << "Is the requester an employee (Y/N)? ";
+    string user_input;
+    cin >> user_input;
+    if (user_input == "y" || user_input == "Y")
+    {
+        while (true)
+        {
+            cout << "Enter the requester's department (max 12 chars): ";
+            string department_input;
+            cin >> department_input;
+
+            if (department_input.length() > 12)
+            {
+                cout << "Department name exceeds the maximum length of 12 characters. Please enter a valid department.\n";
+                continue;
+            }
+
+            strncpy(chosen_requester.department, department_input.c_str(), sizeof(chosen_requester.department) - 1);
+            chosen_requester.department[sizeof(chosen_requester.department) - 1] = '\0';
+            break;
+        }
+    }
+
+    if (addRequester(&chosen_requester))
+    {
+        cout << "The new requester has been successfully added.\n";
+    }
+}
+
 // Function to control the creation of a change request
 void createChangeRequestControl()
 {
@@ -305,153 +418,62 @@ void createChangeRequestControl()
     Requester temp;             // Temporary requester pointer
     Requester chosen_requester; // Chosen requester pointer
 
-    bool getFlag = getNextRequester(&temp);
-    if (!getFlag)
+    bool getRequesterFlag = getNextRequester(&temp);
+    if (!getRequesterFlag)
     {
-        // Prompt user to create a new requester
-        cout << "Creating a new requester:\n";
-        string inputname;
-
-        while (true)
-        {
-            cout << "Enter requester's name ('Last name, First name', max 30 chars): ";
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
-            getline(cin, inputname);
-
-            if (!isValidRequesterNameLength(inputname))
-            {
-                cout << "Requester name exceeds the maximum length of 30 characters. Please enter a valid name.\n";
-                continue;
-            }
-            if (!isValidRequesterName(inputname))
-            {
-                cout << "Requester name must be in the format 'Last name, First name' with both names containing only alphabetic characters. Please enter a valid name.\n";
-                continue;
-            }
-
-            formatRequesterName(inputname, chosen_requester.requester_name);
-            break;
-        }
-
-        while (true)
-        {
-            cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
-            string phone_number_input;
-            cin >> phone_number_input;
-
-            if (phone_number_input.length() != 11)
-            {
-                cout << "Phone number must be exactly 11 digits. Please enter a valid number.\n";
-                continue;
-            }
-
-            bool valid = true;
-            for (size_t i = 0; i < 11; i++)
-            {
-                if (!isdigit(phone_number_input[i]))
-                {
-                    valid = false;
-                    break;
-                }
-                chosen_requester.phone_number[i] = phone_number_input[i] - '0';
-            }
-
-            if (!valid)
-            {
-                cout << "Phone number must contain only digits. Please enter a valid number.\n";
-                continue;
-            }
-
-            if (!isValidPhoneNumber(chosen_requester.phone_number))
-            {
-                cout << "Invalid phone number. The first digit must be 1. Please enter a valid number.\n";
-                continue;
-            }
-
-            break;
-        }
-
-        while (true)
-        {
-            cout << "Enter the requester's email (max 24 chars): ";
-            string email_input;
-            cin >> email_input;
-
-            if (!isValidEmail(email_input))
-            {
-                cout << "Invalid email format or exceeds the maximum length of 24 characters. Please enter a valid email.\n";
-                continue;
-            }
-
-            strncpy(chosen_requester.email, email_input.c_str(), sizeof(chosen_requester.email) - 1);
-            chosen_requester.email[sizeof(chosen_requester.email) - 1] = '\0';
-            break;
-        }
-
-        cout << "Is the requester an employee (Y/N)? ";
-        string user_input;
-        cin >> user_input;
-        if (user_input == "y" || user_input == "Y")
-        {
-            while (true)
-            {
-                cout << "Enter the requester's department (max 12 chars): ";
-                string department_input;
-                cin >> department_input;
-
-                if (department_input.length() > 12)
-                {
-                    cout << "Department name exceeds the maximum length of 12 characters. Please enter a valid department.\n";
-                    continue;
-                }
-
-                strncpy(chosen_requester.department, department_input.c_str(), sizeof(chosen_requester.department) - 1);
-                chosen_requester.department[sizeof(chosen_requester.department) - 1] = '\0';
-                break;
-            }
-        }
-
-        if (addRequester(&chosen_requester))
-        {
-            cout << "The new requester has been successfully added.\n";
-        }
+        createRequester(temp, chosen_requester);
     }
-    else
+
+    // Requester exists, show list and let user select one
+    int i;
+    while (getRequesterFlag)
     {
-        // Requester exists, show list and let user select one
-        int i = 0;
-        while (getFlag)
-        {
-            requester_list[i] = temp;
-            cout << i + 1 << ") " << temp.requester_name << "\n";
+        requester_list[0] = temp;
+        cout << "Select a requester that reports this change request: \n";
+        cout << "   Requester name                " << "Phone      " << "Email                   " << "Department  \n";
 
-            i++;
-            if (i >= 20)
+        cout << "1) " << temp.requester_name
+             << temp.phone_number
+             << temp.email
+             << temp.department
+             << "\n";
+
+        for (i = 1; i < 20; i++)
+        {
+            if (getNextRequester(&temp) == true)
             {
-                break;
+                requester_list[i] = temp; // Add requester to the list
+                cout << i + 1 << ") " << temp.requester_name
+                     << temp.phone_number
+                     << temp.email
+                     << temp.department
+                     << "\n";
             }
-
-            getFlag = getNextRequester(&temp);
+            else
+            {
+                getRequesterFlag = false;
+                break; // Exit loop if no more requesters
+            }
         }
 
-        cout << "Select a requester that reports this change request:\n";
-        for (int j = 0; j < i; j++)
-        {
-            cout << j + 1 << ") " << requester_list[j].requester_name << "\n";
-        }
+        // Display options for more requesters or to create a new one
+        cout << i + 1 << ") Show more requesters\n";
+        cout << "0) Create a new requester\n";
         cout << "Enter selection: ";
 
         int user_input;
-        cin >> user_input;
+        cin >> user_input; // Get user input for selection
 
-        if (user_input >= 1 && user_input <= i)
+        cout << user_input;
+        // Check if user input is within valid range
+        if (user_input >= 1 && user_input < i + 1)
         {
-            chosen_requester = requester_list[user_input - 1];
+            chosen_requester = requester_list[user_input - 1]; // Select the chosen requester
+            break;
         }
-        else
+        else if (user_input == 0)
         {
-            cout << "Invalid selection. Returning to the main menu.\n";
-            return;
+            createRequester(temp, chosen_requester);
         }
     }
 
@@ -464,19 +486,19 @@ void createChangeRequestControl()
     Product chosen_product; // Chosen product pointer
 
     // Loop to display product list and select a product
-    bool getFlag1 = getNextProduct(&temp1);
-    if (getFlag1 == false)
+    bool getProductFlag = getNextProduct(&temp1);
+    if (getProductFlag == false)
     {
         cout << "No additional records, this is the end of the file. \n";
         return;
     }
 
-    while (getFlag1 == true)
+    while (getProductFlag == true)
     {
         product_list[0] = temp1;
         cout << "Select a product that corresponds to this change request: \n";
-        cout << "Product    ";
-        cout << "1) " << temp1.product_name;
+        cout << "   Product    \n";
+        cout << "1) " << temp1.product_name << "\n";
 
         int i;
         for (i = 1; i < 20; i++)
@@ -488,22 +510,22 @@ void createChangeRequestControl()
             }
             else
             {
-                getFlag = false;
+                getProductFlag = false;
                 break; // Exit loop if no more products
             }
         }
 
         // Display options for more products or exit
-        cout << i + 2 << ") More\n";
+        cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input; // Get user input for selection
         // Check if user input is within valid range
-        if (1 <= user_input <= i + 1)
+        if (user_input >= 1 && user_input < i + 1)
         {
-            chosen_product = product_list[user_input - 1]; // Select the chosen product
+            chosen_product = product_list[user_input]; // Select the chosen product
             break;
         }
         else if (user_input == 0)
@@ -518,8 +540,27 @@ void createChangeRequestControl()
     Change temp2;         // Temporary change pointer
     Change chosen_change; // Chosen change pointer
 
+    bool getChangeFlag = filterNextChange(&temp2, temp1.product_name);
+    if (getChangeFlag == false)
+    {
+        // Prompt user to create a new change
+        cout << "Enter the description of the new change (max 30 chars): ";
+        cin >> chosen_change.description;
+        *chosen_change.priority = 0; // if 0 print out N/A
+        *chosen_change.status = *"Reported";
+        int id[7];
+        getNextCID(id);
+        *chosen_change.change_ID = *id;
+        *chosen_change.product_name = *chosen_product.product_name;
+        *chosen_change.anticipated_release_ID = *"None";
+
+        // Add to file
+        if (addChange(&chosen_change))
+            cout << "The new change has been successfully added. \n";
+    }
+
     // Loop to display change list and select a change
-    while (filterNextChange(&temp2, temp1.product_name))
+    while (getChangeFlag)
     {
         cout << "Which change corresponds to the change request? \n";
         cout << "Description                     "
@@ -547,7 +588,10 @@ void createChangeRequestControl()
                      << temp2.anticipated_release_ID << "\n";
             }
             else
+            {
+                getChangeFlag = false;
                 break; // Exit loop if no more changes
+            }
         }
         // Display options for more changes or to create a new one
         cout << i + 2 << ") More\n";
@@ -556,10 +600,12 @@ void createChangeRequestControl()
 
         int user_input;
         cin >> user_input; // Get user input for selection
-
-        if (1 <= user_input <= i + 1)
+        cout << "i is "<< i << endl; // !!
+        cout << "user input is " << user_input << endl; // !!
+        if (user_input >= 1 && user_input < i + 1)
         {
-            chosen_change = change_list[user_input - 1]; // Select the chosen change
+            cout << "The user selects: " << i << endl;
+            chosen_change = change_list[user_input]; // Select the chosen change
             break;
         }
         else if (user_input == 0)
@@ -588,9 +634,17 @@ void createChangeRequestControl()
 
     // Move the file pointer to the beginning of the release file
     seekToBeginningOfReleaseFile();
+    cout << "product name" << temp1.product_name;
+    bool getReleaseFlag = filterNextRelease(&temp3, temp1.product_name);
+
+    if (getReleaseFlag == false)
+    {
+        cout << "You have to create a release first!";
+        return;
+    }
 
     // Loop to display release list and select a release
-    while (filterNextRelease(&temp3, temp1.product_name))
+    while (getReleaseFlag)
     {
         release_list[0] = temp3;
         cout << "Select a reported release that corresponds to this change request: \n";
@@ -611,7 +665,10 @@ void createChangeRequestControl()
                      << temp3.release_date << "\n";
             }
             else
+            {
+                getReleaseFlag == false;
                 break; // Exit loop if no more releases
+            }
         }
         // Display options for more releases
         cout << i + 2 << ") More\n";
@@ -620,7 +677,7 @@ void createChangeRequestControl()
         int user_input;
         cin >> user_input; // Get user input for selection
         // Check if user input is within valid range
-        if (1 <= user_input <= i + 1)
+        if (user_input >= 1 && user_input < i + 1)
         {
             chosen_release = release_list[user_input - 1]; // Select the chosen release
             break;

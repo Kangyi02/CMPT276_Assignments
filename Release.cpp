@@ -60,12 +60,14 @@ bool closeRelease()
 // Move the get pointer to the beginning of the release file
 void seekToBeginningOfReleaseFile()
 {
+    ReleaseFileStream.clear();
     ReleaseFileStream.seekg(0, ios::beg);
 }
 
 // Add a new release to file
 bool addRelease(Release* rel)
 {
+    ReleaseFileStream.clear();
     if(ReleaseFileStream.write(reinterpret_cast<char*>(rel), sizeof(Release)))
     {
         ReleaseFileStream.flush();

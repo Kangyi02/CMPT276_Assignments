@@ -69,7 +69,8 @@ bool closeChangeRequest()
 // Move the get pointer to the beginning of the chnage request file
 void seekToBeginningOfChangeRequestFile() 
 {
-        changeRequestFileStream.seekg(0, ios::beg);
+    changeRequestFileStream.clear();
+    changeRequestFileStream.seekg(0, ios::beg);
 }
 
 // Get a next change request
@@ -85,6 +86,7 @@ bool getNextChangeRequest(ChangeRequest* chreq)
 // Add a new change request to file
 bool addChangeRequest(ChangeRequest* chreq)
 {
+    changeRequestFileStream.clear();
     if(changeRequestFileStream.write(reinterpret_cast<char*>(chreq), sizeof(ChangeRequest)))
     {
         return true;

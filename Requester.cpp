@@ -65,6 +65,7 @@ bool closeRequester()
 // Move the get pointer to the beginning of the requester file
 void seekToBeginningOfRequesterFile()
 {
+    RequesterFileStream.clear();
     RequesterFileStream.seekg(0, ios::beg);
 }
 
