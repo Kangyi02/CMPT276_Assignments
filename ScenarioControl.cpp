@@ -118,131 +118,102 @@ void createReleaseControl()
     Product product_list[20];
     Product temp;   // Temporary product pointer
     Product chosen; // Chosen product pointer
+    //*chosen.product_name = NULL;
 
     bool getFlag = getNextProduct(&temp);
-    if (!getFlag)
+    if (getFlag == false)
     {
         cout << "No additional records, this is the end of the file. \n";
         return;
     }
 
-    cout << "For which product you want to add a new release to: \n";
-    while (true) 
+    while (getFlag == true)
     {
         product_list[0] = temp;
+
+        // Loop to display product list and select a product
+        cout << "For which product you want to add a new release to: \n";
         cout << "   Product    \n";
         cout << "1) " << temp.product_name << "\n";
-        
+
         int i;
         for (i = 1; i < 20; i++)
         {
             if (getNextProduct(&temp) == true)
             {
                 product_list[i] = temp;                             // Add product to the list
-                cout << i + 1 << ") " << temp.product_name << "\n"; // Display product name            
+                cout << i + 1 << ") " << temp.product_name << "\n"; // Display product name
             }
             else
             {
+                getFlag == false;
                 break; // Exit loop if no more products
             }
         }
-        
+
         // Display options for more products or exit
         cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
-        cout << "Enter selection: ";
+        cout << "Enter selection: "; // Get user input for selection
 
-        int userInput;
-        while (true)
+        int user_input;
+        cin >> user_input;
+
+        // Check if user input is within valid range
+        if (user_input >= 1 && user_input <= i + 1)
         {
-            cin >> userInput;
-
-            if (userInput >= 1 && userInput <= i)
-            {
-                chosen = product_list[userInput];
-                break;
-            }
-            else if (userInput == 0)
-            {
-                cout << "Release addition cancelled. Returning to the main menu.\n";
-                return; // Return to the main menu if user cancels
-            }
-            else if (userInput != i + 1)
-            {
-                cout << "Invalid input.\n";
-                continue;
-            }
-        }
-        break;
-    }
-
-    char release_ID[9]; // Adjusted size to account for null-terminator
-    string tempReleaseID;
-    while (true)
-    {
-        cout << "Enter a release ID for the new release (max 8 chars): ";
-        cin >> tempReleaseID;
-
-        if (tempReleaseID.length() <= 8)
-        {
+            chosen = product_list[user_input - 1]; // Select the chosen product
             break;
         }
         else
-        {
-            cout << "Release ID exceeds the maximum length of 8 characters. Please enter again.\n";
-        }
+            return; // Return if user chooses to exit
     }
 
-    // Copy the string to the fixed-size character array
-    tempReleaseID.copy(release_ID, tempReleaseID.length());
-    release_ID[tempReleaseID.length()] = '\0';
+    // Prompt user to enter release ID
+    cout << "Enter a release ID of the new release(max 8 chars): ";
+    char release_ID[8]; // should it be global??
+    cin >> release_ID;
 
-    char release_date[11]; // Adjusted size to account for null-terminator
-    string tempDate;
-    while (true)
+    if (strlen(release_ID) > 8)
     {
-        cout << "Enter a release date for the release (YYYY-MM-DD): ";
-        cin >> tempDate;
-
-        // if (isValidDateFormat(release_date) && tempDate.length() <= 10)
-        // {
-        //     break;
-        // }
-        // else
-        // {
-        //     cout << "Invalid release date format or exceeds the maximum length of 10 characters. Please enter again in YYYY-MM-DD format.\n";
-        // }
-        break;
+        cout << "Release ID exceeds the maximum length of 8 characters. Returning to the main menu.\n";
+        return;
     }
 
-    // Copy the string to the fixed-size character array
-    tempDate.copy(release_date, tempDate.length());
-    release_date[tempDate.length()] = '\0';
+    // Prompt user to enter release date
+    cout << "Enter a release date of the release (YYYY-MM-DD): ";
+    char release_date[10]; // should it be global??
+    cin >> release_date;
+
+    // Validate release date format
+    if (!isValidDateFormat(release_date))
+    {
+        cout << "Invalid release date format. Please enter in YYYY-MM-DD format. Returning to the main menu.\n";
+        return;
+    }
+
+    if (strlen(release_date) > 10)
+    {
+        cout << "Release date exceeds the maximum length of 10 characters. Returning to the main menu.\n";
+        return;
+    }
 
     // Confirm adding the release
-    string userInput;
-    while (true)
-    {
-        cout << "Are you sure you want to add the release " << release_ID << " (Y/N)? ";
-        cin >> userInput;
+    cout << "Are you sure you want to add the release(Y/N)? ";
+    // Check user input and proceed accordingly
+    char sure_input[2];
+    cin >> sure_input;
 
-        if (userInput == "y" || userInput == "Y")
-        {
-            // Create new release and write to file
-            Release new_release = Release(release_ID, chosen.product_name, release_date);
-            if (addRelease(&new_release))
+    if (strcmp(sure_input, "y") == 0 || strcmp(sure_input, "Y") == 0)
+    {
+        // Create new release and write to file
+        Release new_release = Release(release_ID, chosen.product_name, release_date);
+        if (addRelease(&new_release))
             cout << "The new release has been successfully added.\n";
-            break;
-        }
-        else if (userInput == "n" || userInput == "N")
-        {
-            cout << "Release addition cancelled. Returning to the main menu.\n";
-            return; // Return to the main menu if user cancels
-        }
-        else
-        {
-            cout << "Invalid input. Please enter 'Y' for yes or 'N' for no.\n";
-        }
+    }
+    else if (sure_input == "n" || sure_input == "N")
+    {
+        return; // Return to the main menu if user cancels
     }
 }
 
