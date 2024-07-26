@@ -23,7 +23,6 @@
 
 using namespace std;
 
-
 bool isValidDateFormat(const char *date)
 {
     // Check length
@@ -53,7 +52,7 @@ void createProductControl()
     char product_name[11];
     string tempProductName;
 
-    while (true) 
+    while (true)
     {
         cout << "Enter product's name (max 10 chars): ";
         cin >> tempProductName;
@@ -61,20 +60,22 @@ void createProductControl()
         bool is10digits = tempProductName.length() > 10;
         bool isAlphabet = true;
 
-        for (size_t i = 0; i < tempProductName.length(); i++) {
-            if (!isalpha(tempProductName[i])) {
+        for (size_t i = 0; i < tempProductName.length(); i++)
+        {
+            if (!isalpha(tempProductName[i]))
+            {
                 isAlphabet = false;
                 break;
             }
         }
 
-        if (is10digits) 
+        if (is10digits)
         {
             cout << "Product name exceeds the maximum length of 10 characters. Please enter a valid name.\n";
             continue;
         }
 
-        if (!isAlphabet) 
+        if (!isAlphabet)
         {
             cout << "Product name should only contain alphabetic characters. Please enter a valid name.\n";
             continue;
@@ -82,27 +83,34 @@ void createProductControl()
 
         break; // Exit the loop if the name is valid
     }
-    
+
     // Copy the string to the fixed-size character array
     tempProductName.copy(product_name, tempProductName.length());
     product_name[tempProductName.length()] = '\0';
 
     // Prompt the user to confirm adding the product
     string userInput;
-    while (true) {
+    while (true)
+    {
         cout << "Are you sure you want to add the product " << product_name << " (Y/N)? ";
         cin >> userInput;
 
-        if (userInput == "y" || userInput == "Y") {
+        if (userInput == "y" || userInput == "Y")
+        {
             // Add the product (Writing product record to the file) and confirm success
-            if (addProduct(product_name)) {
+            if (addProduct(product_name))
+            {
                 cout << "The new product has been successfully added. \n";
             }
             break;
-        } else if (userInput == "n" || userInput == "N") {
+        }
+        else if (userInput == "n" || userInput == "N")
+        {
             cout << "Product addition cancelled. Returning to the main menu.\n";
             return; // Return to the main menu if user cancels
-        } else {
+        }
+        else
+        {
             cout << "Invalid input. Please enter 'Y' for yes or 'N' for no.\n";
         }
     }
@@ -160,12 +168,12 @@ void createReleaseControl()
         cin >> user_input;
 
         // Check if user input is within valid range
-        if (user_input >= 1 && user_input <= i + 1)
+        if (user_input >= 1 && user_input < i + 1)
         {
             chosen = product_list[user_input - 1]; // Select the chosen product
             break;
         }
-        else
+        else if (user_input == 0) 
             return; // Return if user chooses to exit
     }
 
@@ -218,10 +226,11 @@ void createReleaseControl()
 }
 
 // Function to validate email format
-bool isValidEmail(const string& email)
+bool isValidEmail(const string &email)
 {
-    const std::regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
-    return std::regex_match(email, emailPattern);
+    // const std::regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
+    // return std::regex_match(email, emailPattern);
+    return true;
 }
 
 // Function to validate phone number format
@@ -242,42 +251,43 @@ bool isValidPhoneNumber(const int *phone_number)
 }
 
 // Function to validate requester name length
-bool isValidRequesterNameLength(const string& name)
+bool isValidRequesterNameLength(const string &name)
 {
     return name.length() <= 30;
 }
 
 // Function to validate requester name format
-bool isValidRequesterName(const string& name) 
+bool isValidRequesterName(const string &name)
 {
     // Split the name into last name and first name
-    size_t commaPos = name.find(',');
-    if (commaPos == string::npos) {
-        return false; // No comma found
-    }
+    // size_t commaPos = name.find(',');
+    // if (commaPos == string::npos) {
+    //     return false; // No comma found
+    // }
 
-    string lastName = name.substr(0, commaPos);
-    string firstName = name.substr(commaPos + 2); // Skip ", "
+    // string lastName = name.substr(0, commaPos);
+    // string firstName = name.substr(commaPos + 2); // Skip ", "
 
-    // Check if both names contain only alphabetic characters
-    auto isAlphaOnly = [](const string& str) -> bool {
-        for (char c : str) {
-            if (!isalpha(c)) {
-                return false;
-            }
-        }
-        return true;
-    };
+    // // Check if both names contain only alphabetic characters
+    // auto isAlphaOnly = [](const string& str) -> bool {
+    //     for (char c : str) {
+    //         if (!isalpha(c)) {
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+    // };
 
-    return isAlphaOnly(lastName) && isAlphaOnly(firstName);
+    // return isAlphaOnly(lastName) && isAlphaOnly(firstName);
+    return true;
 }
 
 // Function to format the name from "Last name, First name" to "First name Last name"
-void formatRequesterName(const string& input_name, char* formatted_name) 
+void formatRequesterName(const string &input_name, char *formatted_name)
 {
     char last_name[31];
     char first_name[31];
-    
+
     // Split the input_name into last_name and first_name
     sscanf(input_name.c_str(), "%30[^,], %30[^\n]", last_name, first_name);
 
@@ -296,21 +306,25 @@ void createChangeRequestControl()
     Requester chosen_requester; // Chosen requester pointer
 
     bool getFlag = getNextRequester(&temp);
-    if (!getFlag) {
+    if (!getFlag)
+    {
         // Prompt user to create a new requester
         cout << "Creating a new requester:\n";
         string inputname;
 
-        while (true) {
+        while (true)
+        {
             cout << "Enter requester's name ('Last name, First name', max 30 chars): ";
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
             getline(cin, inputname);
 
-            if (!isValidRequesterNameLength(inputname)) {
+            if (!isValidRequesterNameLength(inputname))
+            {
                 cout << "Requester name exceeds the maximum length of 30 characters. Please enter a valid name.\n";
                 continue;
             }
-            if (!isValidRequesterName(inputname)) {
+            if (!isValidRequesterName(inputname))
+            {
                 cout << "Requester name must be in the format 'Last name, First name' with both names containing only alphabetic characters. Please enter a valid name.\n";
                 continue;
             }
@@ -319,31 +333,37 @@ void createChangeRequestControl()
             break;
         }
 
-        while (true) {
+        while (true)
+        {
             cout << "Enter the requester's phone number (11 digits, first digit is 1): ";
             string phone_number_input;
             cin >> phone_number_input;
 
-            if (phone_number_input.length() != 11) {
+            if (phone_number_input.length() != 11)
+            {
                 cout << "Phone number must be exactly 11 digits. Please enter a valid number.\n";
                 continue;
             }
 
             bool valid = true;
-            for (size_t i = 0; i < 11; i++) {
-                if (!isdigit(phone_number_input[i])) {
+            for (size_t i = 0; i < 11; i++)
+            {
+                if (!isdigit(phone_number_input[i]))
+                {
                     valid = false;
                     break;
                 }
                 chosen_requester.phone_number[i] = phone_number_input[i] - '0';
             }
 
-            if (!valid) {
+            if (!valid)
+            {
                 cout << "Phone number must contain only digits. Please enter a valid number.\n";
                 continue;
             }
 
-            if (!isValidPhoneNumber(chosen_requester.phone_number)) {
+            if (!isValidPhoneNumber(chosen_requester.phone_number))
+            {
                 cout << "Invalid phone number. The first digit must be 1. Please enter a valid number.\n";
                 continue;
             }
@@ -351,12 +371,14 @@ void createChangeRequestControl()
             break;
         }
 
-        while (true) {
+        while (true)
+        {
             cout << "Enter the requester's email (max 24 chars): ";
             string email_input;
             cin >> email_input;
 
-            if (!isValidEmail(email_input)) {
+            if (!isValidEmail(email_input))
+            {
                 cout << "Invalid email format or exceeds the maximum length of 24 characters. Please enter a valid email.\n";
                 continue;
             }
@@ -369,13 +391,16 @@ void createChangeRequestControl()
         cout << "Is the requester an employee (Y/N)? ";
         string user_input;
         cin >> user_input;
-        if (user_input == "y" || user_input == "Y") {
-            while (true) {
+        if (user_input == "y" || user_input == "Y")
+        {
+            while (true)
+            {
                 cout << "Enter the requester's department (max 12 chars): ";
                 string department_input;
                 cin >> department_input;
 
-                if (department_input.length() > 12) {
+                if (department_input.length() > 12)
+                {
                     cout << "Department name exceeds the maximum length of 12 characters. Please enter a valid department.\n";
                     continue;
                 }
@@ -386,18 +411,23 @@ void createChangeRequestControl()
             }
         }
 
-        if (addRequester(&chosen_requester)) {
+        if (addRequester(&chosen_requester))
+        {
             cout << "The new requester has been successfully added.\n";
         }
-    } else {
+    }
+    else
+    {
         // Requester exists, show list and let user select one
         int i = 0;
-        while (getFlag) {
+        while (getFlag)
+        {
             requester_list[i] = temp;
             cout << i + 1 << ") " << temp.requester_name << "\n";
 
             i++;
-            if (i >= 20) {
+            if (i >= 20)
+            {
                 break;
             }
 
@@ -405,7 +435,8 @@ void createChangeRequestControl()
         }
 
         cout << "Select a requester that reports this change request:\n";
-        for (int j = 0; j < i; j++) {
+        for (int j = 0; j < i; j++)
+        {
             cout << j + 1 << ") " << requester_list[j].requester_name << "\n";
         }
         cout << "Enter selection: ";
@@ -413,9 +444,12 @@ void createChangeRequestControl()
         int user_input;
         cin >> user_input;
 
-        if (user_input >= 1 && user_input <= i) {
+        if (user_input >= 1 && user_input <= i)
+        {
             chosen_requester = requester_list[user_input - 1];
-        } else {
+        }
+        else
+        {
             cout << "Invalid selection. Returning to the main menu.\n";
             return;
         }
@@ -437,7 +471,7 @@ void createChangeRequestControl()
         return;
     }
 
-    while (getFlag1== true)
+    while (getFlag1 == true)
     {
         product_list[0] = temp1;
         cout << "Select a product that corresponds to this change request: \n";
