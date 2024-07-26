@@ -80,7 +80,7 @@ bool getNextRequester(Requester *req)
     }
     else
     {
-        cout << "No additional records, this is the end of the file." << endl;
+        // cout << "No additional records, this is the end of the file." << endl;
         return false;
     }
 }

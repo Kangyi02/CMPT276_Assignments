@@ -22,8 +22,8 @@ Release::Release() {
 Release::Release(const char* id, const char* name, const char* date)
 {
     strncpy(release_ID, id, sizeof(release_ID));
-    cout << "in constructor" << release_ID << endl; // problem, didn't copy release id here
     release_ID[sizeof(release_ID) - 1] = '\0';
+    cout << "in constructor" << release_ID << endl; // problem, didn't copy release id here
 
     strncpy(product_name, name, sizeof(product_name));
     cout << "in constructor" << product_name << endl;

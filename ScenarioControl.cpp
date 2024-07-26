@@ -455,9 +455,12 @@ void createChangeRequestControl()
         cout << "Select a requester that reports this change request: \n";
         cout << "   Requester name                " << "Phone      " << "Email                   " << "Department  \n";
 
-        cout << "1) " << temp.requester_name
-             << temp.phone_number
-             << temp.email
+        cout << "1) " << temp.requester_name;
+
+        for (int j=0; j<11; j++)
+             cout << temp.phone_number[j];
+
+        cout << temp.email
              << temp.department
              << "\n";
 
@@ -466,9 +469,11 @@ void createChangeRequestControl()
             if (getNextRequester(&temp) == true)
             {
                 requester_list[i] = temp; // Add requester to the list
-                cout << i + 1 << ") " << temp.requester_name
-                     << temp.phone_number
-                     << temp.email
+                cout << i + 1 << ") " << temp.requester_name;
+                for (int j=0; j<11; j++)
+                    cout << temp.phone_number[j];
+
+                cout << temp.email
                      << temp.department
                      << "\n";
             }
@@ -540,7 +545,7 @@ void createChangeRequestControl()
 
         // Display options for more products or exit
         cout << i + 1 << ") More\n";
-        cout << "0) Exit\n";
+        cout << "0)  Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
@@ -687,7 +692,7 @@ void createChangeRequestControl()
             }
             else
             {
-                getReleaseFlag == false;
+                getReleaseFlag = false;
                 break; // Exit loop if no more releases
             }
         }
@@ -722,17 +727,27 @@ void createChangeRequestControl()
 // Function to control the querying of a change
 void queryChangeControl()
 {
+    // Move the file pointer to the beginning of the product file
+    seekToBeginningOfProductFile();
+
     // Array to store a list of products
     Product product_list[20];
     Product temp1;          // Temporary product pointer
     Product chosen_product; // Chosen product pointer
 
     // Loop to display product list and select a product
-    while (getNextProduct(&temp1))
+    bool getProductFlag = getNextProduct(&temp1);
+    if (getProductFlag == false)
+    {
+        cout << "No additional records, this is the end of the file. \n";
+        return;
+    }
+
+    while (getProductFlag == true)
     {
         product_list[0] = temp1;
         cout << "Select a product:\n";
-        cout << "1) " << temp1.product_name;
+        cout << "1) " << temp1.product_name << "\n";
 
         int i;
         for (i = 1; i < 20; i++)
@@ -746,7 +761,7 @@ void queryChangeControl()
                 break; // Exit loop if no more products
         }
         // Display options for more products or exit
-        cout << i + 2 << ") More\n";
+        cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
@@ -754,13 +769,16 @@ void queryChangeControl()
         cin >> user_input; // Get user input for selection
 
         // Check if user input is within valid range
-        if (1 <= user_input <= i + 1)
+        if (user_input >= 1 && user_input < i + 1)
         {
             chosen_product = product_list[user_input - 1]; // Select the chosen product
             break;
         }
         else if (user_input == 0)
+        {
+            getProductFlag = false;
             return; // Return if user chooses to exit
+        }
     }
 
     // Array to store a list of changes
@@ -771,8 +789,14 @@ void queryChangeControl()
     // Move the file pointer to the beginning of the change file
     seekToBeginningOfChangeFile();
 
+    bool getChangeFlag = filterNextChange(&temp2, chosen_product.product_name);
+    if (getChangeFlag == false)
+    {
+        cout << "No additional records, this is the end of the file. \n";
+    }
+
     // Loop to display change list and select a change
-    while (filterNextChange(&temp2, chosen_product.product_name))
+    while (getChangeFlag)
     {
         cout << "Changes in the product '" << chosen_product.product_name << "':\n";
         cout << "Description                     "
@@ -796,7 +820,7 @@ void queryChangeControl()
                 break; // Exit loop if no more changes
         }
         // Display options for more changes or exit
-        cout << i + 2 << ") More\n";
+        cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
@@ -804,7 +828,7 @@ void queryChangeControl()
         cin >> user_input; // Get user input for selection
 
         // Check if user input is within valid range
-        if (1 <= user_input <= i + 1)
+        if (user_input >= 1 && user_input < i + 1)
         {
             chosen_change = change_list[user_input - 1]; // Select the chosen change
             break;
@@ -826,7 +850,8 @@ void queryChangeControl()
          << chosen_change.change_ID
          << chosen_change.status
          << chosen_change.priority
-         << chosen_change.anticipated_release_ID;
+         << chosen_change.anticipated_release_ID
+         << endl;
 }
 
 // Update control
