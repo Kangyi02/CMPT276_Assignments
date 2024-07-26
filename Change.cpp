@@ -100,6 +100,7 @@ bool getNextChange(Change* ch)
 // Add a new change to file
 bool addChange(Change* ch)
 {
+    ChangeFileStream.clear();
     if(ChangeFileStream.write(reinterpret_cast<char*>(ch), sizeof(Change)))
     {
         ChangeFileStream.flush();
