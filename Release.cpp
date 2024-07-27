@@ -23,8 +23,10 @@ Release::Release(const char* id, const char* name, const char* date)
 {
     strncpy(release_ID, id, sizeof(release_ID));
     release_ID[sizeof(release_ID) - 1] = '\0';
+    cout << "in constructor" << release_ID << endl; // problem, didn't copy release id here
 
     strncpy(product_name, name, sizeof(product_name));
+    cout << "in constructor" << product_name << endl;
     product_name[sizeof(product_name) - 1] = '\0';
 
     strncpy(release_date, date, sizeof(release_date));
@@ -67,6 +69,7 @@ void seekToBeginningOfReleaseFile()
 // Add a new release to file
 bool addRelease(Release* rel)
 {
+    cout << rel->release_ID;
     ReleaseFileStream.clear();
     if(ReleaseFileStream.write(reinterpret_cast<char*>(rel), sizeof(Release)))
     {

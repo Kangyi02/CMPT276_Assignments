@@ -24,6 +24,7 @@
 using std::cin;
 using std::cout;
 using std::endl;
+using std::string;
 
 bool isValidDateFormat(const char *date)
 {
@@ -184,6 +185,7 @@ void createReleaseControl()
     cout << "Enter a release ID of the new release(max 8 chars): ";
     char release_ID[8]; // should it be global??
     cin >> release_ID;
+<<<<<<< HEAD
 
         if (tempReleaseID.length() <= 8)
         {
@@ -193,6 +195,16 @@ void createReleaseControl()
         {
             cout << "Release ID exceeds the maximum length of 8 characters. Please enter again.\n";
         }
+=======
+    string tempReleaseID;
+    // if (tempReleaseID.length() <= 8)
+    // {
+    //     break;
+    // }
+    if (tempReleaseID.length() > 8)
+    {
+        cout << "Release ID exceeds the maximum length of 8 characters. Please enter again.\n";
+>>>>>>> cd5571be9167ecf3fbfa842fa568bf2596b37125
     }
 
     // Prompt user to enter release date
@@ -223,6 +235,7 @@ void createReleaseControl()
         {
             // Create new release and write to file
             Release new_release = Release(release_ID, chosen.product_name, release_date);
+            cout << "release id in sc:" << new_release.release_ID << endl;
             if (addRelease(&new_release))
             cout << "The new release has been successfully added.\n";
             break;
@@ -242,8 +255,9 @@ void createReleaseControl()
 // Function to validate email format
 bool isValidEmail(string email)
 {
-    const regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
-    return regex_match(email, emailPattern);
+    //const regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
+    //return regex_match(email, emailPattern);
+    return true;
 }
 
 // Function to validate phone number format
@@ -273,29 +287,30 @@ bool isValidRequesterNameLength(const string &name)
 bool isValidRequesterName(const string &name)
 {
     // Split the name into last name and first name
-    size_t commaPos = name.find(',');
-    if (commaPos == string::npos)
-    {
-        return false; // No comma found
-    }
+    // size_t commaPos = name.find(',');
+    // if (commaPos == string::npos)
+    // {
+    //     return false; // No comma found
+    // }
 
-    string lastName = name.substr(0, commaPos);
-    string firstName = name.substr(commaPos + 2); // Skip ", "
+    // string lastName = name.substr(0, commaPos);
+    // string firstName = name.substr(commaPos + 2); // Skip ", "
 
-    // Check if both names contain only alphabetic characters
-    auto isAlphaOnly = [](const string &str) -> bool
-    {
-        for (char c : str)
-        {
-            if (!isalpha(c))
-            {
-                return false;
-            }
-        }
-        return true;
-    };
+    // // Check if both names contain only alphabetic characters
+    // auto isAlphaOnly = [](const string &str) -> bool
+    // {
+    //     for (char c : str)
+    //     {
+    //         if (!isalpha(c))
+    //         {
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+    // };
 
-    return isAlphaOnly(lastName) && isAlphaOnly(firstName);
+    // return isAlphaOnly(lastName) && isAlphaOnly(firstName);
+    return true;
 }
 
 // Function to format the name from "Last name, First name" to "First name Last name"
@@ -321,7 +336,7 @@ void createRequester(Requester temp, Requester chosen_requester)
     while (true)
     {
         cout << "Enter requester's name ('Last name, First name', max 30 chars): ";
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+        //cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
         getline(cin, inputname);
 
         if (!isValidRequesterNameLength(inputname))
@@ -448,9 +463,12 @@ void createChangeRequestControl()
         cout << "Select a requester that reports this change request: \n";
         cout << "   Requester name                " << "Phone      " << "Email                   " << "Department  \n";
 
-        cout << "1) " << temp.requester_name
-             << temp.phone_number
-             << temp.email
+        cout << "1) " << temp.requester_name;
+
+        for (int j=0; j<11; j++)
+             cout << temp.phone_number[j];
+
+        cout << temp.email
              << temp.department
              << "\n";
 
@@ -459,9 +477,11 @@ void createChangeRequestControl()
             if (getNextRequester(&temp) == true)
             {
                 requester_list[i] = temp; // Add requester to the list
-                cout << i + 1 << ") " << temp.requester_name
-                     << temp.phone_number
-                     << temp.email
+                cout << i + 1 << ") " << temp.requester_name;
+                for (int j=0; j<11; j++)
+                    cout << temp.phone_number[j];
+
+                cout << temp.email
                      << temp.department
                      << "\n";
             }
@@ -516,7 +536,8 @@ void createChangeRequestControl()
         cout << "   Product    \n";
         cout << "1) " << temp1.product_name << "\n";
 
-        for (int i = 1; i < 20; i++)
+        int i;
+        for (i = 1; i < 20; i++)
         {
             if (getNextProduct(&temp1))
             {
@@ -529,10 +550,10 @@ void createChangeRequestControl()
                 break; // Exit loop if no more products
             }
         }
-        int i;
+
         // Display options for more products or exit
         cout << i + 1 << ") More\n";
-        cout << "0) Exit\n";
+        cout << "0)  Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
@@ -540,7 +561,7 @@ void createChangeRequestControl()
         // Check if user input is within valid range
         if (user_input >= 1 && user_input < i + 1)
         {
-            chosen_product = product_list[user_input]; // Select the chosen product
+            chosen_product = product_list[user_input-1]; // Select the chosen product
             break;
         }
         else if (user_input == 0)
@@ -555,7 +576,7 @@ void createChangeRequestControl()
     Change temp2;         // Temporary change pointer
     Change chosen_change; // Chosen change pointer
 
-    bool getChangeFlag = filterNextChange(&temp2, temp1.product_name);
+    bool getChangeFlag = filterNextChange(&temp2, chosen_product.product_name);
     if (getChangeFlag == false)
     {
         // Prompt user to create a new change
@@ -592,7 +613,7 @@ void createChangeRequestControl()
 
         for (int i = 1; i < 20; i++)
         {
-            if (filterNextChange(&temp2, temp1.product_name))
+            if (filterNextChange(&temp2, chosen_product.product_name))
             {
                 change_list[i] = temp2; // Add change to the list
                 cout << i + 1 << ") " << temp2.description
@@ -614,8 +635,7 @@ void createChangeRequestControl()
 
         int user_input;
         cin >> user_input;                              // Get user input for selection
-        cout << "i is " << i << endl;                   // !!
-        cout << "user input is " << user_input << endl; // !!
+   
         if (user_input >= 1 && user_input < i + 1)
         {
             cout << "The user selects: " << i << endl;
@@ -648,8 +668,8 @@ void createChangeRequestControl()
 
     // Move the file pointer to the beginning of the release file
     seekToBeginningOfReleaseFile();
-    cout << "product name" << temp1.product_name;
-    bool getReleaseFlag = filterNextRelease(&temp3, temp1.product_name);
+
+    bool getReleaseFlag = filterNextRelease(&temp3, chosen_product.product_name);
 
     if (getReleaseFlag == false)
     {
@@ -663,16 +683,16 @@ void createChangeRequestControl()
         release_list[0] = temp3;
         cout << "Select a reported release that corresponds to this change request: \n";
 
-        cout << "Release ID"
+        cout << "Release ID  "
              << "Release date\n";
 
         cout << "1) " << temp3.release_ID
-             << temp3.release_date << "\n";
+                << temp3.release_date << "\n";
 
         int i;
         for (i = 1; i < 20; i++)
         {
-            if (filterNextRelease(&temp3, temp1.product_name))
+            if (filterNextRelease(&temp3, chosen_product.product_name))
             {
                 release_list[i] = temp3; // Add release to the list
                 cout << i + 1 << ") " << temp3.release_ID
@@ -680,16 +700,17 @@ void createChangeRequestControl()
             }
             else
             {
-                getReleaseFlag == false;
+                getReleaseFlag = false;
                 break; // Exit loop if no more releases
             }
         }
         // Display options for more releases
-        cout << i + 2 << ") More\n";
+        cout << i + 1 << ") More\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input; // Get user input for selection
+
         // Check if user input is within valid range
         if (user_input >= 1 && user_input < i + 1)
         {
@@ -714,17 +735,27 @@ void createChangeRequestControl()
 // Function to control the querying of a change
 void queryChangeControl()
 {
+    // Move the file pointer to the beginning of the product file
+    seekToBeginningOfProductFile();
+
     // Array to store a list of products
     Product product_list[20];
     Product temp1;          // Temporary product pointer
     Product chosen_product; // Chosen product pointer
 
     // Loop to display product list and select a product
-    while (getNextProduct(&temp1))
+    bool getProductFlag = getNextProduct(&temp1);
+    if (getProductFlag == false)
+    {
+        cout << "No additional records, this is the end of the file. \n";
+        return;
+    }
+
+    while (getProductFlag == true)
     {
         product_list[0] = temp1;
         cout << "Select a product:\n";
-        cout << "1) " << temp1.product_name;
+        cout << "1) " << temp1.product_name << "\n";
 
         int i;
         for (i = 1; i < 20; i++)
@@ -738,7 +769,7 @@ void queryChangeControl()
                 break; // Exit loop if no more products
         }
         // Display options for more products or exit
-        cout << i + 2 << ") More\n";
+        cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
@@ -746,13 +777,16 @@ void queryChangeControl()
         cin >> user_input; // Get user input for selection
 
         // Check if user input is within valid range
-        if (1 <= user_input <= i + 1)
+        if (user_input >= 1 && user_input < i + 1)
         {
             chosen_product = product_list[user_input - 1]; // Select the chosen product
             break;
         }
         else if (user_input == 0)
+        {
+            getProductFlag = false;
             return; // Return if user chooses to exit
+        }
     }
 
     // Array to store a list of changes
@@ -763,8 +797,14 @@ void queryChangeControl()
     // Move the file pointer to the beginning of the change file
     seekToBeginningOfChangeFile();
 
+    bool getChangeFlag = filterNextChange(&temp2, chosen_product.product_name);
+    if (getChangeFlag == false)
+    {
+        cout << "No additional records, this is the end of the file. \n";
+    }
+
     // Loop to display change list and select a change
-    while (filterNextChange(&temp2, chosen_product.product_name))
+    while (getChangeFlag)
     {
         cout << "Changes in the product '" << chosen_product.product_name << "':\n";
         cout << "Description                     "
@@ -788,7 +828,7 @@ void queryChangeControl()
                 break; // Exit loop if no more changes
         }
         // Display options for more changes or exit
-        cout << i + 2 << ") More\n";
+        cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
@@ -796,7 +836,7 @@ void queryChangeControl()
         cin >> user_input; // Get user input for selection
 
         // Check if user input is within valid range
-        if (1 <= user_input <= i + 1)
+        if (user_input >= 1 && user_input < i + 1)
         {
             chosen_change = change_list[user_input - 1]; // Select the chosen change
             break;
@@ -818,7 +858,8 @@ void queryChangeControl()
          << chosen_change.change_ID
          << chosen_change.status
          << chosen_change.priority
-         << chosen_change.anticipated_release_ID;
+         << chosen_change.anticipated_release_ID
+         << endl;
 }
 
 // Update control
