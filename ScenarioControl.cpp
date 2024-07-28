@@ -857,18 +857,28 @@ void queryChangeControl()
 // Update control
 void updateChangeControl()
 {
+    // Move the file pointer to the beginning of the product file
+    seekToBeginningOfProductFile();
+
     // Step 1: Get the product
     Product product_list[20];
     Product temp1;          // Temporary product pointer
     Product chosen_product; // Chosen product pointer
 
     // Loop to display product list and select a product
-    while (getNextProduct(&temp1))
+    bool getProductFlag = getNextProduct(&temp1);
+    if (getProductFlag == false)
+    {
+        cout << "No additional records, this is the end of the file. \n";
+        return;
+    }
+
+    while (getProductFlag == true)
     {
         product_list[0] = temp1;
         cout << "Select a product that corresponds to the change you want to update: \n";
-        cout << "Product    ";
-        cout << "1) " << temp1.product_name;
+        cout << "Product    \n";
+        cout << "1) " << temp1.product_name << "\n";
 
         int i;
         // Display product options
@@ -883,20 +893,23 @@ void updateChangeControl()
                 break; // Exit loop if no more products
         }
 
-        cout << i + 2 << ") More\n";
+        cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input; // User input for product selection
 
-        if (1 <= user_input <= i + 1) // Check for valid selection
+        if (user_input >= 1 && user_input < i + 1) // Check for valid selection
         {
             chosen_product = product_list[user_input - 1]; // Assign chosen product
             break;
         }
         else if (user_input == 0)
+        {
+            getProductFlag == false;
             return; // Exit
+        }
     }
 
     // Step 2: Get the changes
@@ -906,9 +919,17 @@ void updateChangeControl()
     Change temp2;           // Temporary pointer for change
     Change chosen_change;   // Pointer for chosen change
 
-    // Loop until a valid change is chosen
-    while (filterNextChange(&temp2, chosen_product.product_name))
+    bool getChangeFlag = filterNextChange(&temp2, chosen_product.product_name);
+    if (getChangeFlag == false)
     {
+        cout << "No additional records, this is the end of the file. \n";
+        return; // return to the main menu if the change file is empty
+    }
+
+    // Loop to display change list and select a change
+    while (getChangeFlag)
+    {
+        change_list[0] = temp2;
         cout << "Select a change you want to update: \n";
         cout << "Description                     "
              << "change ID   "
@@ -938,30 +959,31 @@ void updateChangeControl()
                 break; // Exit loop if no more changes
         }
 
-        cout << i + 2 << ") More\n";
+        cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input; // User input for change selection
 
-        if (1 <= user_input <= i + 1) // Check for valid selection
+        if (user_input >= 1 && user_input < i + 1) // Check for valid selection
         {
             chosen_change = change_list[user_input - 1]; // Assign chosen change
             break;
         }
         else if (user_input == 0) // Exit
         {
+            getChangeFlag == false;
             return;
         }
     }
-    // Step 3: Update the chosen change
 
+    // Step 3: Update the chosen change
     // Update description
-    cout << "Updating the change with the change ID '1234' in the product '"
+    cout << "Updating the change with the change ID '" << chosen_change.change_ID << "' in the product '"
          << chosen_product.product_name << "':\n"
          << "Do you want to replace the description (Y/N)? ";
-    char user_input1[1];
+    string user_input1;
     cin >> user_input1;
     if (user_input1 == "Y" || user_input1 == "y")
     {
@@ -1020,13 +1042,23 @@ void updateChangeControl()
     cout << "The current 'anticipated release' is " << chosen_change.anticipated_release_ID;
 
     // get release
+    seekToBeginningOfReleaseFile(); // Function to set file cursor to the beginning of the release file
+
     Release release_list[20]; // Array to store release list
     Release temp3;            // Temporary pointer for release
     Release chosen_release;   // Pointer for chosen release
 
-    seekToBeginningOfReleaseFile(); // Function to set file cursor to the beginning of the release file
     // Loop until a valid release is chosen
-    while (filterNextRelease(&temp3, temp1.product_name))
+    bool getReleaseFlag = filterNextRelease(&temp3, chosen_product.product_name);
+
+    if (getReleaseFlag == false)
+    {
+        cout << "You have to create a release first!";
+        return;
+    }
+
+    // Loop to display release list and select a release
+    while (getReleaseFlag)
     {
         cout << "Select an anticipated release that you want to update to: \n";
 
@@ -1057,7 +1089,7 @@ void updateChangeControl()
         int user_input;
         cin >> user_input; // User input for release selection
 
-        if (1 <= user_input <= i + 1) // Check for valid selection
+        if (user_input >= 1 && user_input < i + 1) // Check for valid selection
         {
             chosen_release = release_list[user_input - 1]; // Assign chosen release
             // update the release id
@@ -1065,7 +1097,10 @@ void updateChangeControl()
             break;
         }
         else if (user_input == 0) // Keep current release
+        {
+            getReleaseFlag == false;
             break;
+        }
     }
 
     updateChange(&chosen_change); // Function to update the change in the system
