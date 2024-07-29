@@ -21,12 +21,14 @@
 #ifndef Change_H
 #define Change_H
 
+#include <cstdint>
+
 // Change class
 class Change
 {
 public:
-    int change_ID[7]; // max 6 digits
-    int priority; // 1 digit from 1 to 5
+    int32_t change_ID; // max 6 digits
+    int32_t priority; // 1 digit from 1 to 5
     char status[11]; // 'reported’, ‘evaluate’, ‘in process’, ‘cancelled’ or ‘done’
     char description[31]; // max 30 chars
     char product_name[11]; // max 10 chars
@@ -34,7 +36,7 @@ public:
 
     // constructors
     Change();
-    Change(const char* id, const int prio, const char* status, const char* desc, const char* prodname, const char* arid);
+    Change(const int32_t id, const int32_t prio, const char* status, const char* desc, const char* prodname, const char* arid);
 };
 
 
