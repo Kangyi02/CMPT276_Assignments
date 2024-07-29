@@ -435,8 +435,9 @@ void createChange(Product chosen_product, Change chosen_change)
 {
     // Prompt user to create a new change
     cout << "Enter the description of the new change (max 30 chars): ";
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     string temp_description;
-    cin >> temp_description;
+    getline(cin, temp_description);
     // description length check here
     // To do
     temp_description.copy(chosen_change.description, temp_description.length());
@@ -648,7 +649,7 @@ void createChangeRequestControl()
             }
         }
         // Display options for more changes or to create a new one
-        cout << i + 2 << ") More\n";
+        cout << i + 1 << ") More\n";
         cout << "0) New Change\n";
         cout << "Enter selection: ";
 
