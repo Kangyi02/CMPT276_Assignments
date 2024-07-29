@@ -124,19 +124,16 @@ void createReleaseControl()
 {
     // Move the file pointer to the beginning of the product file
     seekToBeginningOfProductFile();
-
     // Array to store a list of products
     Product product_list[20];
     Product temp;   // Temporary product pointer
     Product chosen; // Chosen product pointer
-
     bool getFlag = getNextProduct(&temp);
     if (!getFlag)
     {
         cout << "No additional records, this is the end of the file. \n";
         return;
     }
-
     cout << "For which product you want to add a new release to: \n";
     while (true)
     {
@@ -162,45 +159,52 @@ void createReleaseControl()
         cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
-
-        int user_input;
-        cin >> user_input;
-
-        // Check if user input is within valid range
-        if (user_input >= 1 && user_input < i + 1)
+        int userInput;
+        while (true)
         {
-            chosen = product_list[user_input - 1]; // Select the chosen product
+            cin >> userInput;
+            if (userInput >= 1 && userInput <= i)
+            {
+                chosen = product_list[userInput - 1];
+                break;
+            }
+            else if (userInput == 0)
+            {
+                cout << "Release addition cancelled. Returning to the main menu.\n";
+                return; // Return to the main menu if user cancels
+            }
+            else if (userInput != i + 1)
+            {
+                cout << "Invalid input.\n";
+                continue;
+            }
+        }
+        break;
+    }
+    char release_ID[9]; // Adjusted size to account for null-terminator
+    string tempReleaseID;
+    while (true)
+    {
+        cout << "Enter a release ID for the new release (max 8 chars): ";
+        cin >> tempReleaseID;
+        if (tempReleaseID.length() <= 8)
+        {
             break;
         }
-        else if (user_input == 0)
-            return; // Return if user chooses to exit
+        else
+        {
+            cout << "Release ID exceeds the maximum length of 8 characters. Please enter again.\n";
+        }
     }
-
-    // Prompt user to enter release ID
-    cout << "Enter a release ID of the new release(max 8 chars): ";
-    char release_ID[8]; // should it be global??
-    cin >> release_ID;
-    string tempReleaseID;
-    // if (tempReleaseID.length() <= 8)
-    // {
-    //     break;
-    // }
-    if (tempReleaseID.length() > 8)
-    {
-        cout << "Release ID exceeds the maximum length of 8 characters. Please enter again.\n";
-    }
-
     // Copy the string to the fixed-size character array
     tempReleaseID.copy(release_ID, tempReleaseID.length());
     release_ID[tempReleaseID.length()] = '\0';
-
     char release_date[11]; // Adjusted size to account for null-terminator
     string tempDate;
     while (true)
     {
         cout << "Enter a release date for the release (YYYY-MM-DD): ";
         cin >> tempDate;
-
         // if (isValidDateFormat(release_date) && tempDate.length() <= 10)
         // {
         //     break;
@@ -211,23 +215,19 @@ void createReleaseControl()
         // }
         break;
     }
-
     // Copy the string to the fixed-size character array
     tempDate.copy(release_date, tempDate.length());
     release_date[tempDate.length()] = '\0';
-
     // Confirm adding the release
     string userInput;
     while (true)
     {
         cout << "Are you sure you want to add the release " << release_ID << " (Y/N)? ";
         cin >> userInput;
-
         if (userInput == "y" || userInput == "Y")
         {
             // Create new release and write to file
             Release new_release = Release(release_ID, chosen.product_name, release_date);
-            cout << "release id in sc:" << new_release.release_ID << endl;
             if (addRelease(&new_release))
                 cout << "The new release has been successfully added.\n";
             break;
@@ -247,8 +247,8 @@ void createReleaseControl()
 // Function to validate email format
 bool isValidEmail(string email)
 {
-    //const regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
-    //return regex_match(email, emailPattern);
+    // const regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
+    // return regex_match(email, emailPattern);
     return true;
 }
 
@@ -319,7 +319,7 @@ void formatRequesterName(const string &input_name, char *formatted_name)
 }
 
 // create requester control
-void createRequester(Requester temp, Requester chosen_requester)
+void createRequester(Requester chosen_requester)
 {
     // Prompt user to create a new requester
     cout << "Creating a new requester:\n";
@@ -328,7 +328,7 @@ void createRequester(Requester temp, Requester chosen_requester)
     while (true)
     {
         cout << "Enter requester's name ('Last name, First name', max 30 chars): ";
-        //cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+        // cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
         getline(cin, inputname);
 
         if (!isValidRequesterNameLength(inputname))
@@ -430,6 +430,45 @@ void createRequester(Requester temp, Requester chosen_requester)
     }
 }
 
+// Create change function
+void createChange(Product chosen_product, Change chosen_change)
+{
+    // Prompt user to create a new change
+    cout << "Enter the description of the new change (max 30 chars): ";
+    string temp_description;
+    cin >> temp_description;
+    // description length check here
+    // To do
+    temp_description.copy(chosen_change.description, temp_description.length());
+    chosen_change.description[temp_description.length()] = '\0';
+    cout << "checking if the change description is correct" << chosen_change.description << endl; // delete
+    // we set the priority here, so no need to
+    chosen_change.priority = 0; // if 0 print out N/A
+    string status_reported = "Reported";
+    status_reported.copy(chosen_change.status, status_reported.length());
+    chosen_change.status[status_reported.length()] = '\0';
+    cout << "checking if the change status is correct" << chosen_change.status << endl; // delete
+
+    // int id[7];
+    // getNextCID(id); // problem here, ?? change id should be one int intead of an array of ints
+    // for (int i = 0; i < sizeof(id) / 4; i++)
+    // {
+    //     chosen_change.change_ID[i] = id[i];
+    //     cout << "checking if the change id is correct" << chosen_change.change_ID[i] << endl; // delete
+    // }
+    *chosen_change.change_ID = 1;
+    strcpy(chosen_change.product_name, chosen_product.product_name);
+    string tempRelease_ID = "None";
+    chosen_change.anticipated_release_ID[tempRelease_ID.length()] = '\0';
+
+    tempRelease_ID.copy(chosen_change.anticipated_release_ID, tempRelease_ID.length());
+    cout << "checking if the release id is correct" << tempRelease_ID << endl; // delete
+
+    // Add to file
+    if (addChange(&chosen_change))
+        cout << "The new change has been successfully added. \n";
+}
+
 // Function to control the creation of a change request
 void createChangeRequestControl()
 {
@@ -444,7 +483,7 @@ void createChangeRequestControl()
     bool getRequesterFlag = getNextRequester(&temp);
     if (!getRequesterFlag)
     {
-        createRequester(temp, chosen_requester);
+        createRequester(chosen_requester);
     }
 
     // Requester exists, show list and let user select one
@@ -457,8 +496,8 @@ void createChangeRequestControl()
 
         cout << "1) " << temp.requester_name;
 
-        for (int j=0; j<11; j++)
-             cout << temp.phone_number[j];
+        for (int j = 0; j < 11; j++)
+            cout << temp.phone_number[j];
 
         cout << temp.email
              << temp.department
@@ -470,7 +509,7 @@ void createChangeRequestControl()
             {
                 requester_list[i] = temp; // Add requester to the list
                 cout << i + 1 << ") " << temp.requester_name;
-                for (int j=0; j<11; j++)
+                for (int j = 0; j < 11; j++)
                     cout << temp.phone_number[j];
 
                 cout << temp.email
@@ -501,7 +540,7 @@ void createChangeRequestControl()
         }
         else if (user_input == 0)
         {
-            createRequester(temp, chosen_requester);
+            createRequester(chosen_requester);
         }
     }
 
@@ -521,7 +560,7 @@ void createChangeRequestControl()
         return;
     }
 
-    while (getProductFlag == true)
+    while (getProductFlag)
     {
         product_list[0] = temp1;
         cout << "Select a product that corresponds to this change request: \n";
@@ -553,7 +592,7 @@ void createChangeRequestControl()
         // Check if user input is within valid range
         if (user_input >= 1 && user_input < i + 1)
         {
-            chosen_product = product_list[user_input-1]; // Select the chosen product
+            chosen_product = product_list[user_input - 1]; // Select the chosen product
             break;
         }
         else if (user_input == 0)
@@ -571,20 +610,7 @@ void createChangeRequestControl()
     bool getChangeFlag = filterNextChange(&temp2, chosen_product.product_name);
     if (getChangeFlag == false)
     {
-        // Prompt user to create a new change
-        cout << "Enter the description of the new change (max 30 chars): ";
-        cin >> chosen_change.description;
-        *chosen_change.priority = 0; // if 0 print out N/A
-        *chosen_change.status = *"Reported";
-        int id[7];
-        getNextCID(id);
-        *chosen_change.change_ID = *id;
-        *chosen_change.product_name = *chosen_product.product_name;
-        *chosen_change.anticipated_release_ID = *"None";
-
-        // Add to file
-        if (addChange(&chosen_change))
-            cout << "The new change has been successfully added. \n";
+        createChange(chosen_product, chosen_change);
     }
 
     // Loop to display change list and select a change
@@ -603,7 +629,8 @@ void createChangeRequestControl()
              << temp2.priority
              << temp2.anticipated_release_ID << "\n";
 
-        for (int i = 1; i < 20; i++)
+        int i;
+        for (i = 1; i < 20; i++)
         {
             if (filterNextChange(&temp2, chosen_product.product_name))
             {
@@ -626,8 +653,8 @@ void createChangeRequestControl()
         cout << "Enter selection: ";
 
         int user_input;
-        cin >> user_input;                              // Get user input for selection
-   
+        cin >> user_input; // Get user input for selection
+
         if (user_input >= 1 && user_input < i + 1)
         {
             cout << "The user selects: " << i << endl;
@@ -636,20 +663,7 @@ void createChangeRequestControl()
         }
         else if (user_input == 0)
         {
-            // Prompt user to create a new change
-            cout << "Enter the description of the new change (max 30 chars): ";
-            cin >> chosen_change.description;
-            *chosen_change.priority = 0; // if 0 print out N/A
-            *chosen_change.status = *"Reported";
-            int id[7];
-            getNextCID(id);
-            *chosen_change.change_ID = *id;
-            *chosen_change.product_name = *chosen_product.product_name;
-            *chosen_change.anticipated_release_ID = *"None";
-
-            // Add to file
-            if (addChange(&chosen_change))
-                cout << "The new change has been successfully added. ";
+            createChange(chosen_product, chosen_change);
         }
     }
 
@@ -679,7 +693,7 @@ void createChangeRequestControl()
              << "Release date\n";
 
         cout << "1) " << temp3.release_ID
-                << temp3.release_date << "\n";
+             << temp3.release_date << "\n";
 
         int i;
         for (i = 1; i < 20; i++)
@@ -714,10 +728,14 @@ void createChangeRequestControl()
     // Prompt user to enter additional information for the change request
     cout << "Enter the request date of the change request (YYYY-MM-DD): ";
     ChangeRequest new_changeRequest;
-    cin >> new_changeRequest.request_date;
-    *new_changeRequest.requester_name = *chosen_requester.requester_name;
-    *new_changeRequest.change_ID = *chosen_change.change_ID;
-    *new_changeRequest.reported_release_ID = *chosen_release.release_ID;
+    string temp_date;
+    cin >> temp_date;
+    temp_date.copy(new_changeRequest.request_date, temp_date.length());
+    new_changeRequest.request_date[temp_date.length()] = '\0';
+
+    strcpy(new_changeRequest.requester_name, chosen_requester.requester_name);
+    *new_changeRequest.change_ID = *chosen_change.change_ID;  // problem 
+    strcpy(new_changeRequest.reported_release_ID, chosen_release.release_ID);
 
     // Create the new change request (Write the record to the file) and confirm success
     if (addChangeRequest(&new_changeRequest))
@@ -781,13 +799,14 @@ void queryChangeControl()
         }
     }
 
+
+    seekToBeginningOfChangeFile();
     // Array to store a list of changes
     Change change_list[20];
     Change temp2;         // Temporary change pointer
     Change chosen_change; // Chosen change pointer
 
     // Move the file pointer to the beginning of the change file
-    seekToBeginningOfChangeFile();
 
     bool getChangeFlag = filterNextChange(&temp2, chosen_product.product_name);
     if (getChangeFlag == false)
@@ -798,6 +817,7 @@ void queryChangeControl()
     // Loop to display change list and select a change
     while (getChangeFlag)
     {
+        change_list[0] = temp2;
         cout << "Changes in the product '" << chosen_product.product_name << "':\n";
         cout << "Description                     "
              << "change ID   \n";
@@ -907,7 +927,7 @@ void updateChangeControl()
         }
         else if (user_input == 0)
         {
-            getProductFlag == false;
+            getProductFlag = false;
             return; // Exit
         }
     }
@@ -973,7 +993,7 @@ void updateChangeControl()
         }
         else if (user_input == 0) // Exit
         {
-            getChangeFlag == false;
+            getChangeFlag = false;
             return;
         }
     }
@@ -1036,7 +1056,7 @@ void updateChangeControl()
 
     cin >> user_input2;
     if (user_input2 != 0)
-        *chosen_change.priority = user_input2; // Update priority
+        chosen_change.priority = user_input2; // Update priority
 
     // Update anticipated release ID
     cout << "The current 'anticipated release' is " << chosen_change.anticipated_release_ID;
@@ -1098,7 +1118,7 @@ void updateChangeControl()
         }
         else if (user_input == 0) // Keep current release
         {
-            getReleaseFlag == false;
+            getReleaseFlag = false;
             break;
         }
     }
