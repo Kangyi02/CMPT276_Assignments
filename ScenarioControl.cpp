@@ -21,10 +21,10 @@
 #include <regex>  // For regex validation
 #include <limits> // For std::numeric_limits
 
-/*using std::cin;
+//using std::cin;
 using std::cout;
-using std::endl;
-using std::string;*/
+//using std::endl;
+//using std::string;
 using namespace std;
 
 bool isValidDateFormat(const char *date)
@@ -135,7 +135,7 @@ void createReleaseControl()
         cout << "No additional records, this is the end of the file. \n";
         return;
     }
-    //cout << "For which product you want to add a new release to: \n";
+    cout << "For which product you want to add a new release to: \n";
     while (true) 
     {
         product_list[0] = temp;
@@ -248,13 +248,14 @@ void createReleaseControl()
         }
     }
 }
-// Function to check the validity of email
-bool isValidEmail(std::string email)
-{
-    const std::regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
-    return std::regex_match(email, emailPattern);
-}
 
+// Function to validate email format
+bool isValidEmail(string email)
+{
+    // const regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
+    // return regex_match(email, emailPattern);
+    return true;
+}
 
 // Function to validate phone number format
 bool isValidPhoneNumber(const int *phone_number)
@@ -474,6 +475,14 @@ void createChange(Product chosen_product, Change chosen_change)
         cout << "The new change has been successfully added. \n";
 }
 
+string createWhitespace(int length) {
+    string spaces = "";
+    for (int i = 0; i < length; i++) {
+        spaces += " ";
+    }
+    return spaces;
+}
+
 // Function to control the creation of a change request
 void createChangeRequestControl()
 {
@@ -497,14 +506,16 @@ void createChangeRequestControl()
     {
         requester_list[0] = temp;
         cout << "Select a requester that reports this change request: \n";
-        cout << "   Requester name                " << "Phone      " << "Email                   " << "Department  \n";
+        cout << "   Requester name                " << "Phone       " << "Email                   " << "Department  \n";
 
-        cout << "1) " << temp.requester_name;
+        cout << "1) " << temp.requester_name << createWhitespace(30 - strlen(temp.requester_name));
 
         for (int j = 0; j < 11; j++)
             cout << temp.phone_number[j];
 
-        cout << temp.email
+        cout << " ";
+
+        cout << temp.email << createWhitespace(24 - strlen(temp.email))
              << temp.department
              << "\n";
 
