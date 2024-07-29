@@ -18,6 +18,8 @@
 #ifndef Requester_H
 #define Requester_H
 
+#include <cstdint>
+
 // Requester class
 class Requester 
 {

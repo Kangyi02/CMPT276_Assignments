@@ -249,16 +249,6 @@ void createReleaseControl()
         }
     }
 }
-<<<<<<< HEAD
-// Function to check the validity of email
-bool isValidEmail(std::string email)
-{
-    // const std::regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
-    // return std::regex_match(email, emailPattern);
-    return true;
-}
-=======
->>>>>>> b449edb810d541f2caeca54261658d02fbb22d6f
 
 // Function to validate email format
 bool isValidEmail(string email)
@@ -762,7 +752,7 @@ void createChangeRequestControl()
     new_changeRequest.request_date[temp_date.length()] = '\0';
 
     strcpy(new_changeRequest.requester_name, chosen_requester.requester_name);
-    *new_changeRequest.change_ID = *chosen_change.change_ID;  // problem 
+    new_changeRequest.change_ID = chosen_change.change_ID;  // problem 
     strcpy(new_changeRequest.reported_release_ID, chosen_release.release_ID);
 
     // Create the new change request (Write the record to the file) and confirm success

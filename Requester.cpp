@@ -1,6 +1,7 @@
 #include "Requester.h"
 #include <iostream>
 #include <fstream>
+#include <cstdint>
 
 using namespace std;
 
