@@ -19,19 +19,21 @@
 #ifndef ChangeRequest_H
 #define ChangeRequest_H
 
+#include <cstdint>
+
 // Change request class
 class ChangeRequest
 {
 public:
     //char* requester_name; // max 30 chars
-    int change_ID[7];  // max 6 digits
+    int32_t change_ID;  // max 6 digits
     char requester_name[21]; // max 20 chars: last name, first name
     char request_date[9]; // YYYY-MM-DD
     char reported_release_ID[9]; // max 8 chars
 
     // Constructors
     ChangeRequest();
-    ChangeRequest(const int* id, const char* name, const char* date, const char* releaseID);
+    ChangeRequest(const int32_t id, const char* name, const char* date, const char* releaseID);
 };
 
 // Initialize the change request file
@@ -48,6 +50,6 @@ bool getNextChangeRequest(ChangeRequest* chreq);
 // Create a new change request 
 bool addChangeRequest(ChangeRequest* chreq);
 
-bool filterNextChangeRequest(ChangeRequest* chreq, int* ch_ID);
+bool filterNextChangeRequest(ChangeRequest* chreq, int32_t ch_ID);
 
 #endif

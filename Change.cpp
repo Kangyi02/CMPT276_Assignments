@@ -7,6 +7,7 @@
 #include "Change.h"
 #include <iostream>
 #include <fstream>
+#include <cstdint>
 
 using namespace std;
 
@@ -14,27 +15,21 @@ fstream ChangeFileStream;
 
 Change::Change()
 {
-    change_ID[0] = '\0';
-    //priority[0] = '\0';
+    change_ID = 0;
+    priority = -1;
     status[0] = '\0';
     description[0] = '\0';
     product_name[0] = '\0';
     anticipated_release_ID[0] = '\0';
 }
 
-Change::Change(const char* id, const int prio, const char* stat, const char* desc, const char* prodname, const char* arid)
+Change::Change(const int32_t id, const int32_t prio, const char* stat, const char* desc, const char* prodname, const char* arid)
 {
     // Initialize all the attritutes with provided data
-    for(int i = 0; i < sizeof(change_ID) - 1; ++i) 
-    {
-        change_ID[i] = id[i];
-    }
+    change_ID = id;
 
-    // for(int i = 0; i < sizeof(priority) - 1; ++i) 
-    // {
-    //     priority[i] = prio[i];
-    // }
     priority = prio;
+
     strncpy(status, stat, sizeof(status));
     status[sizeof(status) - 1] = '\0';
 
@@ -135,7 +130,7 @@ bool updateChange(Change* ch)
     while(ChangeFileStream.read(reinterpret_cast<char*>(&currentChange), sizeof(Change)))
     {
         // start manipulation if change ID match
-        if(intArrayEqual(currentChange.change_ID, ch->change_ID))
+        if(currentChange.change_ID == ch->change_ID)
         {
             ChangeFileStream.seekp(position * sizeof(Change), ios::beg);
             ChangeFileStream.write(reinterpret_cast<const char*>(&currentChange), sizeof(Change));
@@ -186,21 +181,7 @@ bool getNextCID(int* id)
     ChangeFileStream.seekg(0, ios::beg); 
     if(ChangeFileStream.read(reinterpret_cast<char*>(&currentChange), sizeof(Change)))
     {
-        memcpy(id, currentChange.change_ID, sizeof(currentChange.change_ID));
-        int changeIDValue = 0;
-        for (int i = 0; i < 6; ++i)
-        {
-            changeIDValue = changeIDValue * 10 + id[i];
-        }
-        // Increment the change ID
-        changeIDValue += 1;
-
-        // Convert back to change_ID array
-        for (int i = 5; i >= 0; --i)
-        {
-            id[i] = changeIDValue % 10; //now id has next change ID
-            changeIDValue /= 10;
-        }
+        
         return true;
     }
     return false;
@@ -212,21 +193,9 @@ bool updateChangeIDrec()
     Change currentChange;
     ChangeFileStream.seekg(0, ios::beg);
     ChangeFileStream.read(reinterpret_cast<char*>(&currentChange), sizeof(Change));
-    // Convert change_ID array to a single integer
-    int changeIDValue = 0;
-    for (int i = 0; i < 6; ++i)
-    {
-        changeIDValue = changeIDValue * 10 + currentChange.change_ID[i];
-    }
-    // Increment the change ID
-    changeIDValue += 1;
 
-    // Convert back to change_ID array
-    for (int i = 5; i >= 0; --i)
-    {
-        currentChange.change_ID[i] = changeIDValue % 10;
-        changeIDValue /= 10;
-    }
+    // Increment the change ID
+    currentChange.change_ID +=1;
     ChangeFileStream.seekg(0, ios::beg); 
     ChangeFileStream.write(reinterpret_cast<char*>(&currentChange), sizeof(Change));
 

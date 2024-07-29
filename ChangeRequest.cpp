@@ -15,19 +15,16 @@ fstream ChangeRequestFileStream;
 //constructor
 ChangeRequest::ChangeRequest()
 {
-    change_ID[0] = '\0';
+    change_ID = 0;
     requester_name[0] = '\0';
     request_date[0] = '\0';
     reported_release_ID[0] = '\0';
 }
 
-ChangeRequest::ChangeRequest(const int* id, const char* name, const char* date, const char* releaseID)
+ChangeRequest::ChangeRequest(const int32_t id, const char* name, const char* date, const char* releaseID)
 {
     // Initialize all the attributes with provided data
-    for(int i = 0; i < sizeof(change_ID) - 1; ++i) 
-    {
-        change_ID[i] = id[i];
-    }
+    change_ID = id;
 
     strncpy(requester_name, name, sizeof(requester_name));
     requester_name[sizeof(requester_name) - 1] = '\0';
@@ -96,16 +93,13 @@ bool addChangeRequest(ChangeRequest* chreq)
 }
 
 // Search for change request with provided change ID, return one at a time. false if reach the end of the file
-bool filterNextChangeRequest(ChangeRequest* chreq, int* ch_ID)
+bool filterNextChangeRequest(ChangeRequest* chreq, int32_t ch_ID)
 {
     while(ChangeRequestFileStream.read(reinterpret_cast<char*>(chreq), sizeof(ChangeRequest)))
     {
-        for(int i = 0; i < sizeof(chreq->change_ID); ++i)
+        if (chreq->change_ID == ch_ID)
         {
-            if(ch_ID[i] != chreq->change_ID[i])
-            {
-                return true;
-            }
+            return true;
         }
     }
     return false;
