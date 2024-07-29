@@ -1520,7 +1520,6 @@ void shutDownControl()
     if (allClosed)
     {
         cout << "All modules closed successfully.\n";
-        cout << "Thank you for using the Honey Walnut Issue Tracking System! \n";
     }
     else
     {
