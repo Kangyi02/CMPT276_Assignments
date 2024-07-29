@@ -21,11 +21,11 @@
 #include <regex>  // For regex validation
 #include <limits> // For std::numeric_limits
 
-//using std::cin;
+using std::cin;
 using std::cout;
-//using std::endl;
-//using std::string;
-using namespace std;
+using std::endl;
+using std::string;
+//using namespace std;
 
 bool isValidDateFormat(const char *date)
 {
@@ -135,11 +135,8 @@ void createReleaseControl()
         cout << "No additional records, this is the end of the file. \n";
         return;
     }
-<<<<<<< HEAD
     // cout << "For which product you want to add a new release to: \n";
-=======
-    cout << "For which product you want to add a new release to: \n";
->>>>>>> b449edb810d541f2caeca54261658d02fbb22d6f
+
     while (true) 
     {
         product_list[0] = temp;
