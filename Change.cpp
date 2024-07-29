@@ -7,7 +7,6 @@
 #include "Change.h"
 #include <iostream>
 #include <fstream>
-#include <cstring>
 
 using namespace std;
 
@@ -53,11 +52,11 @@ Change::Change(const char* id, const int prio, const char* stat, const char* des
 bool initChange()
 {
     // First, try to create the file if it doesn't exist.
-    std::ofstream file("Change.bin", std::ios::app | std::ios::binary);
+    ofstream file("Change.bin", ios::app | ios::binary);
     file.close();
 
     // Now open the file in the desired mode.
-    ChangeFileStream.open("Change.bin", std::ios::in | std::ios::out | std::ios::binary | std::ios::ate);
+    ChangeFileStream.open("Change.bin", ios::in | ios::out | ios::binary | ios::ate);
     if (!ChangeFileStream) 
     {
         return false;
@@ -138,7 +137,7 @@ bool updateChange(Change* ch)
         // start manipulation if change ID match
         if(intArrayEqual(currentChange.change_ID, ch->change_ID))
         {
-            ChangeFileStream.seekp(position* sizeof(Change), ios::beg);
+            ChangeFileStream.seekp(position * sizeof(Change), ios::beg);
             ChangeFileStream.write(reinterpret_cast<const char*>(&currentChange), sizeof(Change));
             if (!ChangeFileStream) 
             {

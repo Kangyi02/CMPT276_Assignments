@@ -247,14 +247,14 @@ void createReleaseControl()
         }
     }
 }
-
-// Function to validate email format
-bool isValidEmail(string email)
+// Function to check the validity of email
+bool isValidEmail(std::string email)
 {
-    // const regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
-    // return regex_match(email, emailPattern);
+    // const std::regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
+    // return std::regex_match(email, emailPattern);
     return true;
 }
+
 
 // Function to validate phone number format
 bool isValidPhoneNumber(const int *phone_number)
@@ -435,7 +435,7 @@ void createRequester(Requester chosen_requester)
 }
 
 // Create change function
-void createChange(Product chosen_product, Change chosen_change)
+bool createChange(Product chosen_product, Change chosen_change)
 {
     // Prompt user to create a new change
     cout << "Enter the description of the new change (max 30 chars): ";
@@ -461,7 +461,7 @@ void createChange(Product chosen_product, Change chosen_change)
     //     chosen_change.change_ID[i] = id[i];
     //     cout << "checking if the change id is correct" << chosen_change.change_ID[i] << endl; // delete
     // }
-    *chosen_change.change_ID = 1;
+    //chosen_change.change_ID = 100000;
     strcpy(chosen_change.product_name, chosen_product.product_name);
     string tempRelease_ID = "None";
     chosen_change.anticipated_release_ID[tempRelease_ID.length()] = '\0';
@@ -621,6 +621,7 @@ void createChangeRequestControl()
     // Loop to display change list and select a change
     while (getChangeFlag)
     {
+        change_list[0] = temp2;
         cout << "Which change corresponds to the change request? \n";
         cout << "Description                     "
              << "change ID   "
@@ -663,7 +664,7 @@ void createChangeRequestControl()
         if (user_input >= 1 && user_input < i + 1)
         {
             cout << "The user selects: " << i << endl;
-            chosen_change = change_list[user_input]; // Select the chosen change
+            chosen_change = change_list[user_input - 1]; // Select the chosen change
             break;
         }
         else if (user_input == 0)

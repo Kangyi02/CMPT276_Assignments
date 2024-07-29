@@ -7,13 +7,13 @@
 #include "Release.h"
 #include <iostream>
 #include <fstream>
-#include <cstring>
 
 using namespace std;
 
 fstream ReleaseFileStream;
 
-Release::Release() {
+Release::Release() 
+{
     release_ID[0] = '\0';
     product_name[0] = '\0';
     release_date[0] = '\0';
