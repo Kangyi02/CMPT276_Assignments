@@ -134,7 +134,7 @@ void createReleaseControl()
         cout << "No additional records, this is the end of the file. \n";
         return;
     }
-    cout << "For which product you want to add a new release to: \n";
+    //cout << "For which product you want to add a new release to: \n";
     while (true) 
     {
         product_list[0] = temp;
@@ -247,14 +247,13 @@ void createReleaseControl()
         }
     }
 }
-
-// Function to validate email format
-bool isValidEmail(string email)
+// Function to check the validity of email
+bool isValidEmail(std::string email)
 {
-    // const regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
-    // return regex_match(email, emailPattern);
-    return true;
+    const std::regex emailPattern(R"((\w+)(\.\w+)*@(\w+)(\.\w+)+)");
+    return std::regex_match(email, emailPattern);
 }
+
 
 // Function to validate phone number format
 bool isValidPhoneNumber(const int *phone_number)
