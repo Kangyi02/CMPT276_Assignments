@@ -1,7 +1,6 @@
 #include "Requester.h"
 #include <iostream>
 #include <fstream>
-#include <cstring> // Added this line
 
 using namespace std;
 
@@ -80,7 +79,6 @@ bool getNextRequester(Requester *req)
     }
     else
     {
-        // cout << "No additional records, this is the end of the file." << endl;
         return false;
     }
 }
@@ -107,6 +105,5 @@ bool filterNextRequester(Requester *req, char *req_name)
             return true;
         }
     }
-    cout << "No additional records, this is the end of the file." << endl;
     return false; // return false if reach the end of the file
 }
