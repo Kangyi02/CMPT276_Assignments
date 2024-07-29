@@ -11,22 +11,19 @@ Requester::Requester()
 {
     // initialize all the attributes
     requester_name[0] = '\0';
-    phone_number[0] = '\0';
+    phone_number = 0;
     email[0] = '\0';
     department[0] = '\0';
 }
 
 // Parameterized constructor implementation
-Requester::Requester(const char name[31], const int *phone, const char *email_addr, const char *dept)
+Requester::Requester(const char* name, const int64_t phone, const char *email_addr, const char *dept)
 {
     // Initialize all the attribute with provided data
     strncpy(requester_name, name, sizeof(requester_name) - 1);
     requester_name[sizeof(requester_name) - 1] = '\0'; // Ensure null termination
 
-    for (int i = 0; i < 11; ++i)
-    {
-        phone_number[i] = phone[i];
-    }
+    phone_number = phone;
 
     strncpy(email, email_addr, sizeof(email) - 1);
     email[sizeof(email) - 1] = '\0';

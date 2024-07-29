@@ -23,12 +23,12 @@ class Requester
 {
 public:
     char requester_name[31]; // max 20 chars: last name, first name
-    int phone_number[11]; //
+    int64_t phone_number; //
     char email[25]; // max 24 chars
     char department[13];
 
     Requester();
-    Requester(const char* name, const int* phone, const char* email_addr, const char* dept);
+    Requester(const char* name, const int64_t phone, const char* email_addr, const char* dept);
 };
 
 // Initialize the requester file
