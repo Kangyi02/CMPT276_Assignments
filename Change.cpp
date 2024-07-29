@@ -129,6 +129,7 @@ bool intArrayEqual(int* arr1, int* arr2)
 bool updateChange(Change* ch)
 {
     Change currentChange;
+    ChangeFileStream.clear();
     ChangeFileStream.seekg(1, ios::beg); // set g to the beginning skipping dummy
     int position = 1; // counter for offset
     // loop until reach the end of file

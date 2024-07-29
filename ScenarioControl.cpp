@@ -134,7 +134,7 @@ void createReleaseControl()
         cout << "No additional records, this is the end of the file. \n";
         return;
     }
-    cout << "For which product you want to add a new release to: \n";
+    // cout << "For which product you want to add a new release to: \n";
     while (true) 
     {
         product_list[0] = temp;
@@ -154,7 +154,7 @@ void createReleaseControl()
             }
             else
             {
-                getFlag == false;
+                getFlag = false;
                 break; // Exit loop if no more products
             }
         }
@@ -964,6 +964,7 @@ void updateChangeControl()
              << "State      "
              << "Priority     "
              << "Anticipated Release\n";
+
         cout << "1) " << temp2.description
              << temp2.change_ID
              << temp2.status
@@ -1019,13 +1020,18 @@ void updateChangeControl()
              << chosen_change.description
              << "\n"
              << "New description is: ";
-        char *new_description;
-        cin >> new_description;                        // Get new description
-        *chosen_change.description = *new_description; // Update description
+
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        string temp_description;
+        getline(cin, temp_description);
+        // description length check here
+        // To do
+        temp_description.copy(chosen_change.description, temp_description.length());
+        chosen_change.description[temp_description.length()] = '\0';                      // Get new description
     }
 
     // Update status
-    cout << "The current 'status' is Reported.\n"
+    cout << "The current 'status' is " << chosen_change.status << ".\n"
          << "Select a status that you want to update to:\n"
          << "1) Reported\n"
          << "2) Evaluated\n"
@@ -1037,29 +1043,31 @@ void updateChangeControl()
 
     int user_input2;
     cin >> user_input2; // User input for status selection
+
     switch (user_input2)
     {
     case 1:
-        chosen_change.status == "Reported"; // Update status
+        strcpy(chosen_change.status, "Reported");
         break;
     case 2:
-        chosen_change.status == "Evaluated";
+        strcpy(chosen_change.status, "Evaluated");
         break;
     case 3:
-        chosen_change.status == "Cancelled";
+        strcpy(chosen_change.status, "Cancelled");
         break;
     case 4:
-        chosen_change.status == "In process";
+        strcpy(chosen_change.status, "In process");
         break;
     case 5:
-        chosen_change.status == "Done";
+        strcpy(chosen_change.status, "Done");
         break;
     case 0:
         break; // Keep current status
     }
 
+    cout << "The updated 'status' is: " << chosen_change.status << ".\n";
     // Update priority
-    cout << "The current priority is " << chosen_change.priority
+    cout << "The current priority is: " << chosen_change.priority << "\n"
          << "Enter a new priority, or 0 to keep the current priority: ";
 
     cin >> user_input2;
@@ -1067,7 +1075,7 @@ void updateChangeControl()
         chosen_change.priority = user_input2; // Update priority
 
     // Update anticipated release ID
-    cout << "The current 'anticipated release' is " << chosen_change.anticipated_release_ID;
+    cout << "The current 'anticipated release' is " << chosen_change.anticipated_release_ID << "\n";
 
     // get release
     seekToBeginningOfReleaseFile(); // Function to set file cursor to the beginning of the release file
@@ -1088,10 +1096,11 @@ void updateChangeControl()
     // Loop to display release list and select a release
     while (getReleaseFlag)
     {
+        release_list[0] = temp3;
         cout << "Select an anticipated release that you want to update to: \n";
 
-        cout << "Release ID"
-             << "Release date\n";
+        cout << "Release ID  "
+             << "  Release date\n";
 
         cout << "1) " << temp3.release_ID
              << temp3.release_date << "\n"; // Display release
@@ -1107,10 +1116,13 @@ void updateChangeControl()
                      << temp3.release_date << "\n"; // Display release
             }
             else
+            {
+                getReleaseFlag = false;
                 break; // Exit loop if no more releases
+            }
         }
 
-        cout << i + 2 << ") More\n";
+        cout << i + 1 << ") More\n";
         cout << "0) Keep the current release\n"
              << "Enter selection: ";
 
@@ -1121,7 +1133,7 @@ void updateChangeControl()
         {
             chosen_release = release_list[user_input - 1]; // Assign chosen release
             // update the release id
-            *chosen_change.anticipated_release_ID = *chosen_release.release_ID; // Update anticipated release ID
+            strcpy(chosen_change.anticipated_release_ID, chosen_release.release_ID); // Update anticipated release ID
             break;
         }
         else if (user_input == 0) // Keep current release
@@ -1131,8 +1143,13 @@ void updateChangeControl()
         }
     }
 
-    updateChange(&chosen_change); // Function to update the change in the system
-                                  // Display updated change info
+    // Function to update the change in the system
+    if (updateChange(&chosen_change))
+        cout << "The change has been updated successfully. \n";
+    // else
+        // return;
+                            
+    // Display updated change info
     cout << "Change '" << chosen_change.change_ID << "' has been updated:\n"
          << "Description                     "
          << "change ID   "
@@ -1144,7 +1161,8 @@ void updateChangeControl()
          << chosen_change.change_ID
          << chosen_change.status
          << chosen_change.priority
-         << chosen_change.anticipated_release_ID;
+         << chosen_change.anticipated_release_ID
+         << endl;
 }
 
 // Reports control
