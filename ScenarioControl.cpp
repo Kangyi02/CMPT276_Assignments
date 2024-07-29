@@ -334,7 +334,7 @@ void createRequester(Requester chosen_requester)
     while (true)
     {
         cout << "Enter requester's name ('Last name, First name', max 30 chars): ";
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+        cin.ignore(); // Clear the input buffer // ??
         getline(cin, inputname);
 
         if (!isValidRequesterNameLength(inputname))
@@ -372,7 +372,7 @@ void createRequester(Requester chosen_requester)
                 valid = false;
                 break;
             }
-            chosen_requester.phone_number[i] = phone_number_input[i] - '0';
+            //chosen_requester.phone_number[i] = phone_number_input[i] - '0';
         }
 
         if (!valid)
@@ -381,11 +381,11 @@ void createRequester(Requester chosen_requester)
             continue;
         }
 
-        if (!isValidPhoneNumber(chosen_requester.phone_number))
-        {
-            cout << "Invalid phone number. The first digit must be 1. Please enter a valid number.\n";
-            continue;
-        }
+        // if (!isValidPhoneNumber(chosen_requester.phone_number))
+        // {
+        //     cout << "Invalid phone number. The first digit must be 1. Please enter a valid number.\n";
+        //     continue;
+        // }
 
         break;
     }
@@ -437,7 +437,7 @@ void createRequester(Requester chosen_requester)
 }
 
 // Create change function
-bool createChange(Product chosen_product, Change chosen_change)
+void createChange(Product chosen_product, Change chosen_change)
 {
     // Prompt user to create a new change
     cout << "Enter the description of the new change (max 30 chars): ";
@@ -511,8 +511,8 @@ void createChangeRequestControl()
 
         cout << "1) " << temp.requester_name << createWhitespace(30 - strlen(temp.requester_name));
 
-        for (int j = 0; j < 11; j++)
-            cout << temp.phone_number[j];
+        //for (int j = 0; j < 11; j++)
+        cout << temp.phone_number;
 
         cout << " ";
 
@@ -526,8 +526,8 @@ void createChangeRequestControl()
             {
                 requester_list[i] = temp; // Add requester to the list
                 cout << i + 1 << ") " << temp.requester_name;
-                for (int j = 0; j < 11; j++)
-                    cout << temp.phone_number[j];
+                //for (int j = 0; j < 11; j++)
+                cout << temp.phone_number;
 
                 cout << temp.email
                      << temp.department
