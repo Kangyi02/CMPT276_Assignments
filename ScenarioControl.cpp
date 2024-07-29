@@ -21,10 +21,11 @@
 #include <regex>  // For regex validation
 #include <limits> // For std::numeric_limits
 
-using std::cin;
+/*using std::cin;
 using std::cout;
 using std::endl;
-using std::string;
+using std::string;*/
+using namespace std;
 
 bool isValidDateFormat(const char *date)
 {
@@ -331,7 +332,7 @@ void createRequester(Requester chosen_requester)
     while (true)
     {
         cout << "Enter requester's name ('Last name, First name', max 30 chars): ";
-        // cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
         getline(cin, inputname);
 
         if (!isValidRequesterNameLength(inputname))
