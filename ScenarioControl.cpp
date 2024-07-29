@@ -915,7 +915,10 @@ void updateChangeControl()
                 cout << i + 1 << ") " << temp1.product_name << "\n"; // Display product
             }
             else
+            {
+                getProductFlag = false;
                 break; // Exit loop if no more products
+            }
         }
 
         cout << i + 1 << ") More\n";
