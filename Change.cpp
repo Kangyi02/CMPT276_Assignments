@@ -16,14 +16,14 @@ fstream ChangeFileStream;
 Change::Change()
 {
     change_ID[0] = '\0';
-    priority[0] = '\0';
+    //priority[0] = '\0';
     status[0] = '\0';
     description[0] = '\0';
     product_name[0] = '\0';
     anticipated_release_ID[0] = '\0';
 }
 
-Change::Change(const char* id, const int* prio, const char* stat, const char* desc, const char* prodname, const char* arid)
+Change::Change(const char* id, const int prio, const char* stat, const char* desc, const char* prodname, const char* arid)
 {
     // Initialize all the attritutes with provided data
     for(int i = 0; i < sizeof(change_ID) - 1; ++i) 
@@ -31,11 +31,11 @@ Change::Change(const char* id, const int* prio, const char* stat, const char* de
         change_ID[i] = id[i];
     }
 
-    for(int i = 0; i < sizeof(priority) - 1; ++i) 
-    {
-        priority[i] = prio[i];
-    }
-
+    // for(int i = 0; i < sizeof(priority) - 1; ++i) 
+    // {
+    //     priority[i] = prio[i];
+    // }
+    priority = prio;
     strncpy(status, stat, sizeof(status));
     status[sizeof(status) - 1] = '\0';
 
@@ -83,6 +83,7 @@ bool closeChange()
 // Move the get pointer to the beginning of the change file
 void seekToBeginningOfChangeFile()
 {
+    ChangeFileStream.clear();
     ChangeFileStream.seekg(sizeof(Change), ios::beg); //skip the first dummy record
 }
 
