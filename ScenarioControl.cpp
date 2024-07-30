@@ -165,7 +165,8 @@ void createReleaseControl()
     while (true)
     {
         cout << "Enter a release ID for the new release (max 8 chars): ";
-        cin >> tempReleaseID;
+        cin.ignore(); // Clear the input buffer // ??
+        getline(cin, tempReleaseID);
         if (tempReleaseID.length() <= 8)
         {
             break;
