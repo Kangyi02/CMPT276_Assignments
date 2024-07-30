@@ -1167,13 +1167,13 @@ void updateChangeControl()
          << endl;
 }
 
-// Reports control
+// Reports Control
 void allChangesReportControl()
 {
     // Step 1: Get the product
     Product product_list[20]; // Array to store product list
-    Product temp1;            // Temporary pointer for product
-    Product chosen_product;   // Pointer for chosen product
+    Product temp1;            // Temporary product object
+    Product chosen_product;   // Chosen product object
 
     while (true)
     {
@@ -1181,26 +1181,26 @@ void allChangesReportControl()
         seekToBeginningOfProductFile();
 
         bool getProductFlag = getNextProduct(&temp1);
-        if (getProductFlag == false)
+        if (!getProductFlag)
         {
             cout << "No products available. Exiting...\n";
             return;
         }
 
         int productCount = 0;
-        while (getProductFlag)
+        while (getProductFlag && productCount < 20)
         {
             product_list[productCount] = temp1;
             cout << productCount + 1 << ") " << temp1.product_name << "\n"; // Display product
             productCount++;
-
-            if (productCount >= 20 || !getNextProduct(&temp1))
-            {
-                getProductFlag = false;
-            }
+            getProductFlag = getNextProduct(&temp1);
         }
 
-        cout << productCount + 1 << ") More\n";
+        if (productCount == 20 && getProductFlag)
+        {
+            cout << productCount + 1 << ") More\n";
+        }
+
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
@@ -1212,9 +1212,9 @@ void allChangesReportControl()
             chosen_product = product_list[user_input - 1]; // Assign chosen product
             break;
         }
-        else if (user_input == productCount + 1)
+        else if (user_input == productCount + 1 && productCount == 20)
         {
-            continue; // Display the list again if "More" is selected and there are no more products
+            continue; // Display the next set of products if "More" is selected
         }
         else if (user_input == 0) // Exit
         {
@@ -1228,21 +1228,20 @@ void allChangesReportControl()
 
     // Step 2: Get the changes
     Change change_list[20]; // Array to store change list
-    Change temp2;           // Temporary pointer for change
+    Change temp2;           // Temporary change object
 
     // Function to set file cursor to the beginning of the change file
     seekToBeginningOfChangeFile();
 
     bool getChangeFlag = filterNextChange_DoneOrCancelled(&temp2, chosen_product.product_name);
-    if (getChangeFlag == false)
+    if (!getChangeFlag)
     {
         cout << "No changes found for the product '" << chosen_product.product_name << "'. Exiting...\n";
         return;
     }
 
-    while (getChangeFlag)
+    while (true)
     {
-        change_list[0] = temp2;
         cout << "Change report for the product '" << chosen_product.product_name << "': \n";
         cout << "Description                     "
              << "Change ID   "
@@ -1250,32 +1249,24 @@ void allChangesReportControl()
              << "Priority     "
              << "Anticipated Release\n";
 
-        cout << "1) " << temp2.description
-             << temp2.change_ID
-             << temp2.status
-             << temp2.priority
-             << temp2.anticipated_release_ID << "\n";
-        int changeCount = 1;
-        for (int i = 1; i < 20; i++)
+        int changeCount = 0;
+        while (getChangeFlag && changeCount < 20)
         {
-            if (filterNextChange_DoneOrCancelled(&temp2, chosen_product.product_name))
-            {
-                change_list[i] = temp2;
-                cout << i + 1 << ") " << temp2.description
-                     << temp2.change_ID
-                     << temp2.status
-                     << temp2.priority
-                     << temp2.anticipated_release_ID << "\n";
-                changeCount++;
-            }
-            else
-            {
-                getChangeFlag = false;
-                break; // Exit loop if no more changes
-            }
+            change_list[changeCount] = temp2;
+            cout << changeCount + 1 << ") " << temp2.description << " "
+                 << temp2.change_ID << " "
+                 << temp2.status << " "
+                 << temp2.priority << " "
+                 << temp2.anticipated_release_ID << "\n";
+            changeCount++;
+            getChangeFlag = filterNextChange_DoneOrCancelled(&temp2, chosen_product.product_name);
         }
 
-        cout << changeCount + 1 << ") More\n";
+        if (changeCount == 20 && getChangeFlag)
+        {
+            cout << changeCount + 1 << ") More\n";
+        }
+
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
@@ -1284,8 +1275,12 @@ void allChangesReportControl()
 
         if (user_input == 0) // Exit
             return;
-        else if (user_input == changeCount + 1)
+        else if (user_input == changeCount + 1 && changeCount == 20)
             continue; // Display more changes if selected
+        else
+        {
+            cout << "Invalid selection. Please try again.\n";
+        }
     }
 }
 
@@ -1294,8 +1289,8 @@ void allRequestersReportControl()
 {
     // Step 1: Get the product
     Product product_list[20]; // Array to store product list
-    Product temp1;            // Temporary pointer for product
-    Product chosen_product;   // Pointer for chosen product
+    Product temp1;            // Temporary product object
+    Product chosen_product;   // Chosen product object
 
     // Function to set file cursor to the beginning of the product file
     seekToBeginningOfProductFile();
@@ -1304,23 +1299,16 @@ void allRequestersReportControl()
     while (!productChosen)
     {
         int productCount = 0;
-
         cout << "Select a product to print its report: \n";
-        while (getNextProduct(&temp1))
+
+        while (productCount < 20 && getNextProduct(&temp1))
         {
-            if (productCount < 20)
-            {
-                product_list[productCount] = temp1;                             // Store product in array
-                cout << productCount + 1 << ") " << temp1.product_name << "\n"; // Display product
-                productCount++;
-            }
-            else
-            {
-                break; // Exit if the product list is full
-            }
+            product_list[productCount] = temp1;                             // Store product in array
+            cout << productCount + 1 << ") " << temp1.product_name << "\n"; // Display product
+            productCount++;
         }
 
-        if (productCount < 20) // Add a "More" option only if there might be more products
+        if (productCount == 20 && getNextProduct(&temp1))
         {
             cout << productCount + 1 << ") More\n";
         }
@@ -1351,8 +1339,8 @@ void allRequestersReportControl()
 
     // Step 2: Get the changes
     Change change_list[20]; // Array to store change list
-    Change temp2;           // Temporary pointer for change
-    Change chosen_change;   // Pointer for chosen change
+    Change temp2;           // Temporary change object
+    Change chosen_change;   // Chosen change object
 
     // Function to set file cursor to the beginning of the change file
     seekToBeginningOfChangeFile();
@@ -1369,25 +1357,18 @@ void allRequestersReportControl()
              << "Priority     "
              << "Anticipated Release\n";
 
-        while (filterNextChange(&temp2, chosen_product.product_name))
+        while (changeCount < 20 && filterNextChange(&temp2, chosen_product.product_name))
         {
-            if (changeCount < 20)
-            {
-                change_list[changeCount] = temp2;
-                cout << changeCount + 1 << ") " << temp2.description
-                     << temp2.change_ID
-                     << temp2.status
-                     << temp2.priority
-                     << temp2.anticipated_release_ID << "\n";
-                changeCount++;
-            }
-            else
-            {
-                break; // Exit if the change list is full
-            }
+            change_list[changeCount] = temp2;
+            cout << changeCount + 1 << ") " << temp2.description << " "
+                 << temp2.change_ID << " "
+                 << temp2.status << " "
+                 << temp2.priority << " "
+                 << temp2.anticipated_release_ID << "\n";
+            changeCount++;
         }
 
-        if (changeCount < 20) // Add a "More" option only if there might be more changes
+        if (changeCount == 20 && filterNextChange(&temp2, chosen_product.product_name))
         {
             cout << changeCount + 1 << ") More\n";
         }
@@ -1418,8 +1399,8 @@ void allRequestersReportControl()
 
     // Step 3: Get the releases
     Release release_list[20]; // Array to store release list
-    Release temp3;            // Temporary pointer for release
-    Release chosen_release;   // Pointer for chosen release
+    Release temp3;            // Temporary release object
+    Release chosen_release;   // Chosen release object
 
     // Function to set file cursor to the beginning of the release file
     seekToBeginningOfReleaseFile();
@@ -1430,25 +1411,17 @@ void allRequestersReportControl()
         int releaseCount = 0;
 
         cout << "Select an anticipated release that you want to update to: \n";
-        cout << "Release ID"
-             << "Release date\n";
+        cout << "Release ID    Release date\n";
 
-        while (filterNextRelease(&temp3, chosen_product.product_name))
+        while (releaseCount < 20 && filterNextRelease(&temp3, chosen_product.product_name))
         {
-            if (releaseCount < 20)
-            {
-                release_list[releaseCount] = temp3;
-                cout << releaseCount + 1 << ") " << temp3.release_ID
-                     << temp3.release_date << "\n";
-                releaseCount++;
-            }
-            else
-            {
-                break; // Exit if the release list is full
-            }
+            release_list[releaseCount] = temp3;
+            cout << releaseCount + 1 << ") " << temp3.release_ID << " "
+                 << temp3.release_date << "\n";
+            releaseCount++;
         }
 
-        if (releaseCount < 20) // Add a "More" option only if there might be more releases
+        if (releaseCount == 20 && filterNextRelease(&temp3, chosen_product.product_name))
         {
             cout << releaseCount + 1 << ") More\n";
         }
@@ -1479,11 +1452,11 @@ void allRequestersReportControl()
 
     // Step 4: Get the requesters
     Requester requester_list[20]; // Array to store requester list
-    Requester temp4;              // Temporary pointer for requester
+    Requester temp4;              // Temporary requester object
 
     // Get the change requests
     ChangeRequest changeRequest_list[20]; // Array to store change requests
-    ChangeRequest temp5;                  // Temporary pointer for change request
+    ChangeRequest temp5;                  // Temporary change request object
 
     // Function to set file cursor to the beginning of the requester file
     seekToBeginningOfRequesterFile();
@@ -1492,31 +1465,24 @@ void allRequestersReportControl()
 
     // Print header info
     cout << "Here is the report: \n"
-         << "Product: " << chosen_product.product_name
-         << "Change description: " << chosen_change.description
-         << "Change ID: " << chosen_change.change_ID
-         << "Release ID: " << chosen_release.release_ID
+         << "Product: " << chosen_product.product_name << "\n"
+         << "Change description: " << chosen_change.description << "\n"
+         << "Change ID: " << chosen_change.change_ID << "\n"
+         << "Release ID: " << chosen_release.release_ID << "\n"
          << "State: " << chosen_change.status << "\n";
 
     int requestCount = 0;
 
-    while (filterNextChangeRequest(&temp5, chosen_change.change_ID))
+    while (requestCount < 20 && filterNextChangeRequest(&temp5, chosen_change.change_ID))
     {
-        if (requestCount < 20)
-        {
-            filterNextRequester(&temp4, temp5.requester_name); // Get the requester by name
-            requester_list[requestCount] = temp4;
-            cout << "Requester: " << temp4.requester_name
-                 << " Email: " << temp4.email << "\n";
-            requestCount++;
-        }
-        else
-        {
-            break; // Exit if the requester list is full
-        }
+        filterNextRequester(&temp4, temp5.requester_name); // Get the requester by name
+        requester_list[requestCount] = temp4;
+        cout << requestCount + 1 << ") Requester: " << temp4.requester_name << " "
+             << "Email: " << temp4.email << "\n";
+        requestCount++;
     }
 
-    if (requestCount < 20) // Add a "More" option only if there might be more requesters
+    if (requestCount == 20 && filterNextChangeRequest(&temp5, chosen_change.change_ID))
     {
         cout << requestCount + 1 << ") More\n";
     }
