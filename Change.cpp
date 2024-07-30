@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdint>
+#include <cstring>  // Needed this library for Windows
 
 using namespace std;
 

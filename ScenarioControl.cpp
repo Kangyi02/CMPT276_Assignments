@@ -27,28 +27,7 @@ using std::endl;
 using std::string;
 // using namespace std;
 
-bool isValidDateFormat(const char *date)
-{
-    // Check length
-    if (strlen(date) != 10)
-        return false;
 
-    // Check format YYYY-MM-DD
-    for (int i = 0; i < 10; i++)
-    {
-        if (i == 4 || i == 7) // Check for dashes
-        {
-            if (date[i] != '-')
-                return false;
-        }
-        else // Check for digits
-        {
-            if (!isdigit(date[i]))
-                return false;
-        }
-    }
-    return true;
-}
 // Function to control the creation of a product done
 void createProductControl()
 {
@@ -245,6 +224,7 @@ void createReleaseControl()
         }
     }
 }
+
 
 // Function to validate email format
 bool isValidEmail(string email)
