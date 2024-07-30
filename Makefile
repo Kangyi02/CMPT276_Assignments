@@ -1,6 +1,6 @@
 # Variables
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra
+CXXFLAGS = -std=c++17 -Wall -Wextra
 OBJS = Requester.o Change.o ChangeRequest.o Product.o Release.o UI.o StartUp.o ScenarioControl.o main.o
 TARGET = program
 

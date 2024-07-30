@@ -9,6 +9,7 @@
 #include <fstream>
 #include <cstdint>
 #include <cstring>  // Needed this library for Windows
+#include <filesystem>
 
 using namespace std;
 
@@ -47,9 +48,18 @@ Change::Change(const int32_t id, const int32_t prio, const char* stat, const cha
 // Initialize the change file
 bool initChange()
 {
-    // First, try to create the file if it doesn't exist.
-    ofstream file("Change.bin", ios::app | ios::binary);
-    file.close();
+    // CAUSING PROBLEM HERE
+    if (!filesystem::exists("Change.bin"))
+    {
+        // File does not exist, initialize the change file
+        ChangeFileStream.open("Change.bin", ios::out | ios::app | ios::binary);
+
+        Change dummy;
+
+        ChangeFileStream.write(reinterpret_cast<char*>(&dummy), sizeof(Change));
+
+        ChangeFileStream.close();
+    }
 
     // Now open the file in the desired mode.
     ChangeFileStream.open("Change.bin", ios::in | ios::out | ios::binary | ios::ate);
@@ -182,7 +192,7 @@ bool getNextCID(int* id)
     ChangeFileStream.seekg(0, ios::beg); 
     if(ChangeFileStream.read(reinterpret_cast<char*>(&currentChange), sizeof(Change)))
     {
-
+        
         return true;
     }
     return false;
