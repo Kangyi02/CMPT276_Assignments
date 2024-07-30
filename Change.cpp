@@ -9,7 +9,6 @@
 #include <fstream>
 #include <cstdint>
 #include <cstring>  // Needed this library for Windows
-#include <filesystem>
 
 using namespace std;
 
@@ -48,8 +47,12 @@ Change::Change(const int32_t id, const int32_t prio, const char* stat, const cha
 // Initialize the change file
 bool initChange()
 {
+    ifstream fileCheck("Change.bin");
+    bool fileExists = fileCheck.good();
+    fileCheck.close();
+
     // CAUSING PROBLEM HERE
-    if (!filesystem::exists("Change.bin"))
+    if (!fileExists)
     {
         // File does not exist, initialize the change file
         ChangeFileStream.open("Change.bin", ios::out | ios::app | ios::binary);
