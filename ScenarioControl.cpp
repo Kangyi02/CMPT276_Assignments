@@ -25,7 +25,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
-//using namespace std;
+// using namespace std;
 
 bool isValidDateFormat(const char *date)
 {
@@ -129,6 +129,7 @@ void createReleaseControl()
     Product product_list[20];
     Product temp;   // Temporary product pointer
     Product chosen; // Chosen product pointer
+
     bool getFlag = getNextProduct(&temp);
     if (getFlag == false)
     {
@@ -137,7 +138,7 @@ void createReleaseControl()
     }
     // cout << "For which product you want to add a new release to: \n";
 
-    while (true) 
+    while (true)
     {
         product_list[0] = temp;
 
@@ -156,37 +157,31 @@ void createReleaseControl()
             }
             else
             {
-                getFlag = false;
                 break; // Exit loop if no more products
             }
         }
 
         // Display options for more products or exit
-        cout << i + 1 << ") More\n";
+        if (i==20 && getNextProduct(&temp)==true)
+            cout << i + 1 << ") More\n";
+
         cout << "0) Exit\n";
         cout << "Enter selection: ";
+
         int userInput;
-        while (true)
+        cin >> userInput;
+        if (userInput >= 1 && userInput <= i)
         {
-            cin >> userInput;
-            if (userInput >= 1 && userInput <= i)
-            {
-                chosen = product_list[userInput - 1];
-                break;
-            }
-            else if (userInput == 0)
-            {
-                cout << "Release addition cancelled. Returning to the main menu.\n";
-                return; // Return to the main menu if user cancels
-            }
-            else if (userInput != i + 1)
-            {
-                cout << "Invalid input.\n";
-                continue;
-            }
+            chosen = product_list[userInput - 1];
+            break;
         }
-        break;
+        else if (userInput == 0)
+        {
+            cout << "Release addition cancelled. Returning to the main menu.\n";
+            return; // Return to the main menu if user cancels
+        }
     }
+
     char release_ID[9]; // Adjusted size to account for null-terminator
     string tempReleaseID;
     while (true)
@@ -221,6 +216,7 @@ void createReleaseControl()
         // }
         break;
     }
+
     // Copy the string to the fixed-size character array
     tempDate.copy(release_date, tempDate.length());
     release_date[tempDate.length()] = '\0';
@@ -235,7 +231,7 @@ void createReleaseControl()
             // Create new release and write to file
             Release new_release = Release(release_ID, chosen.product_name, release_date);
             if (addRelease(&new_release))
-            cout << "The new release has been successfully added.\n";
+                cout << "The new release has been successfully added.\n";
             break;
         }
         else if (userInput == "n" || userInput == "N")
@@ -365,15 +361,16 @@ void createRequester(Requester chosen_requester)
         }
 
         bool valid = true;
-        for (size_t i = 0; i < 11; i++)
-        {
-            if (!isdigit(phone_number_input[i]))
-            {
-                valid = false;
-                break;
-            }
-            //chosen_requester.phone_number[i] = phone_number_input[i] - '0';
-        }
+        // for (size_t i = 0; i < 11; i++)
+        // {
+        //     if (!isdigit(phone_number_input[i]))
+        //     {
+        //         valid = false;
+        //         break;
+        //     }
+        //     chosen_requester.phone_number[i] = phone_number_input[i] - '0';
+        // }
+        chosen_requester.phone_number = std::stol(phone_number_input);
 
         if (!valid)
         {
@@ -463,7 +460,7 @@ void createChange(Product chosen_product, Change chosen_change)
     //     chosen_change.change_ID[i] = id[i];
     //     cout << "checking if the change id is correct" << chosen_change.change_ID[i] << endl; // delete
     // }
-    //chosen_change.change_ID = 100000;
+    // chosen_change.change_ID = 100000;
     strcpy(chosen_change.product_name, chosen_product.product_name);
     string tempRelease_ID = "None";
     chosen_change.anticipated_release_ID[tempRelease_ID.length()] = '\0';
@@ -476,9 +473,11 @@ void createChange(Product chosen_product, Change chosen_change)
         cout << "The new change has been successfully added. \n";
 }
 
-string createWhitespace(int length) {
+string createWhitespace(int length)
+{
     string spaces = "";
-    for (int i = 0; i < length; i++) {
+    for (int i = 0; i < length; i++)
+    {
         spaces += " ";
     }
     return spaces;
@@ -511,10 +510,7 @@ void createChangeRequestControl()
 
         cout << "1) " << temp.requester_name << createWhitespace(30 - strlen(temp.requester_name));
 
-        //for (int j = 0; j < 11; j++)
-        cout << temp.phone_number;
-
-        cout << " ";
+        cout << temp.phone_number << " ";
 
         cout << temp.email << createWhitespace(24 - strlen(temp.email))
              << temp.department
@@ -526,7 +522,6 @@ void createChangeRequestControl()
             {
                 requester_list[i] = temp; // Add requester to the list
                 cout << i + 1 << ") " << temp.requester_name;
-                //for (int j = 0; j < 11; j++)
                 cout << temp.phone_number;
 
                 cout << temp.email
@@ -541,7 +536,10 @@ void createChangeRequestControl()
         }
 
         // Display options for more requesters or to create a new one
-        cout << i + 1 << ") Show more requesters\n";
+
+        if (i==20 && getNextRequester(&temp))
+            cout << i + 1 << ") Show more requesters\n";
+
         cout << "0) Create a new requester\n";
         cout << "Enter selection: ";
 
@@ -600,12 +598,15 @@ void createChangeRequestControl()
         }
 
         // Display options for more products or exit
-        cout << i + 1 << ") More\n";
+        if (i==20 && getNextProduct(&temp1))
+            cout << i + 1 << ") More\n";
+
         cout << "0)  Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
         cin >> user_input; // Get user input for selection
+
         // Check if user input is within valid range
         if (user_input >= 1 && user_input < i + 1)
         {
@@ -627,6 +628,7 @@ void createChangeRequestControl()
     bool getChangeFlag = filterNextChange(&temp2, chosen_product.product_name);
     if (getChangeFlag == false)
     {
+        cout << "There is no change corresponding to this product.\n";
         createChange(chosen_product, chosen_change);
     }
 
@@ -666,7 +668,9 @@ void createChangeRequestControl()
             }
         }
         // Display options for more changes or to create a new one
-        cout << i + 1 << ") More\n";
+        if (i==20 && filterNextChange(&temp2, chosen_product.product_name))
+            cout << i + 1 << ") More\n";
+
         cout << "0) New Change\n";
         cout << "Enter selection: ";
 
@@ -729,9 +733,10 @@ void createChangeRequestControl()
             }
         }
         // Display options for more releases
-        cout << i + 1 << ") More\n";
-        cout << "Enter selection: ";
+        if (i==20 && filterNextRelease(&temp3, chosen_product.product_name))
+            cout << i + 1 << ") More\n";
 
+        cout << "Enter selection: ";
         int user_input;
         cin >> user_input; // Get user input for selection
 
@@ -752,7 +757,7 @@ void createChangeRequestControl()
     new_changeRequest.request_date[temp_date.length()] = '\0';
 
     strcpy(new_changeRequest.requester_name, chosen_requester.requester_name);
-    new_changeRequest.change_ID = chosen_change.change_ID;  // problem 
+    new_changeRequest.change_ID = chosen_change.change_ID; // problem
     strcpy(new_changeRequest.reported_release_ID, chosen_release.release_ID);
 
     // Create the new change request (Write the record to the file) and confirm success
@@ -779,7 +784,7 @@ void queryChangeControl()
         return;
     }
 
-    while (getProductFlag == true)
+    while (getProductFlag)
     {
         product_list[0] = temp1;
         cout << "Select a product:\n";
@@ -797,7 +802,8 @@ void queryChangeControl()
                 break; // Exit loop if no more products
         }
         // Display options for more products or exit
-        cout << i + 1 << ") More\n";
+        if (i==20 && getNextProduct(&temp1))
+            cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
@@ -816,7 +822,6 @@ void queryChangeControl()
             return; // Return if user chooses to exit
         }
     }
-
 
     seekToBeginningOfChangeFile();
     // Array to store a list of changes
@@ -858,7 +863,8 @@ void queryChangeControl()
                 break; // Exit loop if no more changes
         }
         // Display options for more changes or exit
-        cout << i + 1 << ") More\n";
+        if (i==20 && filterNextChange(&temp2, chosen_product.product_name))
+            cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
@@ -874,6 +880,7 @@ void queryChangeControl()
         else if (user_input == 0)
             return; // Return if user chooses to exit
     }
+
     // Display the information about the chosen change item
     cout << "Here is the information about the change item you queried: \n";
     cout << "Product    "
@@ -911,7 +918,7 @@ void updateChangeControl()
         return;
     }
 
-    while (getProductFlag == true)
+    while (getProductFlag)
     {
         product_list[0] = temp1;
         cout << "Select a product that corresponds to the change you want to update: \n";
@@ -934,7 +941,8 @@ void updateChangeControl()
             }
         }
 
-        cout << i + 1 << ") More\n";
+        if (i==20 && getNextProduct(&temp1))
+            cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
@@ -1001,7 +1009,8 @@ void updateChangeControl()
                 break; // Exit loop if no more changes
         }
 
-        cout << i + 1 << ") More\n";
+        if (i==20 && filterNextChange(&temp2, chosen_product.product_name))
+            cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
 
@@ -1040,7 +1049,7 @@ void updateChangeControl()
         // description length check here
         // To do
         temp_description.copy(chosen_change.description, temp_description.length());
-        chosen_change.description[temp_description.length()] = '\0';                      // Get new description
+        chosen_change.description[temp_description.length()] = '\0'; // Get new description
     }
 
     // Update status
@@ -1160,8 +1169,8 @@ void updateChangeControl()
     if (updateChange(&chosen_change))
         cout << "The change has been updated successfully. \n";
     // else
-        // return;
-                            
+    // return;
+
     // Display updated change info
     cout << "Change '" << chosen_change.change_ID << "' has been updated:\n"
          << "Description                     "
@@ -1300,7 +1309,6 @@ void allChangesReportControl()
     }
 }
 
-
 // Function to control the report generation for all requesters
 void allRequestersReportControl()
 {
@@ -1322,7 +1330,7 @@ void allRequestersReportControl()
         {
             if (productCount < 20)
             {
-                product_list[productCount] = temp1;                // Store product in array
+                product_list[productCount] = temp1;                             // Store product in array
                 cout << productCount + 1 << ") " << temp1.product_name << "\n"; // Display product
                 productCount++;
             }
@@ -1556,7 +1564,6 @@ void allRequestersReportControl()
     }
 }
 
-
 // Function to control the shutdown process
 void shutDownControl()
 {
@@ -1621,7 +1628,8 @@ void shutDownControl()
     // Overall status
     if (allClosed)
     {
-        cout << "All modules closed successfully.\n" << "\n";
+        cout << "All modules closed successfully.\n"
+             << "\n";
         cout << "Thank you for using the Honey Walnut Issue Tracking System! \n";
     }
     else
