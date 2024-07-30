@@ -182,7 +182,7 @@ bool getNextCID(int* id)
     ChangeFileStream.seekg(0, ios::beg); 
     if(ChangeFileStream.read(reinterpret_cast<char*>(&currentChange), sizeof(Change)))
     {
-        
+
         return true;
     }
     return false;
