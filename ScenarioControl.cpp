@@ -125,68 +125,59 @@ void createReleaseControl()
 {
     // Move the file pointer to the beginning of the product file
     seekToBeginningOfProductFile();
-    // Array to store a list of products
-    Product product_list[20];
-    Product temp;   // Temporary product pointer
-    Product chosen; // Chosen product pointer
+    Product product_list[20]; // Array to store a list of products
+    Product temp;   // Temporary product object
+    Product chosen; // Chosen product object
     bool getFlag = getNextProduct(&temp);
-    if (getFlag == false)
+    if (!getFlag)
     {
-        cout << "No additional records, this is the end of the file. \n";
+        cout << "No products available. Exiting...\n";
         return;
     }
-    // cout << "For which product you want to add a new release to: \n";
 
-    while (true) 
+    int productCount = 0;
+    while (getFlag && productCount < 20)
     {
-        product_list[0] = temp;
+        product_list[productCount] = temp;
+        productCount++;
+        getFlag = getNextProduct(&temp);
+    }
 
-        // Loop to display product list and select a product
-        cout << "For which product you want to add a new release to: \n";
-        cout << "   Product    \n";
-        cout << "1) " << temp.product_name << "\n";
-
-        int i;
-        for (i = 1; i < 20; i++)
+    while (true)
+    {
+        cout << "For which product do you want to add a new release?\n";
+        for (int i = 0; i < productCount; i++)
         {
-            if (getNextProduct(&temp) == true)
-            {
-                product_list[i] = temp;                             // Add product to the list
-                cout << i + 1 << ") " << temp.product_name << "\n"; // Display product name
-            }
-            else
-            {
-                getFlag = false;
-                break; // Exit loop if no more products
-            }
+            cout << i + 1 << ") " << product_list[i].product_name << "\n";
         }
-
-        // Display options for more products or exit
-        cout << i + 1 << ") More\n";
+        cout << productCount + 1 << ") More\n";
         cout << "0) Exit\n";
         cout << "Enter selection: ";
+
         int userInput;
-        while (true)
+        cin >> userInput;
+
+        if (userInput >= 1 && userInput <= productCount)
         {
-            cin >> userInput;
-            if (userInput >= 1 && userInput <= i)
-            {
-                chosen = product_list[userInput - 1];
-                break;
-            }
-            else if (userInput == 0)
-            {
-                cout << "Release addition cancelled. Returning to the main menu.\n";
-                return; // Return to the main menu if user cancels
-            }
-            else if (userInput != i + 1)
-            {
-                cout << "Invalid input.\n";
-                continue;
-            }
+            chosen = product_list[userInput - 1];
+            break;
         }
-        break;
+        else if (userInput == productCount + 1)
+        {
+            // If 'More' is selected, display the same list again
+            continue;
+        }
+        else if (userInput == 0)
+        {
+            cout << "Release addition cancelled. Returning to the main menu.\n";
+            return;
+        }
+        else
+        {
+            cout << "Invalid selection. Please try again.\n";
+        }
     }
+
     char release_ID[9]; // Adjusted size to account for null-terminator
     string tempReleaseID;
     while (true)
@@ -205,13 +196,15 @@ void createReleaseControl()
     // Copy the string to the fixed-size character array
     tempReleaseID.copy(release_ID, tempReleaseID.length());
     release_ID[tempReleaseID.length()] = '\0';
+
     char release_date[11]; // Adjusted size to account for null-terminator
     string tempDate;
     while (true)
     {
         cout << "Enter a release date for the release (YYYY-MM-DD): ";
         cin >> tempDate;
-        // if (isValidDateFormat(release_date) && tempDate.length() <= 10)
+        // Uncomment and implement the date validation function if needed
+        // if (isValidDateFormat(tempDate) && tempDate.length() <= 10)
         // {
         //     break;
         // }
@@ -224,24 +217,27 @@ void createReleaseControl()
     // Copy the string to the fixed-size character array
     tempDate.copy(release_date, tempDate.length());
     release_date[tempDate.length()] = '\0';
+
     // Confirm adding the release
-    string userInput;
+    string userConfirmation;
     while (true)
     {
         cout << "Are you sure you want to add the release " << release_ID << " (Y/N)? ";
-        cin >> userInput;
-        if (userInput == "y" || userInput == "Y")
+        cin >> userConfirmation;
+        if (userConfirmation == "y" || userConfirmation == "Y")
         {
             // Create new release and write to file
             Release new_release = Release(release_ID, chosen.product_name, release_date);
             if (addRelease(&new_release))
-            cout << "The new release has been successfully added.\n";
+            {
+                cout << "The new release has been successfully added.\n";
+            }
             break;
         }
-        else if (userInput == "n" || userInput == "N")
+        else if (userConfirmation == "n" || userConfirmation == "N")
         {
             cout << "Release addition cancelled. Returning to the main menu.\n";
-            return; // Return to the main menu if user cancels
+            return;
         }
         else
         {
@@ -249,6 +245,7 @@ void createReleaseControl()
         }
     }
 }
+
 
 // Function to validate email format
 bool isValidEmail(string email)
