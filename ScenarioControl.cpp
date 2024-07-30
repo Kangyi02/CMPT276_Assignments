@@ -425,13 +425,13 @@ void createChange(Product chosen_product, Change chosen_change)
     // To do
     temp_description.copy(chosen_change.description, temp_description.length());
     chosen_change.description[temp_description.length()] = '\0';
-    cout << "checking if the change description is correct" << chosen_change.description << endl; // delete
-    // we set the priority here, so no need to
+    // cout << "checking if the change description is correct" << chosen_change.description << endl; // delete
+    // we set the priority here
     chosen_change.priority = 0; // if 0 print out N/A
     string status_reported = "Reported";
     status_reported.copy(chosen_change.status, status_reported.length());
     chosen_change.status[status_reported.length()] = '\0';
-    cout << "checking if the change status is correct" << chosen_change.status << endl; // delete
+    // cout << "checking if the change status is correct" << chosen_change.status << endl; // delete
 
     // int id[7];
     // getNextCID(id); // problem here, ?? change id should be one int intead of an array of ints
@@ -446,7 +446,7 @@ void createChange(Product chosen_product, Change chosen_change)
     chosen_change.anticipated_release_ID[tempRelease_ID.length()] = '\0';
 
     tempRelease_ID.copy(chosen_change.anticipated_release_ID, tempRelease_ID.length());
-    cout << "checking if the release id is correct" << tempRelease_ID << endl; // delete
+    // cout << "checking if the release id is correct" << tempRelease_ID << endl; // delete
 
     // Add to file
     if (addChange(&chosen_change))
