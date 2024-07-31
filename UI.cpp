@@ -13,6 +13,7 @@
 #include "UI.h"
 #include "ScenarioControl.h"
 #include <iostream>
+#include <limits>
 
 using std::cin;
 using std::cout;
@@ -36,6 +37,16 @@ void activateUI()
 
         cin >> userInput;
 
+        // Check if the input was invalid
+        if (cin.fail()) {
+            // Clear the error state
+            cin.clear();
+            // Discard invalid input
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cout << "Invalid input. Please enter a number between 0 and 4.\n";
+            continue;
+        }
+
         switch (userInput)
         {
         case (1):
@@ -53,6 +64,9 @@ void activateUI()
         case (0):
             userInput = 0;
             shutDownControl();
+            break;
+        default:
+            cout << "Invalid selection. Please enter a number between 0 and 4.\n";
             break;
         }
     }
@@ -89,6 +103,9 @@ void create()
         break;
     case (0):
         break;
+    default:
+        cout << "Invalid selection. Return to the main menu.\n";
+        break;
     }
 }
 
@@ -115,6 +132,9 @@ void query()
         break;
     case (0):
         break;
+    default:
+        cout << "Invalid selection. Return to the main menu.\n";
+        break;
     }
 }
 
@@ -140,6 +160,9 @@ void update()
         updateChangeControl();
         break;
     case (0):
+        break;
+    default:
+        cout << "Invalid selection. Return to the main menu.\n";
         break;
     }
 }
@@ -170,6 +193,9 @@ void reports()
         allRequestersReportControl();
         break;
     case (0):
+        break;
+    default:
+        cout << "Invalid selection. Return to the main menu.\n";
         break;
     }
 }
