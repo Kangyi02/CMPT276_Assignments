@@ -162,7 +162,7 @@ void createReleaseControl()
     while (true)
     {
         cout << "Enter a release ID for the new release (max 8 chars): ";
-        cin.ignore(); // Clear the input buffer // ??
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         getline(cin, tempReleaseID);
         if (tempReleaseID.length() <= 8)
         {
@@ -1478,9 +1478,9 @@ void allRequestersReportControl()
 
         if (releaseCount == 20 && filterNextRelease(&temp3, chosen_product.product_name))
         {
-            cout << releaseCount + 1 << ") More\n";
+            cout << releaseCount + 1 << ") More" << endl;
         }
-        cout << "0) Exit\n";
+        cout << "0) Exit" << endl;
         cout << "Enter selection: ";
 
         int user_input;
@@ -1501,7 +1501,7 @@ void allRequestersReportControl()
         }
         else
         {
-            cout << "Invalid selection. Please try again.\n";
+            cout << "Invalid selection. Please try again." << endl;
         }
     }
 
@@ -1548,29 +1548,22 @@ void allRequestersReportControl()
 
     if (requestCount == 20 && filterNextChangeRequest(&temp5, chosen_change.change_ID))
     {
-        cout << requestCount + 1 << ") More\n";
+        cout << requestCount + 1 << ") More" << endl;
     }
-    cout << "0) Exit\n";
-    cout << "Enter selection: ";
+    cout << "0) Exit" << endl;
 
-    int user_input;
-    cin >> user_input;
-
-    if (user_input >= 1 && user_input <= requestCount)
+    int userInput;
+    while(true)
     {
-        // Process the selected requester if necessary
-    }
-    else if (user_input == requestCount + 1 && requestCount == 20)
-    {
-        // Refill the requester list and display more requesters
-    }
-    else if (user_input == 0)
-    {
-        return;
-    }
-    else
-    {
-        cout << "Invalid selection. Please try again.\n";
+        cout << "Enter selection: ";
+        int user_input;
+        cin >> user_input;
+        if (userInput <= 0 && userInput >= requestCount + 1)
+        {
+            cout << "Invalid input. Enter again." << endl;
+            continue;
+        }
+        break;
     }
 }
 
