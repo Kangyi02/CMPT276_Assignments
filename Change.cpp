@@ -207,7 +207,6 @@ int32_t getNextCID()
     ChangeFileStream.seekg(0, ios::beg);
     if(ChangeFileStream.read(reinterpret_cast<char*>(&dummy), sizeof(Change)))
     {
-        cout << "in getnextcid" << dummy.change_ID;
         int32_t id = dummy.change_ID + 1;
         dummy.change_ID += 1;
         ChangeFileStream.seekp(0, ios::beg); 
