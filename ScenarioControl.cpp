@@ -41,7 +41,7 @@ void createProductControl()
         cin >> tempProductName;
 
         bool is10digits = tempProductName.length() > 10;
-        
+
         if (is10digits)
         {
             cout << "Product name exceeds the maximum length of 10 characters. Please enter a valid name.\n";
@@ -301,17 +301,25 @@ void createRequester(Requester chosen_requester)
             continue;
         }
 
-
         chosen_requester.phone_number = std::stol(phone_number_input);
         break;
     }
 
-    cout << "Enter the requester's email (max 24 chars): ";
-    string email_input;
-    cin >> email_input;
+    while (true)
+    {
+        cout << "Enter the requester's email (max 24 chars): ";
+        string email_input;
+        cin >> email_input;
 
-    strncpy(chosen_requester.email, email_input.c_str(), sizeof(chosen_requester.email) - 1);
-    chosen_requester.email[sizeof(chosen_requester.email) - 1] = '\0';
+        if (email_input.length() > 25)
+        {
+            cout << "Email length must be less than 25 chars. Please enter a valid number.\n";
+            continue;
+        }
+        strncpy(chosen_requester.email, email_input.c_str(), sizeof(chosen_requester.email) - 1);
+        chosen_requester.email[sizeof(chosen_requester.email) - 1] = '\0';
+        break;
+    }
 
     cout << "Is the requester an employee (Y/N)? ";
     string user_input;
@@ -337,6 +345,8 @@ void createRequester(Requester chosen_requester)
         }
     }
 
+
+    
     if (addRequester(&chosen_requester))
     {
         cout << "The new requester has been successfully added.\n";
@@ -347,15 +357,25 @@ void createRequester(Requester chosen_requester)
 void createChange(Product chosen_product, Change chosen_change)
 {
     // Prompt user to create a new change
-    cout << "Enter the description of the new change (max 30 chars): ";
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    string temp_description;
-    getline(cin, temp_description);
-    // description length check here
-    // To do
-    temp_description.copy(chosen_change.description, temp_description.length());
-    chosen_change.description[temp_description.length()] = '\0';
-    // cout << "checking if the change description is correct" << chosen_change.description << endl; // delete
+    while (true)
+    {
+        cout << "Enter the description of the new change (max 30 chars): ";
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        string temp_description;
+        getline(cin, temp_description);
+
+        // description length check
+        if (temp_description.length() > 30)
+        {
+            cout << "Description length must be less than 30 chars. Please enter a valid number.\n";
+            continue;
+        }
+
+        temp_description.copy(chosen_change.description, temp_description.length());
+        chosen_change.description[temp_description.length()] = '\0';
+        break;
+    }
+
     // we set the priority here
     chosen_change.priority = 0; // if 0 print out N/A
     string status_reported = "Reported";
@@ -531,7 +551,7 @@ void createChangeRequestControl()
     {
         cout << "There is no change corresponding to this product.\n";
         createChange(chosen_product, chosen_change);
-        chosen_change.change_ID = 100000;
+        //chosen_change.change_ID = 100000;
     }
 
     // Loop to display change list and select a change
@@ -797,7 +817,7 @@ void queryChangeControl()
 
     cout << chosen_product.product_name << createWhitespace(10 - strlen(chosen_product.product_name))
          << chosen_change.description << createWhitespace(32 - strlen(chosen_change.description))
-         << chosen_change.change_ID  << "           "
+         << chosen_change.change_ID << "           "
          << chosen_change.status << createWhitespace(11 - strlen(chosen_change.status))
          << chosen_change.priority << "            "
          << chosen_change.anticipated_release_ID << createWhitespace(10 - strlen(chosen_change.anticipated_release_ID))
@@ -895,7 +915,7 @@ void updateChangeControl()
              << temp2.change_ID << "           "
              << temp2.status << createWhitespace(11 - strlen(temp2.status))
              << temp2.priority << "            "
-             << temp2.anticipated_release_ID 
+             << temp2.anticipated_release_ID
              << "\n";
 
         int i;
@@ -1088,7 +1108,7 @@ void updateChangeControl()
          << "Anticipated Release\n";
 
     cout << chosen_change.description << createWhitespace(32 - strlen(chosen_change.description))
-         << chosen_change.change_ID  << "           "
+         << chosen_change.change_ID << "           "
          << chosen_change.status << createWhitespace(11 - strlen(chosen_change.status))
          << chosen_change.priority << "            "
          << chosen_change.anticipated_release_ID << createWhitespace(10 - strlen(chosen_change.anticipated_release_ID))
@@ -1443,7 +1463,6 @@ void allRequestersReportControl()
         cout << "Invalid selection. Please try again.\n";
     }
 }
-
 
 // Function to control the shutdown process
 void shutDownControl()
