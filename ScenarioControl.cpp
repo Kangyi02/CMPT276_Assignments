@@ -1155,10 +1155,10 @@ void allChangesReportControl()
         while (getChangeFlag && changeCount < 20)
         {
             change_list[changeCount] = temp2;
-            cout << changeCount + 1 << ") " << temp2.description << " "
-                 << temp2.change_ID << " "
-                 << temp2.status << " "
-                 << temp2.priority << " "
+            cout << changeCount + 1 << ") " << temp2.description << createWhitespace(32 - strlen(temp2.description))
+                 << temp2.change_ID << createWhitespace(12 - strlen(temp2.change_ID))
+                 << temp2.status << createWhitespace(11 - strlen(temp2.status))
+                 << temp2.priority << createWhitespace(13 - strlen(temp2.priority))
                  << temp2.anticipated_release_ID << "\n";
             changeCount++;
             getChangeFlag = filterNextChange_DoneOrCancelled(&temp2, chosen_product.product_name);
@@ -1264,10 +1264,10 @@ void allRequestersReportControl()
         while (changeCount < 20 && filterNextChange(&temp2, chosen_product.product_name))
         {
             change_list[changeCount] = temp2;
-            cout << changeCount + 1 << ") " << temp2.description << " "
-                 << temp2.change_ID << " "
-                 << temp2.status << " "
-                 << temp2.priority << " "
+            cout << changeCount + 1 << ") " << temp2.description << createWhitespace(32 - strlen(temp2.description))
+                 << temp2.change_ID << createWhitespace(12 - strlen(temp2.change_ID))
+                 << temp2.status << createWhitespace(11 - strlen(temp2.status))
+                 << temp2.priority << createWhitespace(13 - strlen(temp2.priority))
                  << temp2.anticipated_release_ID << "\n";
             changeCount++;
         }
