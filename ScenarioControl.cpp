@@ -1346,7 +1346,7 @@ void allRequestersReportControl()
         while (releaseCount < 20 && filterNextRelease(&temp3, chosen_product.product_name))
         {
             release_list[releaseCount] = temp3;
-            cout << releaseCount + 1 << ") " << temp3.release_ID << " "
+            cout << releaseCount + 1 << ") " << temp3.release_ID << createWhitespace(14 - strlen(temp3.release_ID))
                  << temp3.release_date << endl;
             releaseCount++;
         }
