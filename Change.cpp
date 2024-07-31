@@ -110,10 +110,18 @@ bool getNextChange(Change* ch)
 bool addChange(Change* ch)
 {
     ChangeFileStream.clear();
+
+    int32_t id;
+    if(!getNextCID(&id))
+    {
+        return false;
+    }
+    ch->change_ID = id;
+
     if(ChangeFileStream.write(reinterpret_cast<char*>(ch), sizeof(Change)))
     {
         ChangeFileStream.flush();
-        updateChangeIDrec();
+        
         return true;
     }
     return false;
@@ -189,7 +197,8 @@ bool filterNextChange_DoneOrCancelled(Change* ch, char* prod_name)
 }
 
 // Get change ID for next change
-// Return 
+// Return the next available change ID
+// So you don't have to increment after calling this function.
 bool getNextCID(int32_t* id)
 {
     Change dummy;
@@ -198,8 +207,9 @@ bool getNextCID(int32_t* id)
     {
         id = &dummy.change_ID + 1;
         dummy.change_ID += 1;
-        ChangeFileStream.seekg(0, ios::beg); 
+        ChangeFileStream.seekp(0, ios::beg); 
         ChangeFileStream.write(reinterpret_cast<char*>(&dummy), sizeof(Change));
+        ChangeFileStream.seekp(sizeof(Change), ios::beg);
         return true;
     }
     return false;
