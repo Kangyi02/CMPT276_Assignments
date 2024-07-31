@@ -41,26 +41,10 @@ void createProductControl()
         cin >> tempProductName;
 
         bool is10digits = tempProductName.length() > 10;
-        bool isAlphabet = true;
-
-        for (size_t i = 0; i < tempProductName.length(); i++)
-        {
-            if (!isalpha(tempProductName[i]))
-            {
-                isAlphabet = false;
-                break;
-            }
-        }
-
+        
         if (is10digits)
         {
             cout << "Product name exceeds the maximum length of 10 characters. Please enter a valid name.\n";
-            continue;
-        }
-
-        if (!isAlphabet)
-        {
-            cout << "Product name should only contain alphabetic characters. Please enter a valid name.\n";
             continue;
         }
 
@@ -340,7 +324,7 @@ void createRequester(Requester chosen_requester)
             string department_input;
             cin.ignore(); // Clear the input buffer // ??
             getline(cin, department_input);
-            
+
             if (department_input.length() > 12)
             {
                 cout << "Department name exceeds the maximum length of 12 characters. Please enter a valid department.\n";
