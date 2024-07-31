@@ -155,8 +155,9 @@ bool updateChange(Change* ch)
         // start manipulation if change ID match
         if(currentChange.change_ID == ch->change_ID)
         {
+            cout << "in cupdatechange" << currentChange.change_ID;
             ChangeFileStream.seekp(position * sizeof(Change), ios::beg);
-            ChangeFileStream.write(reinterpret_cast<const char*>(&currentChange), sizeof(Change));
+            ChangeFileStream.write(reinterpret_cast<const char*>(ch), sizeof(Change));
             if (!ChangeFileStream) 
             {
             cout << "Error writing to file." << endl;
