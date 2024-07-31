@@ -17,7 +17,7 @@ fstream ChangeFileStream;
 Change::Change()
 {
     change_ID = 100000;
-    priority = -1;
+    priority = 0;
     status[0] = '\0';
     description[0] = '\0';
     product_name[0] = '\0';
@@ -189,29 +189,18 @@ bool filterNextChange_DoneOrCancelled(Change* ch, char* prod_name)
 }
 
 // Get change ID for next change
-bool getNextCID(int* id)
+// Return 
+bool getNextCID(int32_t* id)
 {
-    Change currentChange;
-    ChangeFileStream.seekg(0, ios::beg); 
-    if(ChangeFileStream.read(reinterpret_cast<char*>(&currentChange), sizeof(Change)))
+    Change dummy;
+    ChangeFileStream.seekg(0, ios::beg);
+    if(ChangeFileStream.read(reinterpret_cast<char*>(&dummy), sizeof(Change)))
     {
-        
+        id = &dummy.change_ID + 1;
+        dummy.change_ID += 1;
+        ChangeFileStream.seekg(0, ios::beg); 
+        ChangeFileStream.write(reinterpret_cast<char*>(&dummy), sizeof(Change));
         return true;
     }
     return false;
-}
-
-// Update change ID in the dummy object by incrementing
-bool updateChangeIDrec()
-{
-    Change currentChange;
-    ChangeFileStream.seekg(0, ios::beg);
-    ChangeFileStream.read(reinterpret_cast<char*>(&currentChange), sizeof(Change));
-
-    // Increment the change ID
-    currentChange.change_ID +=1;
-    ChangeFileStream.seekg(0, ios::beg); 
-    ChangeFileStream.write(reinterpret_cast<char*>(&currentChange), sizeof(Change));
-
-    return true;
 }
