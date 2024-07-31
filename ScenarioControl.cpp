@@ -648,9 +648,8 @@ void createChangeRequestControl()
     while (getReleaseFlag)
     {
         release_list[0] = temp3;
-        cout << "Select a reported release that corresponds to this change request:" << endl;
-
-        cout << left << setw(14) << "   Release ID"
+        cout << "Select a reported release that corresponds to this change request:" << endl
+             << left << setw(14) << "   Release ID"
              << setw(13) << "Release date" << endl;
 
         cout << "1) " 
@@ -703,14 +702,15 @@ void createChangeRequestControl()
         {
             cout << "Release date exceed the manimum length of 10 characters with the format (YYYY-MM-DD). Please enter again" << endl;
             continue;
-        }        
+        }
+        break;        
     }
 
     tempDate.copy(new_changeRequest.request_date, tempDate.length());
     new_changeRequest.request_date[tempDate.length()] = '\0';
 
     strcpy(new_changeRequest.requester_name, chosen_requester.requester_name);
-    new_changeRequest.change_ID = chosen_change.change_ID;
+    new_changeRequest.change_ID = chosen_change.change_ID; 
     strcpy(new_changeRequest.reported_release_ID, chosen_release.release_ID);
 
     // Create the new change request (Write the record to the file) and confirm success
@@ -1310,19 +1310,24 @@ void allChangesReportControl()
         }
 
         cout << "0) Exit\n";
-        cout << "Enter selection: ";
 
-        int user_input;
-        cin >> user_input; // User input for navigating changes
-
-        if (user_input == 0) // Exit
-            return;
-        else if (user_input == changeCount + 1 && changeCount == 20)
-            continue; // Display more changes if selected
-        else
+        int userInput;
+        while (true)
         {
-            cout << "Invalid selection. Please try again.\n";
+            cout << "Enter selection: ";
+            cin >> userInput;
+            if (userInput != 0 && userInput != changeCount + 1)
+            {
+                cout << "Invalid input. Enter again." << endl;
+                continue;
+            }
+            break;
         }
+
+        if (userInput == 0) // Exit
+            return;
+        else if (userInput == changeCount + 1 && changeCount == 20)
+            continue; // Display more changes if selected
     }
 }
 
@@ -1354,9 +1359,9 @@ void allRequestersReportControl()
 
         if (productCount == 20 && getNextProduct(&temp1))
         {
-            cout << productCount + 1 << ") More\n";
+            cout << productCount + 1 << ") More" << endl;
         }
-        cout << "0) Exit\n";
+        cout << "0) Exit" << endl;
         cout << "Enter selection: ";
 
         int user_input;
@@ -1377,7 +1382,7 @@ void allRequestersReportControl()
         }
         else
         {
-            cout << "Invalid selection. Please try again.\n";
+            cout << "Invalid selection. Please try again." << endl;
         }
     }
 
@@ -1444,6 +1449,7 @@ void allRequestersReportControl()
         }
     }
 
+
     // Step 3: Get the releases
     Release release_list[20]; // Array to store release list
     Release temp3;            // Temporary release object
@@ -1457,22 +1463,29 @@ void allRequestersReportControl()
     {
         int releaseCount = 0;
 
-        cout << "Select an anticipated release that you want to update to: \n";
-        cout << "   Release ID    Release date\n";
+        cout << "Select an anticipated release that you want to update to:" << endl 
+             << left << setw(14) << "   Release ID"
+             << setw(13) << "Release date" << endl;
 
         while (releaseCount < 20 && filterNextRelease(&temp3, chosen_product.product_name))
         {
             release_list[releaseCount] = temp3;
-            cout << releaseCount + 1 << ") " << temp3.release_ID << " "
-                 << temp3.release_date << endl;
+            cout << setw(3) << to_string(releaseCount + 1) + ") " 
+                 << setw(11) << temp3.release_ID
+                 << setw(13) << temp3.release_date 
+                 << endl;
             releaseCount++;
         }
 
         if (releaseCount == 20 && filterNextRelease(&temp3, chosen_product.product_name))
         {
-            cout << releaseCount + 1 << ") More\n";
+            cout << releaseCount + 1 << ") More" << endl;
         }
         cout << "0) Exit\n";
+
+        // PROBLEM: Implement while(true) loop just like line 1427
+        // otherwise invalid input behave just like 'more'
+
         cout << "Enter selection: ";
 
         int user_input;
@@ -1516,7 +1529,7 @@ void allRequestersReportControl()
          << "Change description: " << chosen_change.description << endl
          << "Change ID: " << chosen_change.change_ID << endl
          << "Release ID: " << chosen_release.release_ID << endl
-         << "State: " << chosen_change.status << endl;
+         << "State: " << chosen_change.status << endl << endl;
 
     int requestCount = 0;
     std::set<std::string> uniqueRequesters; // Set to track unique requesters
@@ -1528,8 +1541,11 @@ void allRequestersReportControl()
             // Only add and print if the requester is not already in the set
             filterNextRequester(&temp4, temp5.requester_name); // Get the requester by name
             requester_list[requestCount] = temp4;
-            cout << requestCount + 1 << ") Requester: " << temp4.requester_name << " "
-                 << "Email: " << temp4.email << endl;
+            cout << left << setw(15) << to_string(requestCount + 1) + ") Requester: " 
+                 << setw(21) << temp4.requester_name
+                 << "Email: " 
+                 << setw(25) << temp4.email 
+                 << endl;
             uniqueRequesters.insert(temp5.requester_name); // Add to the set
             requestCount++;
         }
@@ -1537,9 +1553,11 @@ void allRequestersReportControl()
 
     if (requestCount == 20 && filterNextChangeRequest(&temp5, chosen_change.change_ID))
     {
-        cout << requestCount + 1 << ") More\n";
+        cout << requestCount + 1 << ") More" << endl;
     }
-    cout << "0) Exit\n";
+    cout << "0) Exit" << endl;
+
+    // PROBLEM: same problem as above, while(true) is needed
     cout << "Enter selection: ";
 
     int user_input;
