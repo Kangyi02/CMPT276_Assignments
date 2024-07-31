@@ -65,8 +65,6 @@ bool filterNextChange(Change* ch, char* prod_name);
 bool filterNextChange_DoneOrCancelled(Change* ch, char* prod_name);
 
 
-bool getNextCID(int* id);
-
-bool updateChangeIDrec();
+bool getNextCID(int32_t* id);
 
 #endif
