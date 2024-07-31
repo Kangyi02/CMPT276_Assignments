@@ -1290,7 +1290,7 @@ void allRequestersReportControl()
         while (changeCount < 20 && filterNextChange(&temp2, chosen_product.product_name))
         {
             change_list[changeCount] = temp2;
-            cout << changeCount + 1 << ") " << temp2.description << createWhitespace(32 - strlen(temp2.description)
+            cout << changeCount + 1 << ") " << temp2.description << createWhitespace(32 - strlen(temp2.description))
                  << temp2.change_ID << createWhitespace(12 - std::to_string(temp2.change_ID).length())
                  << temp2.status << createWhitespace(11 - strlen(temp2.status))
                  << temp2.priority << createWhitespace(13 - std::to_string(temp2.priority).length())
