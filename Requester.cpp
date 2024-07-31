@@ -18,6 +18,8 @@ Requester::Requester()
     department[0] = '\0';
 }
 
+// --------------------------------------------------------------------------------------
+
 // Parameterized constructor implementation
 Requester::Requester(const char* name, const int64_t phone, const char *email_addr, const char *dept)
 {
@@ -34,6 +36,8 @@ Requester::Requester(const char* name, const int64_t phone, const char *email_ad
     department[sizeof(department) - 1] = '\0';
 }
 
+// --------------------------------------------------------------------------------------
+
 // Initialize the requester file
 bool initRequester()
 {
@@ -44,6 +48,8 @@ bool initRequester()
     }
     return true;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Shut down the requester file
 bool closeRequester()
@@ -60,12 +66,16 @@ bool closeRequester()
     return true;
 }
 
+// --------------------------------------------------------------------------------------
+
 // Move the get pointer to the beginning of the requester file
 void seekToBeginningOfRequesterFile()
 {
     RequesterFileStream.clear();
     RequesterFileStream.seekg(0, ios::beg);
 }
+
+// --------------------------------------------------------------------------------------
 
 // Get a next requester
 bool getNextRequester(Requester *req)
@@ -82,6 +92,8 @@ bool getNextRequester(Requester *req)
     }
 }
 
+// --------------------------------------------------------------------------------------
+
 // Store a new requester to file
 bool addRequester(Requester *req)
 {
@@ -93,6 +105,8 @@ bool addRequester(Requester *req)
     }
     return false;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Filter requesters by name
 bool filterNextRequester(Requester *req, char *req_name)

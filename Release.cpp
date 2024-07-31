@@ -19,6 +19,8 @@ Release::Release()
     release_date[0] = '\0';
 }
 
+// --------------------------------------------------------------------------------------
+
 Release::Release(const char* id, const char* name, const char* date)
 {
     strncpy(release_ID, id, sizeof(release_ID));
@@ -31,6 +33,8 @@ Release::Release(const char* id, const char* name, const char* date)
     release_date[sizeof(release_date) - 1] = '\0';
 }
 
+// --------------------------------------------------------------------------------------
+
 // Initialize the release file
 bool initRelease()
 {
@@ -41,6 +45,8 @@ bool initRelease()
     }
     return true;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Shut down the release file
 bool closeRelease()
@@ -57,12 +63,16 @@ bool closeRelease()
     return true;
 }
 
+// --------------------------------------------------------------------------------------
+
 // Move the get pointer to the beginning of the release file
 void seekToBeginningOfReleaseFile()
 {
     ReleaseFileStream.clear();
     ReleaseFileStream.seekg(0, ios::beg);
 }
+
+// --------------------------------------------------------------------------------------
 
 // Add a new release to file
 bool addRelease(Release* rel)
@@ -75,6 +85,8 @@ bool addRelease(Release* rel)
     }
     return false;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Filter release by product name
 bool filterNextRelease(Release* rel, char* prod_name)

@@ -19,6 +19,8 @@ Product::Product()
     release_date[0] = '\0';
 }
 
+// --------------------------------------------------------------------------------------
+
 // Parameterized constructor implementation
 Product::Product(const char* name, const char* date)
 {
@@ -29,6 +31,8 @@ Product::Product(const char* name, const char* date)
     strncpy(release_date, date, sizeof(date) - 1);
     product_name[sizeof(date) - 1] = '\0';
 }
+
+// --------------------------------------------------------------------------------------
 
 // Initialize the product file
 //FIX FILE PATH BEFORE SUBMITTING
@@ -41,6 +45,8 @@ bool initProduct()
     }
     return true;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Shut down the product file
 bool closeProduct() 
@@ -57,12 +63,16 @@ bool closeProduct()
     return true;
 }
 
+// --------------------------------------------------------------------------------------
+
 // Move the get pointer to the beginning of the product file
 void seekToBeginningOfProductFile() 
 {
     productFileStream.clear();
     productFileStream.seekg(0, ios::beg);
 }
+
+// --------------------------------------------------------------------------------------
 
 // Store a new product to file
 bool addProduct(char* prod_name)
@@ -75,6 +85,8 @@ bool addProduct(char* prod_name)
     }
     return false;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Get the next product
 bool getNextProduct(Product* prod) 

@@ -16,13 +16,15 @@ fstream ChangeFileStream;
 
 Change::Change()
 {
-    change_ID = 100000;
+    change_ID = 0;
     priority = 0;
     status[0] = '\0';
     description[0] = '\0';
     product_name[0] = '\0';
     anticipated_release_ID[0] = '\0';
 }
+
+// --------------------------------------------------------------------------------------
 
 Change::Change(const int32_t id, const int32_t prio, const char* stat, const char* desc, const char* prodname, const char* arid)
 {
@@ -43,6 +45,8 @@ Change::Change(const int32_t id, const int32_t prio, const char* stat, const cha
     strncpy(anticipated_release_ID, arid, sizeof(anticipated_release_ID));
     anticipated_release_ID[sizeof(anticipated_release_ID) - 1] = '\0';
 }
+
+// --------------------------------------------------------------------------------------
 
 // Initialize the change file
 bool initChange()
@@ -72,6 +76,8 @@ bool initChange()
     return true;
 }
 
+// --------------------------------------------------------------------------------------
+
 // Shut down the change file
 bool closeChange()
 {
@@ -87,12 +93,16 @@ bool closeChange()
     return true;
 }
 
+// --------------------------------------------------------------------------------------
+
 // Move the get pointer to the beginning of the change file
 void seekToBeginningOfChangeFile()
 {
     ChangeFileStream.clear();
     ChangeFileStream.seekg(sizeof(Change), ios::beg); //skip the first dummy record
 }
+
+// --------------------------------------------------------------------------------------
 
 // Get a next change 
 bool getNextChange(Change* ch)
@@ -104,6 +114,8 @@ bool getNextChange(Change* ch)
     }
     return false;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Add a new change to file
 bool addChange(Change* ch)
@@ -128,6 +140,8 @@ bool addChange(Change* ch)
     return false;
 }
 
+// --------------------------------------------------------------------------------------
+
 // Helper function of updateChange() that check if two int array is same
 // Precondition: two array need to have the same length
 bool intArrayEqual(int* arr1, int* arr2)
@@ -141,6 +155,8 @@ bool intArrayEqual(int* arr1, int* arr2)
     }
     return true;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Update attritube of provided change
 bool updateChange(Change* ch)
@@ -170,6 +186,8 @@ bool updateChange(Change* ch)
     return false;
 }
 
+// --------------------------------------------------------------------------------------
+
 // Filter change by product name
 bool filterNextChange(Change* ch, char* prod_name)
 {
@@ -182,6 +200,8 @@ bool filterNextChange(Change* ch, char* prod_name)
     }
     return false;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Filter change by product name, but exclude done or cancelled change
 bool filterNextChange_DoneOrCancelled(Change* ch, char* prod_name)
@@ -198,6 +218,8 @@ bool filterNextChange_DoneOrCancelled(Change* ch, char* prod_name)
     return false;
 }
 
+// --------------------------------------------------------------------------------------
+
 // Get change ID for next change
 // Return the next available change ID
 // So you don't have to increment after calling this function.
@@ -207,7 +229,6 @@ int32_t getNextCID()
     ChangeFileStream.seekg(0, ios::beg);
     if(ChangeFileStream.read(reinterpret_cast<char*>(&dummy), sizeof(Change)))
     {
-        cout << "in getnextcid" << dummy.change_ID;
         int32_t id = dummy.change_ID + 1;
         dummy.change_ID += 1;
         ChangeFileStream.seekp(0, ios::beg); 

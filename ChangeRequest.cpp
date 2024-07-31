@@ -22,6 +22,8 @@ ChangeRequest::ChangeRequest()
     reported_release_ID[0] = '\0';
 }
 
+// --------------------------------------------------------------------------------------
+
 ChangeRequest::ChangeRequest(const int32_t id, const char* name, const char* date, const char* releaseID)
 {
     // Initialize all the attributes with provided data
@@ -37,6 +39,8 @@ ChangeRequest::ChangeRequest(const int32_t id, const char* name, const char* dat
     reported_release_ID[sizeof(reported_release_ID) - 1] = '\0';
 }
 
+// --------------------------------------------------------------------------------------
+
 // Initialize the change request file
 bool initChangeRequest() 
 {
@@ -47,6 +51,8 @@ bool initChangeRequest()
     }
     return true;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Shut down the change requst file
 bool closeChangeRequest() 
@@ -62,6 +68,8 @@ bool closeChangeRequest()
     }
     return true;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Move the get pointer to the beginning of the chnage request file
 void seekToBeginningOfChangeRequestFile() 
@@ -81,6 +89,8 @@ bool getNextChangeRequest(ChangeRequest* chreq)
     return false;
 }
 
+// --------------------------------------------------------------------------------------
+
 // Add a new change request to file
 bool addChangeRequest(ChangeRequest* chreq)
 {
@@ -92,6 +102,8 @@ bool addChangeRequest(ChangeRequest* chreq)
     }
     return false;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Search for change request with provided change ID, return one at a time. false if reach the end of the file
 bool filterNextChangeRequest(ChangeRequest* chreq, int32_t ch_ID)

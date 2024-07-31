@@ -21,11 +21,16 @@
 #include <regex>  // For regex validation
 #include <limits> // For std::numeric_limits
 #include <set>
+#include <iomanip>
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
+using std::setw;
+using std::left;
+using std::right;
+using std::to_string;
 // using namespace std;
 
 // Function to control the creation of a product done
@@ -108,7 +113,7 @@ void createReleaseControl()
         // Loop to display product list and select a product
         cout << "For which product you want to add a new release to: \n";
         cout << "   Product    \n";
-        cout << "1) " << temp.product_name << "\n";
+        cout << "1) " << temp.product_name << endl;
 
         int i;
         for (i = 1; i < 20; i++)
@@ -116,7 +121,7 @@ void createReleaseControl()
             if (getNextProduct(&temp) == true)
             {
                 product_list[i] = temp;                             // Add product to the list
-                cout << i + 1 << ") " << temp.product_name << "\n"; // Display product name
+                cout << i + 1 << ") " << temp.product_name << endl; // Display product name
             }
             else
             {
@@ -426,28 +431,30 @@ void createChangeRequestControl()
     while (getRequesterFlag)
     {
         requester_list[0] = temp;
-        cout << "Select a requester that reports this change request: \n";
-        cout << "   Requester name                " << "Phone         " << "Email                   " << "Department\n";
+        cout << "Select a requester that reports this change request: " << endl;
+        cout << left << setw(24) << "   Requester name" 
+             << setw(12) << "Phone" 
+             << setw(25) << "Email" 
+             << setw(13) << "Department" << endl;
 
-        cout << "1) " << temp.requester_name << createWhitespace(30 - strlen(temp.requester_name));
-
-        cout << temp.phone_number << "   ";
-
-        cout << temp.email << createWhitespace(24 - strlen(temp.email))
-             << temp.department
-             << "\n";
+        cout << left << "1) " 
+             << setw(21) << temp.requester_name 
+             << setw(12) << temp.phone_number 
+             << setw(25) << temp.email
+             << setw(13) << temp.department
+             << endl;
 
         for (i = 1; i < 20; i++)
         {
             if (getNextRequester(&temp) == true)
             {
                 requester_list[i] = temp; // Add requester to the list
-                cout << i + 1 << ") " << temp.requester_name << createWhitespace(30 - strlen(temp.requester_name));
-                cout << temp.phone_number << "   ";
-
-                cout << temp.email << createWhitespace(24 - strlen(temp.email))
-                     << temp.department
-                     << "\n";
+                cout << left << setw(3) << to_string(i+1) + ") " 
+                     << setw(21) << temp.requester_name 
+                     << setw(12) << temp.phone_number 
+                     << setw(25) << temp.email
+                     << setw(13) << temp.department
+                     << endl;
             }
             else
             {
@@ -501,7 +508,7 @@ void createChangeRequestControl()
         product_list[0] = temp1;
         cout << "Select a product that corresponds to this change request: \n";
         cout << "   Product    \n";
-        cout << "1) " << temp1.product_name << "\n";
+        cout << "1) " << temp1.product_name << endl;
 
         int i;
         for (i = 1; i < 20; i++)
@@ -509,7 +516,7 @@ void createChangeRequestControl()
             if (getNextProduct(&temp1))
             {
                 product_list[i] = temp1;                             // Add product to the list
-                cout << i + 1 << ") " << temp1.product_name << "\n"; // Add product to the list
+                cout << i + 1 << ") " << temp1.product_name << endl; // Add product to the list
             }
             else
             {
@@ -558,18 +565,19 @@ void createChangeRequestControl()
     while (getChangeFlag)
     {
         change_list[0] = temp2;
-        cout << "Which change corresponds to the change request? \n";
-        cout << "   Description                   "
-             << "change ID   "
-             << "State      "
-             << "Priority     "
-             << "Anticipated Release\n";
+        cout << "Which change corresponds to the change request?" << endl;
+        cout << left << setw(34) << "   Description"
+             << setw(10) << "Change ID"
+             << setw(11) << "State"
+             << setw(9) << "Priority"
+             << setw(9) << "Anticipated Release" << endl;
 
-        cout << "1) " << temp2.description << createWhitespace(30 - strlen(temp2.description))
-             << temp2.change_ID << "      "
-             << temp2.status << createWhitespace(11 - strlen(temp2.status))
-             << temp2.priority << "            "
-             << temp2.anticipated_release_ID << "\n";
+        cout << left << setw(3) << "1)" 
+            << setw(31) << temp2.description 
+            << setw(10) << temp2.change_ID 
+            << setw(11) << temp2.status 
+            << setw(9) << temp2.priority 
+            << setw(9) << temp2.anticipated_release_ID << endl;
 
         int i;
         for (i = 1; i < 20; i++)
@@ -577,11 +585,12 @@ void createChangeRequestControl()
             if (filterNextChange(&temp2, chosen_product.product_name))
             {
                 change_list[i] = temp2; // Add change to the list
-                cout << i + 1 << ") " << temp2.description << createWhitespace(30 - strlen(temp2.description))
-                     << temp2.change_ID << "      "
-                     << temp2.status << createWhitespace(11 - strlen(temp2.status))
-                     << temp2.priority << "            "
-                     << temp2.anticipated_release_ID << "\n";
+                cout << left << setw(3) << to_string(i + 1) + ")" 
+                     << setw(31) << temp2.description 
+                     << setw(10) << temp2.change_ID 
+                     << setw(11) << temp2.status 
+                     << setw(9) << temp2.priority 
+                     << setw(9) << temp2.anticipated_release_ID << endl;
             }
             else
             {
@@ -633,13 +642,15 @@ void createChangeRequestControl()
     while (getReleaseFlag)
     {
         release_list[0] = temp3;
-        cout << "Select a reported release that corresponds to this change request: \n";
+        cout << "Select a reported release that corresponds to this change request:" << endl;
 
-        cout << "   Release ID  "
-             << "Release date\n";
+        cout << left << setw(14) << "   Release ID"
+             << setw(13) << "Release date" << endl;
 
-        cout << "1) " << temp3.release_ID << createWhitespace(12 - strlen(temp3.release_ID))
-             << temp3.release_date << "\n";
+        cout << "1) " 
+             << setw(11) << temp3.release_ID
+             << setw(13) << temp3.release_date 
+             << endl;
 
         int i;
         for (i = 1; i < 20; i++)
@@ -647,8 +658,10 @@ void createChangeRequestControl()
             if (filterNextRelease(&temp3, chosen_product.product_name))
             {
                 release_list[i] = temp3; // Add release to the list
-                cout << i + 1 << ") " << temp3.release_ID << createWhitespace(12 - strlen(temp3.release_ID))
-                     << temp3.release_date << "\n";
+                cout << left << setw(3) << to_string(i + 1) + ")"
+                     << setw(11) << temp3.release_ID
+                     << setw(13) << temp3.release_date
+                     << endl;
             }
             else
             {
@@ -712,7 +725,7 @@ void queryChangeControl()
     {
         product_list[0] = temp1;
         cout << "Select a product:\n";
-        cout << "1) " << temp1.product_name << "\n";
+        cout << "1) " << temp1.product_name << endl;
 
         int i;
         for (i = 1; i < 20; i++)
@@ -720,7 +733,7 @@ void queryChangeControl()
             if (getNextProduct(&temp1))
             {
                 product_list[i] = temp1; // Add product to the list
-                cout << i + 1 << ") " << temp1.product_name << "\n";
+                cout << i + 1 << ") " << temp1.product_name << endl;
             }
             else
                 break; // Exit loop if no more products
@@ -771,7 +784,7 @@ void queryChangeControl()
 
         cout << "1) " << temp2.description << createWhitespace(32 - strlen(temp2.description))
              << temp2.change_ID
-             << "\n";
+             << endl;
 
         int i;
         for (i = 1; i < 20; i++)
@@ -781,7 +794,7 @@ void queryChangeControl()
                 change_list[i] = temp2; // Add change to the list
                 cout << i + 1 << ") " << temp2.description << createWhitespace(32 - strlen(temp2.description))
                      << temp2.change_ID
-                     << "\n";
+                     << endl;
             }
             else
                 break; // Exit loop if no more changes
@@ -808,19 +821,19 @@ void queryChangeControl()
 
     // Display the information about the chosen change item
     cout << "Here is the information about the change item you queried: \n";
-    cout << "Product   "
-         << "Description                     "
-         << "change ID   "
-         << "State      "
-         << "Priority     "
-         << "Anticipated Release\n";
-
-    cout << chosen_product.product_name << createWhitespace(10 - strlen(chosen_product.product_name))
-         << chosen_change.description << createWhitespace(32 - strlen(chosen_change.description))
-         << chosen_change.change_ID << "      "
-         << chosen_change.status << createWhitespace(11 - strlen(chosen_change.status))
-         << chosen_change.priority << "            "
-         << chosen_change.anticipated_release_ID << createWhitespace(10 - strlen(chosen_change.anticipated_release_ID))
+    cout << left << setw(11) << "Product" 
+         << setw(31) << "Description"
+         << setw(10) << "Change ID"
+         << setw(11) << "State"
+         << setw(9) << "Priority"
+         << setw(9) << "Anticipated Release" 
+         << endl
+         << setw(11) << chosen_product.product_name
+         << setw(31) << chosen_change.description
+         << setw(10) << chosen_change.change_ID
+         << setw(11) << chosen_change.status
+         << setw(9) << chosen_change.priority
+         << setw(9) << chosen_change.anticipated_release_ID
          << endl;
 }
 
@@ -846,9 +859,9 @@ void updateChangeControl()
     while (getProductFlag)
     {
         product_list[0] = temp1;
-        cout << "Select a product that corresponds to the change you want to update: \n";
-        cout << "Product    \n";
-        cout << "1) " << temp1.product_name << "\n";
+        cout << "Select a product that corresponds to the change you want to update:" << endl;
+        cout << "Product" << endl;
+        cout << "1) " << temp1.product_name << endl;
 
         int i;
         // Display product options
@@ -857,7 +870,7 @@ void updateChangeControl()
             if (getNextProduct(&temp1))
             {
                 product_list[i] = temp1;                             // Store product in array
-                cout << i + 1 << ") " << temp1.product_name << "\n"; // Display product
+                cout << i + 1 << ") " << temp1.product_name << endl; // Display product
             }
             else
             {
@@ -904,19 +917,20 @@ void updateChangeControl()
     while (getChangeFlag)
     {
         change_list[0] = temp2;
-        cout << "Select a change you want to update: \n";
-        cout << "   Description                     "
-             << "change ID   "
-             << "State      "
-             << "Priority     "
-             << "Anticipated Release\n";
-
-        cout << "1) " << temp2.description << createWhitespace(32 - strlen(temp2.description))
-             << temp2.change_ID << "           "
-             << temp2.status << createWhitespace(11 - strlen(temp2.status))
-             << temp2.priority << "            "
-             << temp2.anticipated_release_ID
-             << "\n";
+        cout << "Select a change you want to update:" << endl;
+        cout << left << setw(34) << "   Description"
+             << setw(10) << "Change ID"
+             << setw(11) << "State"
+             << setw(9) << "Priority"
+             << setw(9) << "Anticipated Release" 
+             << endl
+             << setw(3) << "1) "  // first change
+             << setw(31) << temp2.description 
+             << setw(10) << temp2.change_ID 
+             << setw(11) << temp2.status 
+             << setw(9) << temp2.priority 
+             << setw(9) << temp2.anticipated_release_ID
+             << endl;
 
         int i;
         // Display change options
@@ -925,11 +939,13 @@ void updateChangeControl()
             if (filterNextChange(&temp2, chosen_product.product_name))
             {
                 change_list[i] = temp2; // Store change in array
-                cout << i + 1 << ") " << temp2.description << createWhitespace(32 - strlen(temp2.description))
-                     << temp2.change_ID << "           "
-                     << temp2.status << createWhitespace(11 - strlen(temp2.status))
-                     << temp2.priority << "            "
-                     << temp2.anticipated_release_ID << "\n"; // Display change
+                cout << left << setw(3) << to_string(i + 1) + ")" 
+                     << setw(31) << temp2.description 
+                     << setw(10) << temp2.change_ID 
+                     << setw(11) << temp2.status 
+                     << setw(9) << temp2.priority 
+                     << setw(9) << temp2.anticipated_release_ID
+                     << endl;  // Display change
             }
             else
                 break; // Exit loop if no more changes
@@ -966,7 +982,7 @@ void updateChangeControl()
     {
         cout << "Old description is: "
              << chosen_change.description
-             << "\n"
+             << endl
              << "New description is: ";
 
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -1015,7 +1031,7 @@ void updateChangeControl()
 
     cout << "The updated 'status' is: " << chosen_change.status << ".\n";
     // Update priority
-    cout << "The current priority is: " << chosen_change.priority << "\n"
+    cout << "The current priority is: " << chosen_change.priority << endl
          << "Enter a new priority, or 0 to keep the current priority: ";
 
     cin >> user_input2;
@@ -1023,7 +1039,7 @@ void updateChangeControl()
         chosen_change.priority = user_input2; // Update priority
 
     // Update anticipated release ID
-    cout << "The current 'anticipated release' is " << chosen_change.anticipated_release_ID << "\n";
+    cout << "The current 'anticipated release' is " << chosen_change.anticipated_release_ID << endl;
 
     // get release
     seekToBeginningOfReleaseFile(); // Function to set file cursor to the beginning of the release file
@@ -1045,13 +1061,18 @@ void updateChangeControl()
     while (getReleaseFlag)
     {
         release_list[0] = temp3;
-        cout << "Select an anticipated release that you want to update to: \n";
+        cout << "Select an anticipated release that you want to update to:" << endl;
 
-        cout << "   Release ID  "
-             << "Release date\n";
+        cout << left << setw(14) << "   Release ID"
+             << setw(13) << "Release date" 
+             << endl
+             << "1) " 
+             << setw(11) << temp3.release_ID
+             << setw(13) << temp3.release_date 
+             << endl;
 
         cout << "1) " << temp3.release_ID << createWhitespace(12 - strlen(temp3.release_ID))
-             << temp3.release_date << "\n"; // Display release
+             << temp3.release_date << endl; // Display release
 
         int i;
         // Display release options
@@ -1060,8 +1081,10 @@ void updateChangeControl()
             if (filterNextRelease(&temp3, temp1.product_name))
             {
                 release_list[i] = temp3; // Store release in array
-                cout << i + 1 << ") " << temp3.release_ID << createWhitespace(12 - strlen(temp3.release_ID))
-                     << temp3.release_date << "\n"; // Display release
+                cout << left << setw(3) << to_string(i + 1) + ")"
+                     << setw(11) << temp3.release_ID
+                     << setw(13) << temp3.release_date
+                     << endl;
             }
             else
             {
@@ -1101,17 +1124,18 @@ void updateChangeControl()
 
     // Display updated change info
     cout << "Change '" << chosen_change.change_ID << "' has been updated:\n"
-         << "Description                     "
-         << "change ID   "
-         << "State      "
-         << "Priority     "
-         << "Anticipated Release\n";
-
-    cout << chosen_change.description << createWhitespace(32 - strlen(chosen_change.description))
-         << chosen_change.change_ID << "      "
-         << chosen_change.status << createWhitespace(11 - strlen(chosen_change.status))
-         << chosen_change.priority << "            "
-         << chosen_change.anticipated_release_ID << createWhitespace(10 - strlen(chosen_change.anticipated_release_ID))
+         << left << setw(34) << "   Description"
+         << setw(10) << "Change ID"
+         << setw(11) << "State"
+         << setw(9) << "Priority"
+         << setw(9) << "Anticipated Release" 
+         << endl
+         << setw(3) << "1) "  // first change
+         << setw(31) << chosen_change.description 
+         << setw(10) << chosen_change.change_ID 
+         << setw(11) << chosen_change.status 
+         << setw(9) << chosen_change.priority 
+         << setw(9) << chosen_change.anticipated_release_ID
          << endl;
 }
 
@@ -1139,7 +1163,7 @@ void allChangesReportControl()
         while (getProductFlag && productCount < 20)
         {
             product_list[productCount] = temp1;
-            cout << productCount + 1 << ") " << temp1.product_name << "\n"; // Display product
+            cout << productCount + 1 << ") " << temp1.product_name << endl; // Display product
             productCount++;
             getProductFlag = getNextProduct(&temp1);
         }
@@ -1190,22 +1214,23 @@ void allChangesReportControl()
 
     while (true)
     {
-        cout << "Change report for the product '" << chosen_product.product_name << "': \n";
-        cout << "   Description                     "
-             << "Change ID   "
-             << "State      "
-             << "Priority     "
-             << "Anticipated Release\n";
+        cout << "Change report for the product'" << chosen_product.product_name << "': \n";
+        cout << left << setw(34) << "   Description"
+             << setw(10) << "Change ID"
+             << setw(11) << "State"
+             << setw(9) << "Priority"
+             << setw(9) << "Anticipated Release" << endl;
 
         int changeCount = 0;
         while (getChangeFlag && changeCount < 20)
         {
             change_list[changeCount] = temp2;
-            cout << changeCount + 1 << ") " << temp2.description << " "
-                 << temp2.change_ID << " "
-                 << temp2.status << " "
-                 << temp2.priority << " "
-                 << temp2.anticipated_release_ID << "\n";
+            cout << left << setw(3) << to_string(changeCount + 1) + ")" 
+            << setw(31) << temp2.description 
+            << setw(10) << temp2.change_ID 
+            << setw(11) << temp2.status 
+            << setw(9) << temp2.priority 
+            << setw(9) << temp2.anticipated_release_ID << endl;
             changeCount++;
             getChangeFlag = filterNextChange_DoneOrCancelled(&temp2, chosen_product.product_name);
         }
@@ -1252,7 +1277,7 @@ void allRequestersReportControl()
         while (productCount < 20 && getNextProduct(&temp1))
         {
             product_list[productCount] = temp1;                             // Store product in array
-            cout << productCount + 1 << ") " << temp1.product_name << "\n"; // Display product
+            cout << productCount + 1 << ") " << temp1.product_name << endl; // Display product
             productCount++;
         }
 
@@ -1312,7 +1337,7 @@ void allRequestersReportControl()
                  << temp2.change_ID << " "
                  << temp2.status << " "
                  << temp2.priority << " "
-                 << temp2.anticipated_release_ID << "\n";
+                 << temp2.anticipated_release_ID << endl;
             changeCount++;
         }
 
@@ -1365,7 +1390,7 @@ void allRequestersReportControl()
         {
             release_list[releaseCount] = temp3;
             cout << releaseCount + 1 << ") " << temp3.release_ID << " "
-                 << temp3.release_date << "\n";
+                 << temp3.release_date << endl;
             releaseCount++;
         }
 
@@ -1413,11 +1438,11 @@ void allRequestersReportControl()
 
     // Print header info
     cout << "Here is the report: \n"
-         << "Product: " << chosen_product.product_name << "\n"
-         << "Change description: " << chosen_change.description << "\n"
-         << "Change ID: " << chosen_change.change_ID << "\n"
-         << "Release ID: " << chosen_release.release_ID << "\n"
-         << "State: " << chosen_change.status << "\n";
+         << "Product: " << chosen_product.product_name << endl
+         << "Change description: " << chosen_change.description << endl
+         << "Change ID: " << chosen_change.change_ID << endl
+         << "Release ID: " << chosen_release.release_ID << endl
+         << "State: " << chosen_change.status << endl;
 
     int requestCount = 0;
     std::set<std::string> uniqueRequesters; // Set to track unique requesters
@@ -1430,7 +1455,7 @@ void allRequestersReportControl()
             filterNextRequester(&temp4, temp5.requester_name); // Get the requester by name
             requester_list[requestCount] = temp4;
             cout << requestCount + 1 << ") Requester: " << temp4.requester_name << " "
-                 << "Email: " << temp4.email << "\n";
+                 << "Email: " << temp4.email << endl;
             uniqueRequesters.insert(temp5.requester_name); // Add to the set
             requestCount++;
         }
@@ -1468,7 +1493,7 @@ void allRequestersReportControl()
 void shutDownControl()
 {
     bool allClosed = true;
-    cout << "\n";
+    cout << endl;
 
     // Close Change
     if (closeChange())
@@ -1529,7 +1554,7 @@ void shutDownControl()
     if (allClosed)
     {
         cout << "All modules closed successfully.\n"
-             << "\n";
+             << endl;
         cout << "Thank you for using the Honey Walnut Issue Tracking System! \n";
     }
     else
