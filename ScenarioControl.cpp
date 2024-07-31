@@ -423,7 +423,6 @@ void createChangeRequestControl()
         int user_input;
         cin >> user_input; // Get user input for selection
 
-        cout << user_input;
         // Check if user input is within valid range
         if (user_input >= 1 && user_input < i + 1)
         {
