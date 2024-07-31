@@ -29,7 +29,6 @@ using std::endl;
 using std::string;
 using std::setw;
 using std::left;
-using std::right;
 using std::to_string;
 // using namespace std;
 
@@ -39,23 +38,18 @@ void createProductControl()
     // Prompt user to enter the product name
     char product_name[11];
     string tempProductName;
-
     while (true)
     {
         cout << "Enter product's name (max 10 chars): ";
         cin >> tempProductName;
-
-        bool is10digits = tempProductName.length() > 10;
-
-        if (is10digits)
+        if (tempProductName.length() > 10)
         {
-            cout << "Product name exceeds the maximum length of 10 characters. Please enter a valid name.\n";
+            cout << "Product name exceeds the maximum length of 10 characters. Please enter a valid name." << endl;
             continue;
         }
 
         break; // Exit the loop if the name is valid
     }
-
     // Copy the string to the fixed-size character array
     tempProductName.copy(product_name, tempProductName.length());
     product_name[tempProductName.length()] = '\0';
@@ -72,18 +66,18 @@ void createProductControl()
             // Add the product (Writing product record to the file) and confirm success
             if (addProduct(product_name))
             {
-                cout << "The new product has been successfully added. \n";
+                cout << "The new product has been successfully added." << endl;
             }
             break;
         }
         else if (userInput == "n" || userInput == "N")
         {
-            cout << "Product addition cancelled. Returning to the main menu.\n";
+            cout << "Product addition cancelled. Returning to the main menu." << endl;
             return; // Return to the main menu if user cancels
         }
         else
         {
-            cout << "Invalid input. Please enter 'Y' for yes or 'N' for no.\n";
+            cout << "Invalid input. Please enter 'Y' for yes or 'N' for no." << endl;
         }
     }
 }
@@ -103,7 +97,7 @@ void createReleaseControl()
     bool getFlag = getNextProduct(&temp);
     if (getFlag == false)
     {
-        cout << "No additional records, this is the end of the file. \n";
+        cout << "No products found. The Product file is empty." << endl;
         return;
     }
     // cout << "For which product you want to add a new release to: \n";
@@ -113,8 +107,8 @@ void createReleaseControl()
         product_list[0] = temp;
 
         // Loop to display product list and select a product
-        cout << "For which product you want to add a new release to: \n";
-        cout << "   Product    \n";
+        cout << "For which product you want to add a new release to:" << endl;
+        cout << "   Product    " << endl;
         cout << "1) " << temp.product_name << endl;
 
         int i;
@@ -133,13 +127,24 @@ void createReleaseControl()
 
         // Display options for more products or exit
         if (i == 20 && getNextProduct(&temp) == true)
-            cout << i + 1 << ") More\n";
+            cout << i + 1 << ") More" << endl;
 
-        cout << "0) Exit\n";
-        cout << "Enter selection: ";
+        cout << "0) Exit" << endl;
 
         int userInput;
-        cin >> userInput;
+        while (true)
+        {
+            cout << "Enter selection: ";
+            cin >> userInput;
+
+            if (userInput < 0 || userInput > i)
+            {
+                cout << "Invalid input. Enter again." << endl;
+                continue;
+            }
+            break;
+        }
+
         if (userInput >= 1 && userInput <= i)
         {
             chosen = product_list[userInput - 1];
@@ -147,9 +152,9 @@ void createReleaseControl()
         }
         else if (userInput == 0)
         {
-            cout << "Release addition cancelled. Returning to the main menu.\n";
+            cout << "Release addition cancelled. Returning to the main menu." << endl;
             return; // Return to the main menu if user cancels
-        }
+        } // Go back to the top if i+1) more
     }
 
     char release_ID[9]; // Adjusted size to account for null-terminator
@@ -165,40 +170,56 @@ void createReleaseControl()
         }
         else
         {
-            cout << "Release ID exceeds the maximum length of 8 characters. Please enter again.\n";
+            cout << "Release ID exceeds the maximum length of 8 characters. Please enter again." << endl;
         }
     }
     // Copy the string to the fixed-size character array
     tempReleaseID.copy(release_ID, tempReleaseID.length());
     release_ID[tempReleaseID.length()] = '\0';
-    char release_date[11]; // Adjusted size to account for null-terminator
-    string tempDate;
-    cout << "Enter a release date for the release (YYYY-MM-DD): ";
-    cin >> tempDate;
 
+    char release_date[11];
+    string tempDate;
+    while (true)
+    {
+        cout << "Enter a release date for the release (YYYY-MM-DD): ";
+        cin >> tempDate;
+        if (tempDate.length() > 10)
+        {
+            cout << "Release date exceed the manimum length of 10 characters with the format (YYYY-MM-DD). Please enter again" << endl;
+            continue;
+        }
+        break;
+    }
     // Copy the string to the fixed-size character array
     tempDate.copy(release_date, tempDate.length());
     release_date[tempDate.length()] = '\0';
-    // Confirm adding the release
-    string userInput;
 
-    cout << "Are you sure you want to add the release " << release_ID << " (Y/N)? ";
-    cin >> userInput;
-    if (userInput == "y" || userInput == "Y")
+    // Confirm
+    string userInput;
+    while (true)
     {
-        // Create new release and write to file
-        Release new_release = Release(release_ID, chosen.product_name, release_date);
-        if (addRelease(&new_release))
-            cout << "The new release has been successfully added.\n";
-    }
-    else if (userInput == "n" || userInput == "N")
-    {
-        cout << "Release addition cancelled. Returning to the main menu.\n";
-        return; // Return to the main menu if user cancels
-    }
-    else
-    {
-        cout << "Invalid input. Please enter 'Y' for yes or 'N' for no.\n";
+        cout << "Are you sure you want to add the release " << release_ID << " (Y/N)? ";
+        cin >> userInput;
+
+        if (userInput == "y" || userInput == "Y")
+        {
+            // Create new release and write to file
+            Release new_release = Release(release_ID, chosen.product_name, release_date);
+            if (addRelease(&new_release))
+            {
+                cout << "The new release has been successfully added." << endl;
+            }
+            break;        
+        }
+        else if (userInput == "n" || userInput == "N")
+        {
+            cout << "Release addition cancelled. Returning to the main menu." << endl;
+            return; // Return to the main menu if user cancels
+        }
+        else
+        {
+            cout << "Invalid input. Please enter 'Y' for yes or 'N' for no." << endl;
+        }
     }
 }
 
@@ -223,7 +244,7 @@ void formatRequesterName(const string &input_name, char *formatted_name)
 void createRequester(Requester chosen_requester)
 {
     // Prompt user to create a new requester
-    cout << "Creating a new requester:\n";
+    cout << "Creating a new requester:" << endl;
     string inputname;
 
     while (true)
@@ -234,7 +255,7 @@ void createRequester(Requester chosen_requester)
 
         if (inputname.length() > 31)
         {
-            cout << "Requester name exceeds the maximum length of 30 characters. Please enter a valid name.\n";
+            cout << "Requester name exceeds the maximum length of 30 characters. Please enter a valid name." << endl;
             continue;
         }
 
@@ -250,7 +271,7 @@ void createRequester(Requester chosen_requester)
 
         if (phone_number_input.length() != 11)
         {
-            cout << "Phone number must be exactly 11 digits. Please enter a valid number.\n";
+            cout << "Phone number must be exactly 11 digits. Please enter a valid number." << endl;
             continue;
         }
 
@@ -274,33 +295,52 @@ void createRequester(Requester chosen_requester)
         break;
     }
 
-    cout << "Is the requester an employee (Y/N)? ";
-    string user_input;
-    cin >> user_input;
-    if (user_input == "y" || user_input == "Y")
+    string userInput;
+    while (true)
     {
-        while (true)
+        cout << "Is the requester an employee (Y/N)? ";
+        cin >> userInput;
+
+        if (userInput == "y" || userInput == "Y")
         {
-            cout << "Enter the requester's department (max 12 chars): ";
-            string department_input;
-            cin.ignore(); // Clear the input buffer 
-            getline(cin, department_input);
-
-            if (department_input.length() > 13)
+            while (true)
             {
-                cout << "Department name exceeds the maximum length of 12 characters. Please enter a valid department.\n";
-                continue;
-            }
+                cout << "Enter the requester's department (max 12 chars): ";
+                string department_input;
+                cin.ignore(); // Clear the input buffer 
+                getline(cin, department_input);
 
-            strncpy(chosen_requester.department, department_input.c_str(), sizeof(chosen_requester.department) - 1);
-            chosen_requester.department[sizeof(chosen_requester.department) - 1] = '\0';
+                if (department_input.length() > 13)
+                {
+                    cout << "Department name exceeds the maximum length of 12 characters. Please enter a valid department.\n";
+                    continue;
+                }
+
+                strncpy(chosen_requester.department, department_input.c_str(), sizeof(chosen_requester.department) - 1);
+                chosen_requester.department[sizeof(chosen_requester.department) - 1] = '\0';
+                break;
+            }
             break;
+        }
+        else if (userInput == "n" || userInput == "N")
+        {
+            // skip this process
+            break;
+        }
+        else
+        {
+            cout << "Invalid input. Please enter 'Y' for yes or 'N' for no." << endl;
         }
     }
 
+    // Write the requester to the file
     if (addRequester(&chosen_requester))
     {
-        cout << "The new requester has been successfully added.\n";
+        cout << "The new requester has been successfully added." << endl;
+    }
+    else
+    {
+        cout << "Failed to add the new requester to the file." << endl;
     }
 }
 
@@ -310,17 +350,17 @@ void createRequester(Requester chosen_requester)
 void createChange(Product chosen_product, Change* chosen_change)
 {
     // Prompt user to create a new change
+    string temp_description;
     while (true)
     {
         cout << "Enter the description of the new change (max 30 chars): ";
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        string temp_description;
         getline(cin, temp_description);
 
         // description length check
         if (temp_description.length() > 30)
         {
-            cout << "Description length must be less than 30 chars. Please enter a valid number.\n";
+            cout << "Description length must be less than 30 chars. Please enter a valid number." << endl;
             continue;
         }
 
@@ -340,21 +380,10 @@ void createChange(Product chosen_product, Change* chosen_change)
     chosen_change->anticipated_release_ID[tempRelease_ID.length()] = '\0';
 
     tempRelease_ID.copy(chosen_change->anticipated_release_ID, tempRelease_ID.length());
-    // cout << "checking if the release id is correct" << tempRelease_ID << endl; // delete
 
     // Add to file
     if (addChange(chosen_change))
         cout << "The new change has been successfully added. \n";
-}
-
-string createWhitespace(int length)
-{
-    string spaces = "";
-    for (int i = 0; i < length; i++)
-    {
-        spaces += " ";
-    }
-    return spaces;
 }
 
 // --------------------------------------------------------------------------------------
@@ -367,9 +396,10 @@ void createChangeRequestControl()
 
     // Array to store a list of requesters
     Requester requester_list[20];
-    Requester temp;             // Temporary requester pointer
-    Requester chosen_requester; // Chosen requester pointer
+    Requester temp;             // Temporary requester
+    Requester chosen_requester; // Chosen requester
 
+    // Check if at least one requester exists
     bool getRequesterFlag = getNextRequester(&temp);
     if (!getRequesterFlag)
     {
@@ -381,7 +411,7 @@ void createChangeRequestControl()
     while (getRequesterFlag)
     {
         requester_list[0] = temp;
-        cout << "Select a requester that reports this change request: " << endl;
+        cout << "Select a requester that reports this change request:" << endl;
         cout << left << setw(24) << "   Requester name" 
              << setw(12) << "Phone" 
              << setw(25) << "Email" 
@@ -415,24 +445,31 @@ void createChangeRequestControl()
 
         // Display options for more requesters or to create a new one
         if (i == 20 && getNextRequester(&temp))
-            cout << i + 1 << ") Show more requesters\n";
+            cout << i + 1 << ") More" << endl;
 
-        cout << "0) Create a new requester\n";
-        cout << "Enter selection: ";
+        cout << "0) Create a new requester" << endl;
 
-        int user_input;
-        cin >> user_input; // Get user input for selection
-
-        cout << user_input;
-        // Check if user input is within valid range
-        if (user_input >= 1 && user_input < i + 1)
+        int userInput;
+        while (true)
         {
-            chosen_requester = requester_list[user_input - 1]; // Select the chosen requester
-            break;
-        }
-        else if (user_input == 0)
-        {
-            createRequester(chosen_requester);
+            cout << "Enter selection: ";
+            cin >> userInput; // Get user input for selection
+
+            if (userInput >= 1 && userInput < i + 1)
+            {
+                chosen_requester = requester_list[userInput - 1]; // Select the chosen requester
+                break;
+            }
+            else if (userInput == 0)
+            {
+                createRequester(chosen_requester);
+                break;
+            }
+            else
+            {
+                cout << "Invalid input. Enter again." << endl;
+                continue;
+            }
         }
     }
 
@@ -448,16 +485,17 @@ void createChangeRequestControl()
     bool getProductFlag = getNextProduct(&temp1);
     if (getProductFlag == false)
     {
-        cout << "No additional records, this is the end of the file. \n";
+        // Terminate the operation if there is no product
+        cout << "No products found. The Release file is empty." << endl;
         return;
     }
 
     while (getProductFlag)
     {
         product_list[0] = temp1;
-        cout << "Select a product that corresponds to this change request: \n";
-        cout << "   Product    \n";
-        cout << "1) " << temp1.product_name << endl;
+        cout << "Select a product that corresponds to this change request:" << endl
+             << "   Product    " << endl
+             << "1) " << temp1.product_name << endl;
 
         int i;
         for (i = 1; i < 20; i++)
@@ -476,22 +514,32 @@ void createChangeRequestControl()
 
         // Display options for more products or exit
         if (i == 20 && getNextProduct(&temp1))
-            cout << i + 1 << ") More\n";
+            cout << i + 1 << ") More" << endl;
 
-        cout << "0)  Exit\n";
-        cout << "Enter selection: ";
+        cout << "0)  Exit" << endl;
 
-        int user_input;
-        cin >> user_input; // Get user input for selection
-
-        // Check if user input is within valid range
-        if (user_input >= 1 && user_input < i + 1)
+        int userInput;
+        while (true)
         {
-            chosen_product = product_list[user_input - 1]; // Select the chosen product
+            cout << "Enter selection: ";
+            cin >> userInput; // Get user input for selection
+
+            if (userInput < 0 || userInput > i)
+            {
+                cout << "Invalid input. Enter again." << endl;
+                continue;
+            }
             break;
         }
-        else if (user_input == 0)
-            return; // Return if user chooses to exit
+
+        // Check if user input is within valid range
+        if (userInput >= 1 && userInput < i + 1)
+        {
+            chosen_product = product_list[userInput - 1]; // Select the chosen product
+            break;
+        }
+        else if (userInput == 0)
+            return; // Back to main menu
     }
 
     // Move the file pointer to the beginning of the change file
@@ -505,9 +553,8 @@ void createChangeRequestControl()
     bool getChangeFlag = filterNextChange(&temp2, chosen_product.product_name);
     if (getChangeFlag == false)
     {
-        cout << "There is no change corresponding to this product.\n";
+        cout << "There is no change corresponding to this product." << endl;
         createChange(chosen_product, &chosen_change);
-        //chosen_change.change_ID = 100000;
     }
 
     // Loop to display change list and select a change
@@ -550,24 +597,34 @@ void createChangeRequestControl()
 
         // Display options for more changes or to create a new one
         if (i == 20 && filterNextChange(&temp2, chosen_product.product_name))
-            cout << i + 1 << ") More\n";
+            cout << i + 1 << ") More" << endl;
 
-        cout << "0) New Change\n";
-        cout << "Enter selection: ";
+        cout << "0) New Change" << endl;
 
-        int user_input;
-        cin >> user_input; // Get user input for selection
-
-        if (user_input >= 1 && user_input < i + 1)
+        int userInput;
+        while (true)
         {
-            cout << "The user selects: " << i << endl;
-            chosen_change = change_list[user_input - 1]; // Select the chosen change
+            cout << "Enter selection: ";
+            cin >> userInput; // Get user input for selection
+            if (userInput < 0 || userInput > i + 1)
+            {
+                cout << "Invalid input. Enter again." << endl;
+                continue;
+            }
             break;
         }
-        else if (user_input == 0)
+
+        if (userInput >= 1 && userInput < i + 1)
+        {
+            cout << "The user selects: " << i << endl;
+            chosen_change = change_list[userInput - 1]; // Select the chosen change
+            break;
+        }
+        else if (userInput == 0)
         {
             createChange(chosen_product, &chosen_change);
-            chosen_change.change_ID = temp2.change_ID++;
+            // chosen_change.change_ID = temp2.change_ID++; // what is this for ?
+            break;
         }
     }
 
@@ -583,7 +640,7 @@ void createChangeRequestControl()
 
     if (getReleaseFlag == false)
     {
-        cout << "You have to create a release first!";
+        cout << "No release found. The Release file is empty." << endl;
         return;
     }
 
@@ -620,7 +677,7 @@ void createChangeRequestControl()
         }
         // Display options for more releases
         if (i == 20 && filterNextRelease(&temp3, chosen_product.product_name))
-            cout << i + 1 << ") More\n";
+            cout << i + 1 << ") More" << endl;
 
         cout << "Enter selection: ";
         int user_input;
@@ -635,20 +692,30 @@ void createChangeRequestControl()
     }
 
     // Prompt user to enter additional information for the change request
-    cout << "Enter the request date of the change request (YYYY-MM-DD): ";
     ChangeRequest new_changeRequest;
-    string temp_date;
-    cin >> temp_date;
-    temp_date.copy(new_changeRequest.request_date, temp_date.length());
-    new_changeRequest.request_date[temp_date.length()] = '\0';
+
+    string tempDate;
+    while (true)
+    {
+        cout << "Enter the request date of the change request (YYYY-MM-DD): ";
+        cin >> tempDate;
+        if (tempDate.length() > 10)
+        {
+            cout << "Release date exceed the manimum length of 10 characters with the format (YYYY-MM-DD). Please enter again" << endl;
+            continue;
+        }        
+    }
+
+    tempDate.copy(new_changeRequest.request_date, tempDate.length());
+    new_changeRequest.request_date[tempDate.length()] = '\0';
 
     strcpy(new_changeRequest.requester_name, chosen_requester.requester_name);
-    new_changeRequest.change_ID = chosen_change.change_ID; // problem
+    new_changeRequest.change_ID = chosen_change.change_ID;
     strcpy(new_changeRequest.reported_release_ID, chosen_release.release_ID);
 
     // Create the new change request (Write the record to the file) and confirm success
     if (addChangeRequest(&new_changeRequest))
-        cout << "The new change request has been successfully created. \n";
+        cout << "The new change request has been successfully created." << endl;
 }
 
 // ---------------------------------------------------------------------------------------
@@ -668,14 +735,14 @@ void queryChangeControl()
     bool getProductFlag = getNextProduct(&temp1);
     if (getProductFlag == false)
     {
-        cout << "No additional records, this is the end of the file. \n";
+        cout << "No product found. Returning to the main menu" << endl;
         return;
     }
 
     while (getProductFlag)
     {
         product_list[0] = temp1;
-        cout << "Select a product:\n";
+        cout << "Select a product:" << endl;
         cout << "1) " << temp1.product_name << endl;
 
         int i;
@@ -691,20 +758,30 @@ void queryChangeControl()
         }
         // Display options for more products or exit
         if (i == 20 && getNextProduct(&temp1))
-            cout << i + 1 << ") More\n";
-        cout << "0) Exit\n";
-        cout << "Enter selection: ";
+            cout << i + 1 << ") More" << endl;
+        cout << "0) Exit" << endl;
 
-        int user_input;
-        cin >> user_input; // Get user input for selection
-
-        // Check if user input is within valid range
-        if (user_input >= 1 && user_input < i + 1)
+        int userInput;
+        while (true)
         {
-            chosen_product = product_list[user_input - 1]; // Select the chosen product
+            cout << "Enter selection: ";
+            cin >> userInput; // Get user input for selection
+
+            if (userInput < 0 || userInput > i +1)
+            {
+                cout << "Invalid input. Enter again." << endl;
+                continue;
+            }
             break;
         }
-        else if (user_input == 0)
+
+        // Do operations according to the user input
+        if (userInput >= 1 && userInput < i + 1)
+        {
+            chosen_product = product_list[userInput - 1]; // Select the chosen product
+            break;
+        }
+        else if (userInput == 0)
         {
             getProductFlag = false;
             return; // Return if user chooses to exit
@@ -722,20 +799,23 @@ void queryChangeControl()
     bool getChangeFlag = filterNextChange(&temp2, chosen_product.product_name);
     if (getChangeFlag == false)
     {
-        cout << "No additional records, this is the end of the file. \n";
+        cout << "No change related to '" << chosen_product.product_name << "' found. Returning to the main menu" << endl;
+        return;
     }
 
     // Loop to display change list and select a change
     while (getChangeFlag)
     {
         change_list[0] = temp2;
-        cout << "Changes in the product '" << chosen_product.product_name << "':\n";
-        cout << "   Description                     "
-             << "change ID   \n";
-
-        cout << "1) " << temp2.description << createWhitespace(32 - strlen(temp2.description))
-             << temp2.change_ID
+        cout << "Changes in the product '" << chosen_product.product_name << "':" << endl;
+        cout << left << setw(34) << "   Description"
+             << setw(10) << "Change ID"
              << endl;
+
+        cout << left << setw(3) << "1)" 
+            << setw(31) << temp2.description 
+            << setw(10) << temp2.change_ID
+            << endl;
 
         int i;
         for (i = 1; i < 20; i++)
@@ -743,8 +823,9 @@ void queryChangeControl()
             if (filterNextChange(&temp2, chosen_product.product_name))
             {
                 change_list[i] = temp2; // Add change to the list
-                cout << i + 1 << ") " << temp2.description << createWhitespace(32 - strlen(temp2.description))
-                     << temp2.change_ID
+                cout << left << setw(3) << to_string(i + 1) + ")" 
+                     << setw(31) << temp2.description 
+                     << setw(10) << temp2.change_ID
                      << endl;
             }
             else
@@ -753,20 +834,28 @@ void queryChangeControl()
 
         // Display options for more changes or exit
         if (i == 20 && filterNextChange(&temp2, chosen_product.product_name))
-            cout << i + 1 << ") More\n";
-        cout << "0) Exit\n";
-        cout << "Enter selection: ";
-
-        int user_input;
-        cin >> user_input; // Get user input for selection
-
-        // Check if user input is within valid range
-        if (user_input >= 1 && user_input < i + 1)
+            cout << i + 1 << ") More" << endl;
+        cout << "0) Exit" << endl;
+        int userInput;
+        while (true)
         {
-            chosen_change = change_list[user_input - 1]; // Select the chosen change
+            cout << "Enter selection: ";
+            cin >> userInput;
+            if (userInput < 0 || userInput > i + 1)
+            {
+                cout << "Invalid input. Enter again." << endl;
+                continue;
+            }
             break;
         }
-        else if (user_input == 0)
+
+        // Check if user input is within valid range
+        if (userInput >= 1 && userInput < i + 1)
+        {
+            chosen_change = change_list[userInput - 1]; // Select the chosen change
+            break;
+        }
+        else if (userInput == 0)
             return; // Return if user chooses to exit
     }
 
@@ -805,7 +894,7 @@ void updateChangeControl()
     bool getProductFlag = getNextProduct(&temp1);
     if (getProductFlag == false)
     {
-        cout << "No additional records, this is the end of the file. \n";
+        cout << "No product found. The Product file is empty." << endl;
         return;
     }
 
@@ -813,7 +902,7 @@ void updateChangeControl()
     {
         product_list[0] = temp1;
         cout << "Select a product that corresponds to the change you want to update:" << endl;
-        cout << "Product" << endl;
+        cout << "   Product" << endl;
         cout << "1) " << temp1.product_name << endl;
 
         int i;
@@ -835,17 +924,25 @@ void updateChangeControl()
         if (i == 20 && getNextProduct(&temp1))
             cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
-        cout << "Enter selection: ";
-
-        int user_input;
-        cin >> user_input; // User input for product selection
-
-        if (user_input >= 1 && user_input < i + 1) // Check for valid selection
+        int userInput;
+        while (true)
         {
-            chosen_product = product_list[user_input - 1]; // Assign chosen product
+            cout << "Enter selection: ";
+            cin >> userInput;
+            if (userInput < 0 || userInput > i +1)
+            {
+                cout << "Invalid input. Enter again." << endl;
+                continue;
+            }
             break;
         }
-        else if (user_input == 0)
+
+        if (userInput >= 1 && userInput < i + 1) // Check for valid selection
+        {
+            chosen_product = product_list[userInput - 1]; // Assign chosen product
+            break;
+        }
+        else if (userInput == 0)
         {
             getProductFlag = false;
             return; // Exit
@@ -862,7 +959,7 @@ void updateChangeControl()
     bool getChangeFlag = filterNextChange(&temp2, chosen_product.product_name);
     if (getChangeFlag == false)
     {
-        cout << "No additional records, this is the end of the file. \n";
+        cout << "No change found." << endl;
         return; // return to the main menu if the change file is empty
     }
 
@@ -907,17 +1004,25 @@ void updateChangeControl()
         if (i == 20 && filterNextChange(&temp2, chosen_product.product_name))
             cout << i + 1 << ") More\n";
         cout << "0) Exit\n";
-        cout << "Enter selection: ";
-
-        int user_input;
-        cin >> user_input; // User input for change selection
-
-        if (user_input >= 1 && user_input < i + 1) // Check for valid selection
+        int userInput;
+        while (true)
         {
-            chosen_change = change_list[user_input - 1]; // Assign chosen change
+            cout << "Enter selection: ";
+            cin >> userInput;
+            if (userInput < 0 || userInput > i + 1)
+            {
+                cout << "Invalid input. Enter again." << endl;
+                continue;
+            }
             break;
         }
-        else if (user_input == 0) // Exit
+
+        if (userInput >= 1 && userInput < i + 1) // Check for valid selection
+        {
+            chosen_change = change_list[userInput - 1]; // Assign chosen change
+            break;
+        }
+        else if (userInput == 0) // Exit
         {
             getChangeFlag = false;
             return;
@@ -927,41 +1032,53 @@ void updateChangeControl()
     // Step 3: Update the chosen change
     // Update description
     cout << "Updating the change with the change ID '" << chosen_change.change_ID << "' in the product '"
-         << chosen_product.product_name << "':\n"
-         << "Do you want to replace the description (Y/N)? ";
-    string user_input1;
-    cin >> user_input1;
-    if (user_input1 == "Y" || user_input1 == "y")
-    {
-        cout << "Old description is: "
-             << chosen_change.description
-             << endl
-             << "New description is: ";
+         << chosen_product.product_name << "':" << endl;
 
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        string temp_description;
-        getline(cin, temp_description);
-        // description length check here
-        // To do
-        temp_description.copy(chosen_change.description, temp_description.length());
-        chosen_change.description[temp_description.length()] = '\0'; // Get new description
+    string userInput;
+    while (true)
+    {
+        cout << "Do you want to replace the description (Y/N)? ";
+        cin >> userInput;
+        if (userInput == "Y" || userInput == "y")
+        {
+            string tempDescription;
+            cout << "Old description is: "
+                 << chosen_change.description
+                 << endl;
+
+            while (true)
+            {
+                cout << "New description is: ";
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                getline(cin, tempDescription);
+                if (tempDescription.length() > 30)
+                {
+                    cout << "The description exeeds 30 characters. Enter again." << endl;
+                    continue;
+                }
+                break;
+            }
+
+            tempDescription.copy(chosen_change.description, tempDescription.length());
+            chosen_change.description[tempDescription.length()] = '\0'; // Get new description
+        }
     }
 
     // Update status
-    cout << "The current 'status' is " << chosen_change.status << ".\n"
-         << "Select a status that you want to update to:\n"
-         << "1) Reported\n"
-         << "2) Evaluated\n"
-         << "3) Cancelled\n"
-         << "4) In process\n"
-         << "5) Done\n"
-         << "0) Keep the current status\n"
+    cout << "The current 'status' is " << chosen_change.status << "." << endl
+         << "Select a status that you want to update to:" << endl
+         << "1) Reported" << endl
+         << "2) Evaluated" << endl
+         << "3) Cancelled" << endl
+         << "4) In process" << endl
+         << "5) Done" << endl
+         << "0) Keep the current status" << endl
          << "Enter selection: ";
 
-    int user_input2;
-    cin >> user_input2; // User input for status selection
+    int userInput2;
+    cin >> userInput2; // User input for status selection
 
-    switch (user_input2)
+    switch (userInput2)
     {
     case 1:
         strcpy(chosen_change.status, "Reported");
@@ -982,14 +1099,14 @@ void updateChangeControl()
         break; // Keep current status
     }
 
-    cout << "The updated 'status' is: " << chosen_change.status << ".\n";
+    cout << "The updated 'status' is: " << chosen_change.status << "." << endl;
     // Update priority
     cout << "The current priority is: " << chosen_change.priority << endl
          << "Enter a new priority, or 0 to keep the current priority: ";
 
-    cin >> user_input2;
-    if (user_input2 != 0)
-        chosen_change.priority = user_input2; // Update priority
+    cin >> userInput2;
+    if (userInput2 != 0)
+        chosen_change.priority = userInput2; // Update priority
 
     // Update anticipated release ID
     cout << "The current 'anticipated release' is " << chosen_change.anticipated_release_ID << endl;
@@ -1024,9 +1141,6 @@ void updateChangeControl()
              << setw(13) << temp3.release_date 
              << endl;
 
-        cout << "1) " << temp3.release_ID << createWhitespace(12 - strlen(temp3.release_ID))
-             << temp3.release_date << endl; // Display release
-
         int i;
         // Display release options
         for (i = 1; i < 20; i++)
@@ -1047,9 +1161,9 @@ void updateChangeControl()
         }
 
         if (i == 20 && filterNextRelease(&temp3, temp1.product_name))
-            cout << i + 1 << ") More\n";
+            cout << i + 1 << ") More" << endl;
 
-        cout << "0) Keep the current release\n"
+        cout << "0) Keep the current release" << endl
              << "Enter selection: ";
 
         int user_input;
@@ -1275,55 +1389,58 @@ void allRequestersReportControl()
     // Function to set file cursor to the beginning of the change file
     seekToBeginningOfChangeFile();
 
-    bool changeChosen = false; // Flag to indicate if a change has been chosen
-    while (!changeChosen)
+    while (true)
     {
-        int changeCount = 0;
+        int i = 1;
 
-        cout << "   Change report for the product '" << chosen_product.product_name << "': \n";
-        cout << "Description                     "
-             << "Change ID   "
-             << "State      "
-             << "Priority     "
-             << "Anticipated Release\n";
+        cout << "   Change report for the product '" << chosen_product.product_name << "': " << endl;
+        cout << left << setw(34) << "   Description"
+             << setw(10) << "Change ID"
+             << setw(11) << "State"
+             << setw(9) << "Priority"
+             << setw(9) << "Anticipated Release"
+             << endl;
 
-        while (changeCount < 20 && filterNextChange(&temp2, chosen_product.product_name))
+        while (i < 20 && filterNextChange(&temp2, chosen_product.product_name))
         {
-            change_list[changeCount] = temp2;
-            cout << changeCount + 1 << ") " << temp2.description << " "
-                 << temp2.change_ID << " "
-                 << temp2.status << " "
-                 << temp2.priority << " "
-                 << temp2.anticipated_release_ID << endl;
-            changeCount++;
+            change_list[i] = temp2;
+            cout << left << setw(3) << to_string(i) + ")" 
+                 << setw(31) << temp2.description 
+                 << setw(10) << temp2.change_ID 
+                 << setw(11) << temp2.status 
+                 << setw(9) << temp2.priority 
+                 << setw(9) << temp2.anticipated_release_ID
+                 << endl;  // Display change
+            i++;
         }
 
-        if (changeCount == 20 && filterNextChange(&temp2, chosen_product.product_name))
+        if (i == 20 && filterNextChange(&temp2, chosen_product.product_name))
         {
-            cout << changeCount + 1 << ") More\n";
+            cout << i << ") More" << endl;
         }
-        cout << "0) Exit\n";
-        cout << "Enter selection: ";
+        cout << "0) Exit" << endl;
 
-        int user_input;
-        cin >> user_input; // User input for navigating changes
+        int userInput;
+        while (true)
+        {
+            cout << "Enter selection: ";
+            cin >> userInput;
+            if (userInput < 0 || userInput > i)
+            {
+                cout << "Invalid input. Enter again." << endl;
+                continue;
+            }
+            break;
+        }
 
-        if (user_input >= 1 && user_input <= changeCount)
+        if (userInput >= 1 && userInput < i)
         {
-            chosen_change = change_list[user_input - 1]; // Assign chosen change
-            changeChosen = true;
+            chosen_change = change_list[i]; // Assign chosen change
+            break;
         }
-        else if (user_input == changeCount + 1 && changeCount == 20)
-        {
-            continue; // Refill the change list and display more changes
-        }
-        else if (user_input == 0) // Exit
+        else if (i == 0) // Exit
         {
             return;
-        }
-        else
-        {
-            cout << "Invalid selection. Please try again.\n";
         }
     }
 
@@ -1394,7 +1511,7 @@ void allRequestersReportControl()
     seekToBeginningOfChangeRequestFile();
 
     // Print header info
-    cout << "Here is the report: \n"
+    cout << endl << "Here is the report: " << endl
          << "Product: " << chosen_product.product_name << endl
          << "Change description: " << chosen_change.description << endl
          << "Change ID: " << chosen_change.change_ID << endl
