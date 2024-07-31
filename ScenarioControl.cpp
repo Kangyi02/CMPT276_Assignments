@@ -273,7 +273,7 @@ void formatRequesterName(const string &input_name, char *formatted_name)
     sscanf(input_name.c_str(), "%30[^,], %30[^\n]", last_name, first_name);
 
     // Ensure the total length is within 30 characters
-    snprintf(formatted_name, 31, "%s %s", first_name, last_name);
+    snprintf(formatted_name, 31, "%s %s", last_name, first_name);
 }
 
 // create requester control
@@ -337,8 +337,9 @@ void createRequester(Requester chosen_requester)
         {
             cout << "Enter the requester's department (max 12 chars): ";
             string department_input;
-            cin >> department_input;
-
+            cin.ignore(); // Clear the input buffer // ??
+            getline(cin, department_input);
+            
             if (department_input.length() > 12)
             {
                 cout << "Department name exceeds the maximum length of 12 characters. Please enter a valid department.\n";
@@ -1185,7 +1186,7 @@ void allChangesReportControl()
     while (true)
     {
         cout << "Change report for the product '" << chosen_product.product_name << "': \n";
-        cout << "Description                     "
+        cout << "   Description                     "
              << "Change ID   "
              << "State      "
              << "Priority     "
