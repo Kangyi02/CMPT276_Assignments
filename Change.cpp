@@ -58,7 +58,6 @@ bool initChange()
         ChangeFileStream.open("Change.bin", ios::out | ios::app | ios::binary);
 
         Change dummy;
-
         ChangeFileStream.write(reinterpret_cast<char*>(&dummy), sizeof(Change));
 
         ChangeFileStream.close();
@@ -111,12 +110,14 @@ bool addChange(Change* ch)
 {
     ChangeFileStream.clear();
 
-    int32_t id;
-    if(!getNextCID(&id))
+    ch->change_ID = getNextCID();
+
+    if(ch->change_ID == -1)
     {
         return false;
     }
-    ch->change_ID = id;
+
+    ChangeFileStream.seekp(0, ios::end); 
 
     if(ChangeFileStream.write(reinterpret_cast<char*>(ch), sizeof(Change)))
     {
@@ -199,18 +200,19 @@ bool filterNextChange_DoneOrCancelled(Change* ch, char* prod_name)
 // Get change ID for next change
 // Return the next available change ID
 // So you don't have to increment after calling this function.
-bool getNextCID(int32_t* id)
+int32_t getNextCID()
 {
     Change dummy;
     ChangeFileStream.seekg(0, ios::beg);
     if(ChangeFileStream.read(reinterpret_cast<char*>(&dummy), sizeof(Change)))
     {
-        id = &dummy.change_ID + 1;
+        cout << "in getnextcid" << dummy.change_ID;
+        int32_t id = dummy.change_ID + 1;
         dummy.change_ID += 1;
         ChangeFileStream.seekp(0, ios::beg); 
         ChangeFileStream.write(reinterpret_cast<char*>(&dummy), sizeof(Change));
         ChangeFileStream.seekp(sizeof(Change), ios::beg);
-        return true;
+        return id;
     }
-    return false;
+    return -1;
 }
