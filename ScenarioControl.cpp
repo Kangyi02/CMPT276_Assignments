@@ -20,6 +20,7 @@
 #include <cctype> // For isalpha
 #include <regex>  // For regex validation
 #include <limits> // For std::numeric_limits
+#include <set>
 
 using std::cin;
 using std::cout;
@@ -1415,14 +1416,20 @@ void allRequestersReportControl()
          << "State: " << chosen_change.status << "\n";
 
     int requestCount = 0;
+    std::set<std::string> uniqueRequesters; // Set to track unique requesters
 
     while (requestCount < 20 && filterNextChangeRequest(&temp5, chosen_change.change_ID))
     {
-        filterNextRequester(&temp4, temp5.requester_name); // Get the requester by name
-        requester_list[requestCount] = temp4;
-        cout << requestCount + 1 << ") Requester: " << temp4.requester_name << " "
-             << "Email: " << temp4.email << "\n";
-        requestCount++;
+        if (uniqueRequesters.find(temp5.requester_name) == uniqueRequesters.end())
+        {
+            // Only add and print if the requester is not already in the set
+            filterNextRequester(&temp4, temp5.requester_name); // Get the requester by name
+            requester_list[requestCount] = temp4;
+            cout << requestCount + 1 << ") Requester: " << temp4.requester_name << " "
+                 << "Email: " << temp4.email << "\n";
+            uniqueRequesters.insert(temp5.requester_name); // Add to the set
+            requestCount++;
+        }
     }
 
     if (requestCount == 20 && filterNextChangeRequest(&temp5, chosen_change.change_ID))
@@ -1452,6 +1459,7 @@ void allRequestersReportControl()
         cout << "Invalid selection. Please try again.\n";
     }
 }
+
 
 // Function to control the shutdown process
 void shutDownControl()
