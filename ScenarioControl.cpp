@@ -1280,7 +1280,7 @@ void allRequestersReportControl()
     {
         int changeCount = 0;
 
-        cout << "Change report for the product '" << chosen_product.product_name << "': \n";
+        cout << "   Change report for the product '" << chosen_product.product_name << "': \n";
         cout << "Description                     "
              << "Change ID   "
              << "State      "
@@ -1341,7 +1341,7 @@ void allRequestersReportControl()
         int releaseCount = 0;
 
         cout << "Select an anticipated release that you want to update to: \n";
-        cout << "Release ID    Release date\n";
+        cout << "   Release ID    Release date\n";
 
         while (releaseCount < 20 && filterNextRelease(&temp3, chosen_product.product_name))
         {
