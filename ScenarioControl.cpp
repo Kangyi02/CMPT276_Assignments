@@ -566,7 +566,7 @@ void createChangeRequestControl()
              << "Anticipated Release\n";
 
         cout << "1) " << temp2.description << createWhitespace(30 - strlen(temp2.description))
-             << temp2.change_ID << "           "
+             << temp2.change_ID << "      "
              << temp2.status << createWhitespace(11 - strlen(temp2.status))
              << temp2.priority << "            "
              << temp2.anticipated_release_ID << "\n";
@@ -578,7 +578,7 @@ void createChangeRequestControl()
             {
                 change_list[i] = temp2; // Add change to the list
                 cout << i + 1 << ") " << temp2.description << createWhitespace(30 - strlen(temp2.description))
-                     << temp2.change_ID << "           "
+                     << temp2.change_ID << "      "
                      << temp2.status << createWhitespace(11 - strlen(temp2.status))
                      << temp2.priority << "            "
                      << temp2.anticipated_release_ID << "\n";
@@ -817,7 +817,7 @@ void queryChangeControl()
 
     cout << chosen_product.product_name << createWhitespace(10 - strlen(chosen_product.product_name))
          << chosen_change.description << createWhitespace(32 - strlen(chosen_change.description))
-         << chosen_change.change_ID << "           "
+         << chosen_change.change_ID << "      "
          << chosen_change.status << createWhitespace(11 - strlen(chosen_change.status))
          << chosen_change.priority << "            "
          << chosen_change.anticipated_release_ID << createWhitespace(10 - strlen(chosen_change.anticipated_release_ID))
@@ -1108,7 +1108,7 @@ void updateChangeControl()
          << "Anticipated Release\n";
 
     cout << chosen_change.description << createWhitespace(32 - strlen(chosen_change.description))
-         << chosen_change.change_ID << "           "
+         << chosen_change.change_ID << "      "
          << chosen_change.status << createWhitespace(11 - strlen(chosen_change.status))
          << chosen_change.priority << "            "
          << chosen_change.anticipated_release_ID << createWhitespace(10 - strlen(chosen_change.anticipated_release_ID))

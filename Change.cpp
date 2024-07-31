@@ -159,7 +159,7 @@ bool updateChange(Change* ch)
             ChangeFileStream.write(reinterpret_cast<const char*>(&currentChange), sizeof(Change));
             if (!ChangeFileStream) 
             {
-            cerr << "Error writing to file." << endl;
+            cout << "Error writing to file." << endl;
             return false;
             }
             return true;
