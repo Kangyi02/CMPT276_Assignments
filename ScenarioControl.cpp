@@ -88,6 +88,8 @@ void createProductControl()
     }
 }
 
+// ---------------------------------------------------------------------------------------
+
 // Function to control the creation of a release done
 void createReleaseControl()
 {
@@ -200,58 +202,7 @@ void createReleaseControl()
     }
 }
 
-// Function to validate phone number format
-bool isValidPhoneNumber(const int *phone_number)
-{
-    if (phone_number[0] != 1)
-    {
-        return false;
-    }
-    for (size_t i = 1; i < 11; i++)
-    {
-        if (phone_number[i] < 0 || phone_number[i] > 9)
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-// Function to validate requester name length
-bool isValidRequesterNameLength(const string &name)
-{
-    return name.length() <= 30;
-}
-
-// Function to validate requester name format
-bool isValidRequesterName(const string &name)
-{
-    // Split the name into last name and first name
-    // size_t commaPos = name.find(',');
-    // if (commaPos == string::npos)
-    // {
-    //     return false; // No comma found
-    // }
-
-    // string lastName = name.substr(0, commaPos);
-    // string firstName = name.substr(commaPos + 2); // Skip ", "
-
-    // // Check if both names contain only alphabetic characters
-    // auto isAlphaOnly = [](const string &str) -> bool
-    // {
-    //     for (char c : str)
-    //     {
-    //         if (!isalpha(c))
-    //         {
-    //             return false;
-    //         }
-    //     }
-    //     return true;
-    // };
-
-    // return isAlphaOnly(lastName) && isAlphaOnly(firstName);
-    return true;
-}
+// --------------------------------------------------------------------------------------
 
 // Function to format the name from "Last name, First name" to "First name Last name"
 void formatRequesterName(const string &input_name, char *formatted_name)
@@ -263,8 +214,10 @@ void formatRequesterName(const string &input_name, char *formatted_name)
     sscanf(input_name.c_str(), "%30[^,], %30[^\n]", last_name, first_name);
 
     // Ensure the total length is within 30 characters
-    snprintf(formatted_name, 31, "%s %s", last_name, first_name);
+    snprintf(formatted_name, 31, "%s %s", first_name, last_name);
 }
+
+// --------------------------------------------------------------------------------------
 
 // create requester control
 void createRequester(Requester chosen_requester)
@@ -279,14 +232,9 @@ void createRequester(Requester chosen_requester)
         cin.ignore(); // Clear the input buffer // ??
         getline(cin, inputname);
 
-        if (!isValidRequesterNameLength(inputname))
+        if (inputname.length() > 31)
         {
             cout << "Requester name exceeds the maximum length of 30 characters. Please enter a valid name.\n";
-            continue;
-        }
-        if (!isValidRequesterName(inputname))
-        {
-            cout << "Requester name must be in the format 'Last name, First name' with both names containing only alphabetic characters. Please enter a valid name.\n";
             continue;
         }
 
@@ -335,10 +283,10 @@ void createRequester(Requester chosen_requester)
         {
             cout << "Enter the requester's department (max 12 chars): ";
             string department_input;
-            cin.ignore(); // Clear the input buffer // ??
+            cin.ignore(); // Clear the input buffer 
             getline(cin, department_input);
 
-            if (department_input.length() > 12)
+            if (department_input.length() > 13)
             {
                 cout << "Department name exceeds the maximum length of 12 characters. Please enter a valid department.\n";
                 continue;
@@ -350,13 +298,13 @@ void createRequester(Requester chosen_requester)
         }
     }
 
-
-
     if (addRequester(&chosen_requester))
     {
         cout << "The new requester has been successfully added.\n";
     }
 }
+
+// ---------------------------------------------------------------------------------------
 
 // Create change function
 void createChange(Product chosen_product, Change* chosen_change)
@@ -408,6 +356,8 @@ string createWhitespace(int length)
     }
     return spaces;
 }
+
+// --------------------------------------------------------------------------------------
 
 // Function to control the creation of a change request
 void createChangeRequestControl()
@@ -464,7 +414,6 @@ void createChangeRequestControl()
         }
 
         // Display options for more requesters or to create a new one
-
         if (i == 20 && getNextRequester(&temp))
             cout << i + 1 << ") Show more requesters\n";
 
@@ -702,6 +651,8 @@ void createChangeRequestControl()
         cout << "The new change request has been successfully created. \n";
 }
 
+// ---------------------------------------------------------------------------------------
+
 // Function to control the querying of a change
 void queryChangeControl()
 {
@@ -836,6 +787,8 @@ void queryChangeControl()
          << setw(9) << chosen_change.anticipated_release_ID
          << endl;
 }
+
+// ---------------------------------------------------------------------------------------
 
 // Update control
 void updateChangeControl()
@@ -1139,6 +1092,8 @@ void updateChangeControl()
          << endl;
 }
 
+// ---------------------------------------------------------------------------------------
+
 // Reports Control
 void allChangesReportControl()
 {
@@ -1256,6 +1211,8 @@ void allChangesReportControl()
         }
     }
 }
+
+// ---------------------------------------------------------------------------------------
 
 // Function to control the report generation for all requesters
 void allRequestersReportControl()
@@ -1488,6 +1445,8 @@ void allRequestersReportControl()
         cout << "Invalid selection. Please try again.\n";
     }
 }
+
+// ---------------------------------------------------------------------------------------
 
 // Function to control the shutdown process
 void shutDownControl()
