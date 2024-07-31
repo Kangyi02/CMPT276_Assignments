@@ -1399,21 +1399,24 @@ void allRequestersReportControl()
     {
         int changeCount = 0;
 
-        cout << "Change report for the product '" << chosen_product.product_name << "': \n";
-        cout << "Description                     "
-             << "Change ID   "
-             << "State      "
-             << "Priority     "
-             << "Anticipated Release\n";
+        cout << "   Change report for the product '" << chosen_product.product_name << "': " << endl;
+        cout << left << setw(34) << "   Description"
+             << setw(10) << "Change ID"
+             << setw(11) << "State"
+             << setw(9) << "Priority"
+             << setw(9) << "Anticipated Release"
+             << endl;
 
         while (changeCount < 20 && filterNextChange(&temp2, chosen_product.product_name))
         {
             change_list[changeCount] = temp2;
-            cout << changeCount + 1 << ") " << temp2.description << " "
-                 << temp2.change_ID << " "
-                 << temp2.status << " "
-                 << temp2.priority << " "
-                 << temp2.anticipated_release_ID << "\n";
+            cout << left << setw(3) << to_string(changeCount + 1) + ")" 
+                 << setw(31) << temp2.description 
+                 << setw(10) << temp2.change_ID 
+                 << setw(11) << temp2.status 
+                 << setw(9) << temp2.priority 
+                 << setw(9) << temp2.anticipated_release_ID
+                 << endl;  // Display change
             changeCount++;
         }
 
@@ -1459,14 +1462,17 @@ void allRequestersReportControl()
     {
         int releaseCount = 0;
 
-        cout << "Select an anticipated release that you want to update to: \n";
-        cout << "Release ID    Release date\n";
+        cout << "Select an anticipated release that you want to update to:" << endl 
+             << left << setw(14) << "   Release ID"
+             << setw(13) << "Release date" << endl;
 
         while (releaseCount < 20 && filterNextRelease(&temp3, chosen_product.product_name))
         {
             release_list[releaseCount] = temp3;
-            cout << releaseCount + 1 << ") " << temp3.release_ID << " "
-                 << temp3.release_date << "\n";
+            cout << setw(3) << to_string(releaseCount + 1) + ") " 
+                 << setw(11) << temp3.release_ID
+                 << setw(13) << temp3.release_date 
+                 << endl;
             releaseCount++;
         }
 
@@ -1530,8 +1536,11 @@ void allRequestersReportControl()
             // Only add and print if the requester is not already in the set
             filterNextRequester(&temp4, temp5.requester_name); // Get the requester by name
             requester_list[requestCount] = temp4;
-            cout << requestCount + 1 << ") Requester: " << temp4.requester_name << " "
-                 << "Email: " << temp4.email << "\n";
+            cout << left << setw(15) << to_string(requestCount + 1) + ") Requester: " 
+                 << setw(21) << temp4.requester_name
+                 << "Email: " 
+                 << setw(25) << temp4.email 
+                 << endl;
             uniqueRequesters.insert(temp5.requester_name); // Add to the set
             requestCount++;
         }
