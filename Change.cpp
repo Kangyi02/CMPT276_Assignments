@@ -16,7 +16,7 @@ fstream ChangeFileStream;
 
 Change::Change()
 {
-    change_ID = 0;
+    change_ID = 100000;
     priority = -1;
     status[0] = '\0';
     description[0] = '\0';
