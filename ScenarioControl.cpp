@@ -228,14 +228,14 @@ void createReleaseControl()
 // Function to format the name from "Last name, First name" to "First name Last name"
 void formatRequesterName(const string &input_name, char *formatted_name)
 {
-    char last_name[31];
-    char first_name[31];
+    char last_name[21];
+    char first_name[21];
 
     // Split the input_name into last_name and first_name
-    sscanf(input_name.c_str(), "%30[^,], %30[^\n]", last_name, first_name);
+    sscanf(input_name.c_str(), "%20[^,], %20[^\n]", last_name, first_name);
 
     // Ensure the total length is within 30 characters
-    snprintf(formatted_name, 31, "%s %s", first_name, last_name);
+    snprintf(formatted_name, 21, "%s %s", first_name, last_name);
 }
 
 // --------------------------------------------------------------------------------------
@@ -253,7 +253,7 @@ void createRequester(Requester chosen_requester)
         cin.ignore(); // Clear the input buffer // ??
         getline(cin, inputname);
 
-        if (inputname.length() > 31)
+        if (inputname.length() > 21)
         {
             cout << "Requester name exceeds the maximum length of 30 characters. Please enter a valid name." << endl;
             continue;
@@ -1353,15 +1353,15 @@ void allRequestersReportControl()
         while (productCount < 20 && getNextProduct(&temp1))
         {
             product_list[productCount] = temp1;                             // Store product in array
-            cout << productCount + 1 << ") " << temp1.product_name << endl; // Display product
+            cout << productCount + 1 << ") " << temp1.product_name << "\n"; // Display product
             productCount++;
         }
 
         if (productCount == 20 && getNextProduct(&temp1))
         {
-            cout << productCount + 1 << ") More" << endl;
+            cout << productCount + 1 << ") More\n";
         }
-        cout << "0) Exit" << endl;
+        cout << "0) Exit\n";
         cout << "Enter selection: ";
 
         int user_input;
@@ -1382,7 +1382,7 @@ void allRequestersReportControl()
         }
         else
         {
-            cout << "Invalid selection. Please try again." << endl;
+            cout << "Invalid selection. Please try again.\n";
         }
     }
 
@@ -1394,61 +1394,57 @@ void allRequestersReportControl()
     // Function to set file cursor to the beginning of the change file
     seekToBeginningOfChangeFile();
 
-    while (true)
+    bool changeChosen = false; // Flag to indicate if a change has been chosen
+    while (!changeChosen)
     {
-        int i = 1;
+        int changeCount = 0;
 
-        cout << "   Change report for the product '" << chosen_product.product_name << "': " << endl;
-        cout << left << setw(34) << "   Description"
-             << setw(10) << "Change ID"
-             << setw(11) << "State"
-             << setw(9) << "Priority"
-             << setw(9) << "Anticipated Release"
-             << endl;
+        cout << "Change report for the product '" << chosen_product.product_name << "': \n";
+        cout << "Description                     "
+             << "Change ID   "
+             << "State      "
+             << "Priority     "
+             << "Anticipated Release\n";
 
-        while (i < 20 && filterNextChange(&temp2, chosen_product.product_name))
+        while (changeCount < 20 && filterNextChange(&temp2, chosen_product.product_name))
         {
-            change_list[i] = temp2;
-            cout << left << setw(3) << to_string(i) + ")" 
-                 << setw(31) << temp2.description 
-                 << setw(10) << temp2.change_ID 
-                 << setw(11) << temp2.status 
-                 << setw(9) << temp2.priority 
-                 << setw(9) << temp2.anticipated_release_ID
-                 << endl;  // Display change
-            i++;
+            change_list[changeCount] = temp2;
+            cout << changeCount + 1 << ") " << temp2.description << " "
+                 << temp2.change_ID << " "
+                 << temp2.status << " "
+                 << temp2.priority << " "
+                 << temp2.anticipated_release_ID << "\n";
+            changeCount++;
         }
 
-        if (i == 20 && filterNextChange(&temp2, chosen_product.product_name))
+        if (changeCount == 20 && filterNextChange(&temp2, chosen_product.product_name))
         {
-            cout << i << ") More" << endl;
+            cout << changeCount + 1 << ") More\n";
         }
-        cout << "0) Exit" << endl;
+        cout << "0) Exit\n";
+        cout << "Enter selection: ";
 
-        int userInput;
-        while (true)
-        {
-            cout << "Enter selection: ";
-            cin >> userInput;
-            if (userInput < 0 || userInput > i)
-            {
-                cout << "Invalid input. Enter again." << endl;
-                continue;
-            }
-            break;
-        }
+        int user_input;
+        cin >> user_input; // User input for navigating changes
 
-        if (userInput >= 1 && userInput < i)
+        if (user_input >= 1 && user_input <= changeCount)
         {
-            chosen_change = change_list[i]; // Assign chosen change
-            break;
+            chosen_change = change_list[user_input - 1]; // Assign chosen change
+            changeChosen = true;
         }
-        else if (i == 0) // Exit
+        else if (user_input == changeCount + 1 && changeCount == 20)
+        {
+            continue; // Refill the change list and display more changes
+        }
+        else if (user_input == 0) // Exit
         {
             return;
         }
+        else
+        {
+            cout << "Invalid selection. Please try again.\n";
+        }
     }
-
 
     // Step 3: Get the releases
     Release release_list[20]; // Array to store release list
@@ -1463,29 +1459,22 @@ void allRequestersReportControl()
     {
         int releaseCount = 0;
 
-        cout << "Select an anticipated release that you want to update to:" << endl 
-             << left << setw(14) << "   Release ID"
-             << setw(13) << "Release date" << endl;
+        cout << "Select an anticipated release that you want to update to: \n";
+        cout << "Release ID    Release date\n";
 
         while (releaseCount < 20 && filterNextRelease(&temp3, chosen_product.product_name))
         {
             release_list[releaseCount] = temp3;
-            cout << setw(3) << to_string(releaseCount + 1) + ") " 
-                 << setw(11) << temp3.release_ID
-                 << setw(13) << temp3.release_date 
-                 << endl;
+            cout << releaseCount + 1 << ") " << temp3.release_ID << " "
+                 << temp3.release_date << "\n";
             releaseCount++;
         }
 
         if (releaseCount == 20 && filterNextRelease(&temp3, chosen_product.product_name))
         {
-            cout << releaseCount + 1 << ") More" << endl;
+            cout << releaseCount + 1 << ") More\n";
         }
         cout << "0) Exit\n";
-
-        // PROBLEM: Implement while(true) loop just like line 1427
-        // otherwise invalid input behave just like 'more'
-
         cout << "Enter selection: ";
 
         int user_input;
@@ -1524,12 +1513,12 @@ void allRequestersReportControl()
     seekToBeginningOfChangeRequestFile();
 
     // Print header info
-    cout << endl << "Here is the report: " << endl
-         << "Product: " << chosen_product.product_name << endl
-         << "Change description: " << chosen_change.description << endl
-         << "Change ID: " << chosen_change.change_ID << endl
-         << "Release ID: " << chosen_release.release_ID << endl
-         << "State: " << chosen_change.status << endl << endl;
+    cout << "Here is the report: \n"
+         << "Product: " << chosen_product.product_name << "\n"
+         << "Change description: " << chosen_change.description << "\n"
+         << "Change ID: " << chosen_change.change_ID << "\n"
+         << "Release ID: " << chosen_release.release_ID << "\n"
+         << "State: " << chosen_change.status << "\n";
 
     int requestCount = 0;
     std::set<std::string> uniqueRequesters; // Set to track unique requesters
@@ -1541,11 +1530,8 @@ void allRequestersReportControl()
             // Only add and print if the requester is not already in the set
             filterNextRequester(&temp4, temp5.requester_name); // Get the requester by name
             requester_list[requestCount] = temp4;
-            cout << left << setw(15) << to_string(requestCount + 1) + ") Requester: " 
-                 << setw(21) << temp4.requester_name
-                 << "Email: " 
-                 << setw(25) << temp4.email 
-                 << endl;
+            cout << requestCount + 1 << ") Requester: " << temp4.requester_name << " "
+                 << "Email: " << temp4.email << "\n";
             uniqueRequesters.insert(temp5.requester_name); // Add to the set
             requestCount++;
         }
@@ -1553,11 +1539,9 @@ void allRequestersReportControl()
 
     if (requestCount == 20 && filterNextChangeRequest(&temp5, chosen_change.change_ID))
     {
-        cout << requestCount + 1 << ") More" << endl;
+        cout << requestCount + 1 << ") More\n";
     }
-    cout << "0) Exit" << endl;
-
-    // PROBLEM: same problem as above, while(true) is needed
+    cout << "0) Exit\n";
     cout << "Enter selection: ";
 
     int user_input;
