@@ -346,7 +346,7 @@ void createRequester(Requester chosen_requester)
     }
 
 
-    
+
     if (addRequester(&chosen_requester))
     {
         cout << "The new requester has been successfully added.\n";
@@ -354,7 +354,7 @@ void createRequester(Requester chosen_requester)
 }
 
 // Create change function
-void createChange(Product chosen_product, Change chosen_change)
+void createChange(Product chosen_product, Change* chosen_change)
 {
     // Prompt user to create a new change
     while (true)
@@ -371,26 +371,26 @@ void createChange(Product chosen_product, Change chosen_change)
             continue;
         }
 
-        temp_description.copy(chosen_change.description, temp_description.length());
-        chosen_change.description[temp_description.length()] = '\0';
+        temp_description.copy(chosen_change->description, temp_description.length());
+        chosen_change->description[temp_description.length()] = '\0';
         break;
     }
 
     // we set the priority here
-    chosen_change.priority = 0; // if 0 print out N/A
+    chosen_change->priority = 0; // if 0 print out N/A
     string status_reported = "Reported";
-    status_reported.copy(chosen_change.status, status_reported.length());
-    chosen_change.status[status_reported.length()] = '\0';
+    status_reported.copy(chosen_change->status, status_reported.length());
+    chosen_change->status[status_reported.length()] = '\0';
 
-    strcpy(chosen_change.product_name, chosen_product.product_name);
+    strcpy(chosen_change->product_name, chosen_product.product_name);
     string tempRelease_ID = "None";
-    chosen_change.anticipated_release_ID[tempRelease_ID.length()] = '\0';
+    chosen_change->anticipated_release_ID[tempRelease_ID.length()] = '\0';
 
-    tempRelease_ID.copy(chosen_change.anticipated_release_ID, tempRelease_ID.length());
+    tempRelease_ID.copy(chosen_change->anticipated_release_ID, tempRelease_ID.length());
     // cout << "checking if the release id is correct" << tempRelease_ID << endl; // delete
 
     // Add to file
-    if (addChange(&chosen_change))
+    if (addChange(chosen_change))
         cout << "The new change has been successfully added. \n";
 }
 
@@ -550,7 +550,7 @@ void createChangeRequestControl()
     if (getChangeFlag == false)
     {
         cout << "There is no change corresponding to this product.\n";
-        createChange(chosen_product, chosen_change);
+        createChange(chosen_product, &chosen_change);
         //chosen_change.change_ID = 100000;
     }
 
@@ -608,7 +608,7 @@ void createChangeRequestControl()
         }
         else if (user_input == 0)
         {
-            createChange(chosen_product, chosen_change);
+            createChange(chosen_product, &chosen_change);
             chosen_change.change_ID = temp2.change_ID++;
         }
     }
