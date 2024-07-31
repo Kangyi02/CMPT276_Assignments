@@ -147,7 +147,7 @@ bool updateChange(Change* ch)
 {
     Change currentChange;
     ChangeFileStream.clear();
-    ChangeFileStream.seekg(1, ios::beg); // set g to the beginning skipping dummy
+    seekToBeginningOfChangeFile(); // set g to the beginning skipping dummy
     int position = 1; // counter for offset
     // loop until reach the end of file
     while(ChangeFileStream.read(reinterpret_cast<char*>(&currentChange), sizeof(Change)))
@@ -159,7 +159,7 @@ bool updateChange(Change* ch)
             ChangeFileStream.write(reinterpret_cast<const char*>(&currentChange), sizeof(Change));
             if (!ChangeFileStream) 
             {
-            cerr << "Error writing to file." << endl;
+            cout << "Error writing to file." << endl;
             return false;
             }
             return true;
