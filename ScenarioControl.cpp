@@ -159,9 +159,10 @@ void createReleaseControl()
 
     char release_ID[9]; // Adjusted size to account for null-terminator
     string tempReleaseID;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     while (true)
     {
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "Enter a release ID for the new release (max 8 chars): ";
         getline(cin, tempReleaseID);
         if (tempReleaseID.length() <= 8)
@@ -246,10 +247,10 @@ void createRequester(Requester chosen_requester)
     // Prompt user to create a new requester
     cout << "Creating a new requester:" << endl;
     string inputname;
-
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     while (true)
     {
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "Enter requester's name ('Last name, First name', max 30 chars): ";
         getline(cin, inputname);
 
@@ -302,10 +303,11 @@ void createRequester(Requester chosen_requester)
         cin >> userInput;
 
         if (userInput == "y" || userInput == "Y")
-        {
+        {   
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             while (true)
             {
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cout << "Enter the requester's department (max 12 chars): ";
                 string department_input;
                 getline(cin, department_input);
@@ -351,9 +353,10 @@ void createChange(Product chosen_product, Change* chosen_change)
 {
     // Prompt user to create a new change
     string temp_description;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     while (true)
     {
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "Enter the description of the new change (max 30 chars): ";
         getline(cin, temp_description);
 
@@ -1045,10 +1048,10 @@ void updateChangeControl()
             cout << "Old description is: "
                  << chosen_change.description
                  << endl;
-
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             while (true)
             {
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cout << "New description is: ";
                 getline(cin, tempDescription);
                 if (tempDescription.length() > 30)
