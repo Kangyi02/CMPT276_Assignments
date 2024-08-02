@@ -156,13 +156,15 @@ void createReleaseControl()
             return; // Return to the main menu if user cancels
         } // Go back to the top if i+1) more
     }
-
-    char release_ID[9]; // Adjusted size to account for null-terminator
+    char release_ID[9]; 
     string tempReleaseID;
+
     while (true)
     {
+       // Adjusted size to account for null-terminator
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
         cout << "Enter a release ID for the new release (max 8 chars): ";
-        cin.ignore(); // Clear the input buffer // ??
         getline(cin, tempReleaseID);
         if (tempReleaseID.length() <= 8)
         {
@@ -175,7 +177,7 @@ void createReleaseControl()
     }
     // Copy the string to the fixed-size character array
     tempReleaseID.copy(release_ID, tempReleaseID.length());
-    release_ID[tempReleaseID.length()] = '\0';
+            release_ID[tempReleaseID.length()] = '\0';
 
     char release_date[11];
     string tempDate;
@@ -246,22 +248,23 @@ void createRequester(Requester chosen_requester)
     // Prompt user to create a new requester
     cout << "Creating a new requester:" << endl;
     string inputname;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     while (true)
     {
         cout << "Enter requester's name ('Last name, First name', max 30 chars): ";
-        cin.ignore(); // Clear the input buffer // ??
         getline(cin, inputname);
 
-        if (inputname.length() > 21)
+        if (inputname.length() <= 31)
         {
-            cout << "Requester name exceeds the maximum length of 30 characters. Please enter a valid name." << endl;
-            continue;
+            break;
         }
-
-        formatRequesterName(inputname, chosen_requester.requester_name);
-        break;
+        else
+        {
+            cout << "Requester name exceeds the maximum length of 30 characters. Please enter again." << endl;
+        }
     }
+    formatRequesterName(inputname, chosen_requester.requester_name);
 
     while (true)
     {
@@ -305,9 +308,9 @@ void createRequester(Requester chosen_requester)
         {
             while (true)
             {
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cout << "Enter the requester's department (max 12 chars): ";
                 string department_input;
-                cin.ignore(); // Clear the input buffer 
                 getline(cin, department_input);
 
                 if (department_input.length() > 13)
@@ -353,8 +356,8 @@ void createChange(Product chosen_product, Change* chosen_change)
     string temp_description;
     while (true)
     {
-        cout << "Enter the description of the new change (max 30 chars): ";
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cout << "Enter the description of the new change (max 30 chars): ";
         getline(cin, temp_description);
 
         // description length check
@@ -516,7 +519,7 @@ void createChangeRequestControl()
         if (i == 20 && getNextProduct(&temp1))
             cout << i + 1 << ") More" << endl;
 
-        cout << "0)  Exit" << endl;
+        cout << "0) Exit" << endl;
 
         int userInput;
         while (true)
@@ -1048,8 +1051,8 @@ void updateChangeControl()
 
             while (true)
             {
-                cout << "New description is: ";
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                cout << "New description is: ";
                 getline(cin, tempDescription);
                 if (tempDescription.length() > 30)
                 {
