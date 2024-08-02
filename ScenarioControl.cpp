@@ -502,7 +502,7 @@ void createChangeRequestControl()
     {
         product_list[0] = temp1;
         cout << "Select a product that corresponds to this change request:" << endl
-             << "     Product    " << endl
+             << "    Product    " << endl
              << " 1) " << temp1.product_name << endl;
 
         int i;
@@ -751,7 +751,7 @@ void queryChangeControl()
     {
         product_list[0] = temp1;
         cout << "Select a product:" << endl;
-        cout << " 1) " << temp1.product_name << endl;
+        cout << right << setw(4) << to_string(1) + ") " << left<< temp1.product_name << endl;
 
         int i;
         for (i = 1; i < 20; i++)
@@ -767,7 +767,7 @@ void queryChangeControl()
         // Display options for more products or exit
         if (i == 20 && getNextProduct(&temp1))
             cout << i + 1 << ") More" << endl;
-        cout << " 0) Exit" << endl;
+        cout << right << setw(4) << to_string(0) + ") " << left <<  "Exit" << endl;
 
         int userInput;
         while (true)
@@ -820,7 +820,7 @@ void queryChangeControl()
              << setw(10) << "Change ID"
              << endl;
 
-        cout << right << setw(4) << "1) " 
+        cout << right << setw(3) << "1)  " 
             << left
             << setw(31) << temp2.description 
             << setw(10) << temp2.change_ID
@@ -844,7 +844,7 @@ void queryChangeControl()
         // Display options for more changes or exit
         if (i == 20 && filterNextChange(&temp2, chosen_product.product_name))
             cout << i + 1 << ") More" << endl;
-        cout << " 0) Exit" << endl;
+        cout << "0)  Exit" << endl;
         int userInput;
 
         cout << "Enter selection: ";
@@ -1339,7 +1339,7 @@ void allChangesReportControl()
             cout << i + 1 << ") More\n";
         }
 
-        cout << " 0) Exit\n";
+        cout << "0)  Exit\n";
 
         cout << "Enter selection: ";
         int userInput;
@@ -1347,8 +1347,6 @@ void allChangesReportControl()
 
         if (userInput == 0) // Exit
             return;
-        // else if (userInput == changeCount + 1 && changeCount == 20)
-        // continue; // Display more changes if selected
     }
 }
 
@@ -1624,7 +1622,7 @@ void allRequestersReportControl()
             }
         }
 
-        if (filterNextChangeRequest(&temp5, chosen_change.change_ID))
+        if (filterNextChangeRequest(&temp5, chosen_change.change_ID) && filterNextRequester(&temp4, temp5.requester_name))
             cout << i + 1 << ") More\n";
         cout << "0) Exit" << endl;
 
