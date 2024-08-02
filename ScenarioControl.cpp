@@ -138,7 +138,7 @@ void createReleaseControl()
             cout << "Enter selection: ";
             cin >> userInput;
 
-            if (userInput < 0 || userInput > i)
+            if (userInput < 0 || userInput > i + 1)
             {
                 cout << "Invalid input. Enter again." << endl;
                 continue;
@@ -456,29 +456,29 @@ void createChangeRequestControl()
         cout << " 0) Create a new requester" << endl;
 
         int userInput;
+
         while (true)
         {
             cout << "Enter selection: ";
-            cin >> userInput; // Get user input for selection
-
-            if (userInput >0 && userInput < i + 1)
-            {
-                chosen_requester = requester_list[userInput - 1]; // Select the chosen requester
-                break;
-            }
-            else if (userInput == 0)
-            {
-                createRequester(chosen_requester);
-                break;
-            }
-            else
+            cin >> userInput; // Get user input for selection    
+            if (userInput < 0 || userInput > i + 1)
             {
                 cout << "Invalid input. Enter again." << endl;
                 continue;
-            }
+            }       
             break;
         }
-        break;
+
+        if (userInput >0 && userInput < i + 1)
+        {
+            chosen_requester = requester_list[userInput - 1]; // Select the chosen requester
+            break;
+        }
+        else if (userInput == 0)
+        {
+            createRequester(chosen_requester);
+            break;
+        }
     }
 
     // Move the file pointer to the beginning of the product file
@@ -995,7 +995,7 @@ void updateChangeControl()
             if (filterNextChange(&temp2, chosen_product.product_name))
             {
                 change_list[i] = temp2; // Store change in array
-                cout << right << setw(4) << to_string(i + 1) + ")"
+                cout << right << setw(4) << to_string(i + 1) + ") "
                      << left 
                      << setw(31) << temp2.description 
                      << setw(10) << temp2.change_ID 
@@ -1012,9 +1012,6 @@ void updateChangeControl()
             cout << i + 1 << ") More\n";
         cout << " 0) Exit\n";
         int userInput;
-
-        cout << "Enter selection: ";
-        cin >> userInput;
 
         cout << "Enter selection: ";
         cin >> userInput;
