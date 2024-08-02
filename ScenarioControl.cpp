@@ -1377,8 +1377,8 @@ void allRequestersReportControl()
     {
         product_list[0] = temp1;
         cout << "Select a product:" << endl;
-        cout << "   Product\n";
-        cout << "1) " << temp1.product_name << endl;
+        cout << "    Product\n";
+        cout << " 1) " << temp1.product_name << endl;
 
         int i;
         for (i = 1; i < 20; i++)
@@ -1386,7 +1386,7 @@ void allRequestersReportControl()
             if (getNextProduct(&temp1))
             {
                 product_list[i] = temp1; // Add product to the list
-                cout << i + 1 << ") " << temp1.product_name << endl;
+                cout << right << setw(4) << to_string(i + 1) +  ") " << left << temp1.product_name << endl;
             }
             else
                 break; // Exit loop if no more products
@@ -1394,7 +1394,7 @@ void allRequestersReportControl()
         // Display options for more products or exit
         if (i == 20 && getNextProduct(&temp1))
             cout << i + 1 << ") More" << endl;
-        cout << "0) Exit" << endl;
+        cout << " 0) Exit" << endl;
 
         int userInput;
         while (true)
@@ -1442,14 +1442,14 @@ void allRequestersReportControl()
     {
         change_list[0] = temp2;
         cout << "Change report for the product '" << chosen_product.product_name << "': " << endl;
-        cout << left << setw(34) << "   Description"
+        cout << left << setw(35) << "    Description"
              << setw(10) << "Change ID"
              << setw(11) << "State"
              << setw(9) << "Priority"
              << setw(9) << "Anticipated Release"
              << endl;
 
-        cout << left << setw(3) << to_string(1) + ")"
+        cout << left << " 1) "
                  << setw(31) << temp2.description
                  << setw(10) << temp2.change_ID
                  << setw(11) << temp2.status
@@ -1464,7 +1464,7 @@ void allRequestersReportControl()
             if (filterNextChange(&temp2, chosen_product.product_name))
             {
             change_list[i] = temp2;
-            cout << left << setw(3) << to_string(i + 1) + ")"
+            cout << left << setw(4) << to_string(i + 1) + ") "
                  << setw(31) << temp2.description
                  << setw(10) << temp2.change_ID
                  << setw(11) << temp2.status
@@ -1523,10 +1523,10 @@ void allRequestersReportControl()
 
         release_list[0] = temp3;
         cout << "Select a reported release that corresponds to this change request:" << endl
-             << left << setw(14) << "   Release ID"
-             << setw(13) << "Release date" << endl;
+             << left << setw(14) << "    Release ID"
+             << setw(13) << " Release date" << endl;
 
-        cout << "1) "
+        cout << " 1) "
              << setw(11) << temp3.release_ID
              << setw(13) << temp3.release_date
              << endl;
@@ -1537,7 +1537,8 @@ void allRequestersReportControl()
             if (filterNextRelease(&temp3, chosen_product.product_name))
             {
                 release_list[i] = temp3; // Add release to the list
-                cout << left << setw(3) << to_string(i + 1) + ")"
+                cout << right << setw(4) << to_string(i + 1) + ") "
+                     << left
                      << setw(11) << temp3.release_ID
                      << setw(13) << temp3.release_date
                      << endl;
@@ -1552,7 +1553,7 @@ void allRequestersReportControl()
         if (i == 20 && filterNextRelease(&temp3, chosen_product.product_name))
             cout << i + 1 << ") More" << endl;
 
-        cout << "0) Exit" << endl;
+        cout << " 0) Exit" << endl;
 
         cout << "Enter selection: ";
         int user_input;
@@ -1594,11 +1595,11 @@ void allRequestersReportControl()
     while (changeRequestFlag)
     {
         int i;
-        cout << "   Requester     " << "Email\n";
+        cout << "    Requester                      Email" << endl;
 
         filterNextRequester(&temp4, temp5.requester_name);
         requester_list[0] = temp4;
-        cout << "1) " << temp4.requester_name << temp4.email << endl;
+        cout << " 1) " << left << setw(31) <<  temp4.requester_name << setw(25) << temp4.email << endl;
 
         for (i = 1; i < 20; i++)
         {
@@ -1609,7 +1610,8 @@ void allRequestersReportControl()
                 {
                     requester_list[i] = temp4;
                     // Display each requester
-                    cout << i + 1 << ") " << temp4.requester_name << "     " << temp4.email << endl;
+                    cout << right << setw(4) << to_string(i + 1) + ") " << left << setw(31) << temp4.requester_name 
+                         << setw(25) << temp4.email << endl;
                 }
                 else
                 {
@@ -1624,9 +1626,9 @@ void allRequestersReportControl()
             }
         }
 
-        if (filterNextChangeRequest(&temp5, chosen_change.change_ID))
+        if (filterNextChangeRequest(&temp5, chosen_change.change_ID) && filterNextRequester(&temp4, temp5.requester_name))
             cout << i + 1 << ") More\n";
-        cout << "0) Exit" << endl;
+        cout << " 0) Exit" << endl;
 
         cout << "Enter selection: ";
         int user_input;
