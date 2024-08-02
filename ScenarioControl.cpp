@@ -850,6 +850,9 @@ void queryChangeControl()
         cout << "Enter selection: ";
         cin >> userInput;
 
+        cout << "Enter selection: ";
+        cin >> userInput;
+
         // Check if user input is within valid range
         if (userInput >= 1 && userInput < i + 1)
         {
@@ -1009,6 +1012,9 @@ void updateChangeControl()
             cout << i + 1 << ") More\n";
         cout << " 0) Exit\n";
         int userInput;
+
+        cout << "Enter selection: ";
+        cin >> userInput;
 
         cout << "Enter selection: ";
         cin >> userInput;
