@@ -846,17 +846,9 @@ void queryChangeControl()
             cout << i + 1 << ") More" << endl;
         cout << " 0) Exit" << endl;
         int userInput;
-        while (true)
-        {
-            cout << "Enter selection: ";
-            cin >> userInput;
-            if (userInput < 0 || userInput > i + 1)
-            {
-                cout << "Invalid input. Enter again." << endl;
-                continue;
-            }
-            break;
-        }
+
+        cout << "Enter selection: ";
+        cin >> userInput;
 
         // Check if user input is within valid range
         if (userInput >= 1 && userInput < i + 1)
@@ -1017,17 +1009,9 @@ void updateChangeControl()
             cout << i + 1 << ") More\n";
         cout << " 0) Exit\n";
         int userInput;
-        while (true)
-        {
-            cout << "Enter selection: ";
-            cin >> userInput;
-            if (userInput < 0 || userInput > i + 1)
-            {
-                cout << "Invalid input. Enter again." << endl;
-                continue;
-            }
-            break;
-        }
+
+        cout << "Enter selection: ";
+        cin >> userInput;
 
         if (userInput >= 1 && userInput < i + 1) // Check for valid selection
         {
@@ -1284,10 +1268,7 @@ void allChangesReportControl()
         {
             return;
         }
-        else
-        {
-            cout << "Invalid selection. Please try again.\n";
-        }
+
     }
 
     // Step 2: Get the changes
@@ -1334,18 +1315,9 @@ void allChangesReportControl()
 
         cout << " 0) Exit\n";
 
+        cout << "Enter selection: ";
         int userInput;
-        while (true)
-        {
-            cout << "Enter selection: ";
-            cin >> userInput;
-            if (userInput != 0 && userInput != changeCount + 1)
-            {
-                cout << "Invalid input. Enter again." << endl;
-                continue;
-            }
-            break;
-        }
+        cin >> userInput;
 
         if (userInput == 0) // Exit
             return;
