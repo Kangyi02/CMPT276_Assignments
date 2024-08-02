@@ -1158,61 +1158,68 @@ void updateChangeControl()
 // Reports Control
 void allChangesReportControl()
 {
+    // Function to set file cursor to the beginning of the product file
+    seekToBeginningOfProductFile();
+
     // Step 1: Get the product
     Product product_list[20]; // Array to store product list
     Product temp1;            // Temporary product object
     Product chosen_product;   // Chosen product object
 
-    while (true)
+    bool getProductFlag = getNextProduct(&temp1);
+    if (!getProductFlag)
     {
-        // Function to set file cursor to the beginning of the product file
-        seekToBeginningOfProductFile();
+        cout << "No product found. Returning to the main menu\n";
+        return;
+    }
 
-        bool getProductFlag = getNextProduct(&temp1);
-        if (!getProductFlag)
+    while (getProductFlag)
+    {
+        product_list[0] = temp1;
+        cout << "Select a product:" << endl;
+        cout << "1) " << temp1.product_name << endl;
+
+        int i;
+        for (i = 1; i < 20; i++)
         {
-            cout << "No products available. Exiting...\n";
-            return;
+            if (getNextProduct(&temp1))
+            {
+                product_list[i] = temp1; // Add product to the list
+                cout << i + 1 << ") " << temp1.product_name << endl;
+            }
+            else
+                break; // Exit loop if no more products
         }
+        // Display options for more products or exit
+        if (i == 20 && getNextProduct(&temp1))
+            cout << i + 1 << ") More" << endl;
+        cout << "0) Exit" << endl;
 
-        cout << "Select a product to print its report:"
-             << endl
-             << "   Product" << endl;
-
-        int productCount = 0;
-        while (getProductFlag && productCount < 20)
+        int userInput;
+        while (true)
         {
-            product_list[productCount] = temp1;
-            cout << productCount + 1 << ") " << temp1.product_name << endl; // Display product
-            productCount++;
-            getProductFlag = getNextProduct(&temp1);
-        }
+            cout << "Enter selection: ";
+            cin >> userInput; // Get user input for selection
 
-        if (productCount == 20 && getProductFlag)
-        {
-            cout << productCount + 1 << ") More\n";
-        }
-
-        cout << "0) Exit\n";
-        cout << "Enter selection: ";
-
-        int user_input;
-        cin >> user_input; // User input for product selection
-
-        if (user_input >= 1 && user_input <= productCount)
-        {
-            chosen_product = product_list[user_input - 1]; // Assign chosen product
+            if (userInput < 0 || userInput > i + 1)
+            {
+                cout << "Invalid input. Enter again." << endl;
+                continue;
+            }
             break;
         }
-        else if (user_input == productCount + 1 && productCount == 20)
-        {
-            continue; // Display the next set of products if "More" is selected
-        }
-        else if (user_input == 0) // Exit
-        {
-            return;
-        }
 
+        // Do operations according to the user input
+        if (userInput >= 1 && userInput < i + 1)
+        {
+            chosen_product = product_list[userInput - 1]; // Select the chosen product
+            break;
+        }
+        else if (userInput == 0)
+        {
+            getProductFlag = false;
+            return; // Return if user chooses to exit
+        }
     }
 
     // Step 2: Get the changes
@@ -1229,8 +1236,10 @@ void allChangesReportControl()
         return;
     }
 
-    while (true)
+    while (getChangeFlag)
     {
+        change_list[0] = temp2;
+
         cout << "Change report for the product '" << chosen_product.product_name << "': \n";
         cout << left << setw(34) << "   Description"
              << setw(10) << "Change ID"
@@ -1238,23 +1247,39 @@ void allChangesReportControl()
              << setw(9) << "Priority"
              << setw(9) << "Anticipated Release" << endl;
 
-        int changeCount = 0;
-        while (getChangeFlag && changeCount < 20)
+        cout << left << setw(3) << to_string(1) + ")"
+             << setw(31) << temp2.description
+             << setw(10) << temp2.change_ID
+             << setw(11) << temp2.status
+             << setw(9) << temp2.priority
+             << setw(9) << temp2.anticipated_release_ID << endl;
+
+        // int changeCount = 0;
+        int i;
+        for (i = 1; i < 20; i++)
         {
-            change_list[changeCount] = temp2;
-            cout << left << setw(3) << to_string(changeCount + 1) + ")"
-                 << setw(31) << temp2.description
-                 << setw(10) << temp2.change_ID
-                 << setw(11) << temp2.status
-                 << setw(9) << temp2.priority
-                 << setw(9) << temp2.anticipated_release_ID << endl;
-            changeCount++;
-            getChangeFlag = filterNextChange_DoneOrCancelled(&temp2, chosen_product.product_name);
+            if (filterNextChange_DoneOrCancelled(&temp2, chosen_product.product_name))
+            {
+                change_list[i] = temp2;
+                cout << left << setw(3) << to_string(i + 1) + ")"
+                     << setw(31) << temp2.description
+                     << setw(10) << temp2.change_ID
+                     << setw(11) << temp2.status
+                     << setw(9) << temp2.priority
+                     << setw(9) << temp2.anticipated_release_ID << endl;
+                // changeCount++;
+                getChangeFlag = filterNextChange_DoneOrCancelled(&temp2, chosen_product.product_name);
+            }
+            else
+            {
+                getChangeFlag = false;
+                break;
+            }
         }
 
-        if (changeCount == 20 && getChangeFlag)
+        if (i == 20 && filterNextChange_DoneOrCancelled(&temp2, chosen_product.product_name))
         {
-            cout << changeCount + 1 << ") More\n";
+            cout << i + 1 << ") More\n";
         }
 
         cout << "0) Exit\n";
@@ -1265,8 +1290,8 @@ void allChangesReportControl()
 
         if (userInput == 0) // Exit
             return;
-        else if (userInput == changeCount + 1 && changeCount == 20)
-            continue; // Display more changes if selected
+        // else if (userInput == changeCount + 1 && changeCount == 20)
+        // continue; // Display more changes if selected
     }
 }
 
@@ -1275,55 +1300,69 @@ void allChangesReportControl()
 // Function to control the report generation for all requesters
 void allRequestersReportControl()
 {
-    // Step 1: Get the product
-    Product product_list[20]; // Array to store product list
-    Product temp1;            // Temporary product object
-    Product chosen_product;   // Chosen product object
-
-    // Function to set file cursor to the beginning of the product file
+    // Move the file pointer to the beginning of the product file
     seekToBeginningOfProductFile();
 
-    bool productChosen = false; // Flag to indicate if a product has been chosen
-    while (!productChosen)
+    // Array to store a list of products
+    Product product_list[20];
+    Product temp1;          // Temporary product pointer
+    Product chosen_product; // Chosen product pointer
+
+    // Loop to display product list and select a product
+    bool getProductFlag = getNextProduct(&temp1);
+    if (getProductFlag == false)
     {
-        int productCount = 0;
-        cout << "Select a product to print its report:"
-             << endl
-             << "   Product" << endl;
+        cout << "No product found. Returning to the main menu" << endl;
+        return;
+    }
 
-        while (productCount < 20 && getNextProduct(&temp1))
+    while (getProductFlag)
+    {
+        product_list[0] = temp1;
+        cout << "Select a product:" << endl;
+        cout << "   Product\n";
+        cout << "1) " << temp1.product_name << endl;
+
+        int i;
+        for (i = 1; i < 20; i++)
         {
-            product_list[productCount] = temp1;                             // Store product in array
-            cout << productCount + 1 << ") " << temp1.product_name << "\n"; // Display product
-            productCount++;
+            if (getNextProduct(&temp1))
+            {
+                product_list[i] = temp1; // Add product to the list
+                cout << i + 1 << ") " << temp1.product_name << endl;
+            }
+            else
+                break; // Exit loop if no more products
+        }
+        // Display options for more products or exit
+        if (i == 20 && getNextProduct(&temp1))
+            cout << i + 1 << ") More" << endl;
+        cout << "0) Exit" << endl;
+
+        int userInput;
+        while (true)
+        {
+            cout << "Enter selection: ";
+            cin >> userInput; // Get user input for selection
+
+            if (userInput < 0 || userInput > i + 1)
+            {
+                cout << "Invalid input. Enter again." << endl;
+                continue;
+            }
+            break;
         }
 
-        if (productCount == 20 && getNextProduct(&temp1))
+        // Do operations according to the user input
+        if (userInput >= 1 && userInput < i + 1)
         {
-            cout << productCount + 1 << ") More\n";
+            chosen_product = product_list[userInput - 1]; // Select the chosen product
+            break;
         }
-        cout << "0) Exit\n";
-        cout << "Enter selection: ";
-
-        int user_input;
-        cin >> user_input; // User input for product selection
-
-        if (user_input >= 1 && user_input <= productCount)
+        else if (userInput == 0)
         {
-            chosen_product = product_list[user_input - 1]; // Assign chosen product
-            productChosen = true;
-        }
-        else if (user_input == productCount + 1 && productCount == 20)
-        {
-            continue; // Refill the product list and display more products
-        }
-        else if (user_input == 0) // Exit
-        {
-            return;
-        }
-        else
-        {
-            cout << "Invalid selection. Please try again.\n";
+            getProductFlag = false;
+            return; // Return if user chooses to exit
         }
     }
 
@@ -1335,11 +1374,16 @@ void allRequestersReportControl()
     // Function to set file cursor to the beginning of the change file
     seekToBeginningOfChangeFile();
 
-    bool changeChosen = false; // Flag to indicate if a change has been chosen
-    while (!changeChosen)
+    bool getChangeFlag = filterNextChange(&temp2, chosen_product.product_name);
+    if (getChangeFlag == false)
     {
-        int changeCount = 0;
+        cout << "No change related to '" << chosen_product.product_name << "' found. Returning to the main menu" << endl;
+        return;
+    }
 
+    while (getChangeFlag)
+    {
+        change_list[0] = temp2;
         cout << "Change report for the product '" << chosen_product.product_name << "': " << endl;
         cout << left << setw(34) << "   Description"
              << setw(10) << "Change ID"
@@ -1348,22 +1392,39 @@ void allRequestersReportControl()
              << setw(9) << "Anticipated Release"
              << endl;
 
-        while (changeCount < 20 && filterNextChange(&temp2, chosen_product.product_name))
-        {
-            change_list[changeCount] = temp2;
-            cout << left << setw(3) << to_string(changeCount + 1) + ")"
+        cout << left << setw(3) << to_string(1) + ")"
                  << setw(31) << temp2.description
                  << setw(10) << temp2.change_ID
                  << setw(11) << temp2.status
                  << setw(9) << temp2.priority
                  << setw(9) << temp2.anticipated_release_ID
                  << endl; // Display change
-            changeCount++;
+
+        int i;
+        for (i = 1; i < 20; i++)        
+        {
+
+            if (filterNextChange(&temp2, chosen_product.product_name))
+            {
+            change_list[i] = temp2;
+            cout << left << setw(3) << to_string(i + 1) + ")"
+                 << setw(31) << temp2.description
+                 << setw(10) << temp2.change_ID
+                 << setw(11) << temp2.status
+                 << setw(9) << temp2.priority
+                 << setw(9) << temp2.anticipated_release_ID
+                 << endl; // Display change
+            }
+            else
+            {
+                getChangeFlag = false;
+                break;
+            }
         }
 
-        if (changeCount == 20 && filterNextChange(&temp2, chosen_product.product_name))
+        if (i == 20 && filterNextChange(&temp2, chosen_product.product_name))
         {
-            cout << changeCount + 1 << ") More\n";
+            cout << i + 1 << ") More\n";
         }
         cout << "0) Exit\n";
         cout << "Enter selection: ";
@@ -1371,23 +1432,16 @@ void allRequestersReportControl()
         int user_input;
         cin >> user_input; // User input for navigating changes
 
-        if (user_input >= 1 && user_input <= changeCount)
+        if (user_input >= 1 && user_input <= i)
         {
             chosen_change = change_list[user_input - 1]; // Assign chosen change
-            changeChosen = true;
-        }
-        else if (user_input == changeCount + 1 && changeCount == 20)
-        {
-            continue; // Refill the change list and display more changes
+            break;
         }
         else if (user_input == 0) // Exit
         {
             return;
         }
-        else
-        {
-            cout << "Invalid selection. Please try again.\n";
-        }
+
     }
 
     // Step 3: Get the releases
@@ -1398,52 +1452,63 @@ void allRequestersReportControl()
     // Function to set file cursor to the beginning of the release file
     seekToBeginningOfReleaseFile();
 
-    bool releaseChosen = false; // Flag to indicate if a release has been chosen
-    while (!releaseChosen)
-    {
-        int releaseCount = 0;
+    bool getReleaseFlag = filterNextRelease(&temp3, chosen_product.product_name);
 
-        cout << "Select a release that is related to this change:" << endl
+    if (getReleaseFlag == false)
+    {
+        cout << "No release found. The Release file is empty." << endl;
+        return;
+    }
+
+    while (getReleaseFlag)
+    {
+        // int releaseCount = 0;
+
+        release_list[0] = temp3;
+        cout << "Select a reported release that corresponds to this change request:" << endl
              << left << setw(14) << "   Release ID"
              << setw(13) << "Release date" << endl;
 
-        while (releaseCount < 20 && filterNextRelease(&temp3, chosen_product.product_name))
-        {
-            release_list[releaseCount] = temp3;
-            cout << setw(3) << to_string(releaseCount + 1) + ") "
-                 << setw(11) << temp3.release_ID
-                 << setw(13) << temp3.release_date
-                 << endl;
-            releaseCount++;
-        }
+        cout << "1) "
+             << setw(11) << temp3.release_ID
+             << setw(13) << temp3.release_date
+             << endl;
 
-        if (releaseCount == 20 && filterNextRelease(&temp3, chosen_product.product_name))
+        int i;
+        for (i = 1; i < 20; i++)
         {
-            cout << releaseCount + 1 << ") More" << endl;
+            if (filterNextRelease(&temp3, chosen_product.product_name))
+            {
+                release_list[i] = temp3; // Add release to the list
+                cout << left << setw(3) << to_string(i + 1) + ")"
+                     << setw(11) << temp3.release_ID
+                     << setw(13) << temp3.release_date
+                     << endl;
+            }
+            else
+            {
+                getReleaseFlag = false;
+                break; // Exit loop if no more releases
+            }
         }
+        // Display options for more releases
+        if (i == 20 && filterNextRelease(&temp3, chosen_product.product_name))
+            cout << i + 1 << ") More" << endl;
+
         cout << "0) Exit" << endl;
+
         cout << "Enter selection: ";
-
         int user_input;
-        cin >> user_input; // User input for release selection
+        cin >> user_input; // Get user input for selection
 
-        if (user_input >= 1 && user_input <= releaseCount)
+        // Check if user input is within valid range
+        if (user_input >= 1 && user_input < i + 1)
         {
-            chosen_release = release_list[user_input - 1]; // Assign chosen release
-            releaseChosen = true;
-        }
-        else if (user_input == releaseCount + 1 && releaseCount == 20)
-        {
-            continue; // Refill the release list and display more releases
+            chosen_release = release_list[user_input - 1]; // Select the chosen release
+            break;
         }
         else if (user_input == 0)
-        {
             return;
-        }
-        else
-        {
-            cout << "Invalid selection. Please try again." << endl;
-        }
     }
 
     // Step 4: Get the requesters
@@ -1467,44 +1532,51 @@ void allRequestersReportControl()
          << "Release ID: " << chosen_release.release_ID << "\n"
          << "State: " << chosen_change.status << "\n";
 
-    int requestCount = 0;
-    std::set<std::string> uniqueRequesters; // Set to track unique requesters
+    bool changeRequestFlag = filterNextChangeRequest(&temp5, chosen_change.change_ID);    
 
-    while (requestCount < 20 && filterNextChangeRequest(&temp5, chosen_change.change_ID))
+    while (changeRequestFlag)
     {
-        if (uniqueRequesters.find(temp5.requester_name) == uniqueRequesters.end())
+        int i;
+        cout << "   Requester     " << "Email\n";
+
+        filterNextRequester(&temp4, temp5.requester_name);
+        requester_list[0] = temp4;
+        cout << "1) " << temp4.requester_name << temp4.email << endl;
+
+        for (i = 1; i < 20; i++)
         {
-            // Only add and print if the requester is not already in the set
-            filterNextRequester(&temp4, temp5.requester_name); // Get the requester by name
-            requester_list[requestCount] = temp4;
-            cout << left << setw(15) << to_string(requestCount + 1) + ") Requester: "
-                 << setw(31) << temp4.requester_name
-                 << "Email: "
-                 << setw(25) << temp4.email
-                 << endl;
-            uniqueRequesters.insert(temp5.requester_name); // Add to the set
-            requestCount++;
+            if (filterNextChangeRequest(&temp5, chosen_change.change_ID))
+            {
+                
+                if (filterNextRequester(&temp4, temp5.requester_name)) // Get the requester by name
+                {
+                    requester_list[i] = temp4;
+                    // Display each requester
+                    cout << i + 1 << ") " << temp4.requester_name << "     " << temp4.email << endl;
+                }
+                else
+                {
+                    changeRequestFlag = false;
+                    break; // Exit loop if no more change requests
+                }
+            }
+            else
+            {
+                changeRequestFlag = false;
+                break; // Exit loop if no more change requests
+            }
         }
-    }
 
-    if (requestCount == 20 && filterNextChangeRequest(&temp5, chosen_change.change_ID))
-    {
-        cout << requestCount + 1 << ") More" << endl;
-    }
-    cout << "0) Exit" << endl;
+        if (filterNextChangeRequest(&temp5, chosen_change.change_ID))
+            cout << i + 1 << ") More\n";
+        cout << "0) Exit" << endl;
 
-    int userInput;
-    while (true)
-    {
         cout << "Enter selection: ";
         int user_input;
         cin >> user_input;
-        if (userInput <= 0 && userInput >= requestCount + 1)
-        {
-            cout << "Invalid input. Enter again." << endl;
-            continue;
-        }
-        break;
+
+        if (user_input == 0)
+            return;
     }
 }
 
