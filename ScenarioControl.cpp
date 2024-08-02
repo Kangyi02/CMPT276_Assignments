@@ -1234,7 +1234,7 @@ void allChangesReportControl()
     {
         product_list[0] = temp1;
         cout << "Select a product:" << endl;
-        cout << "1) " << temp1.product_name << endl;
+        cout << " 1) " << temp1.product_name << endl;
 
         int i;
         for (i = 1; i < 20; i++)
@@ -1242,7 +1242,7 @@ void allChangesReportControl()
             if (getNextProduct(&temp1))
             {
                 product_list[i] = temp1; // Add product to the list
-                cout << i + 1 << ") " << temp1.product_name << endl;
+                cout << right << setw(4) << to_string(i + 1) + ") " << left << temp1.product_name << endl;
             }
             else
                 break; // Exit loop if no more products
@@ -1250,7 +1250,7 @@ void allChangesReportControl()
         // Display options for more products or exit
         if (i == 20 && getNextProduct(&temp1))
             cout << i + 1 << ") More" << endl;
-        cout << "0) Exit" << endl;
+        cout << " 0) Exit" << endl;
 
         int userInput;
         while (true)
@@ -1298,13 +1298,14 @@ void allChangesReportControl()
         change_list[0] = temp2;
 
         cout << "Change report for the product '" << chosen_product.product_name << "': \n";
-        cout << left << setw(34) << "   Description"
+        cout << left << setw(35) << "    Description"
              << setw(10) << "Change ID"
              << setw(11) << "State"
              << setw(9) << "Priority"
              << setw(9) << "Anticipated Release" << endl;
 
-        cout << left << setw(3) << to_string(1) + ")"
+        cout << right << setw(4) << "1) "
+             << left
              << setw(31) << temp2.description
              << setw(10) << temp2.change_ID
              << setw(11) << temp2.status
@@ -1318,7 +1319,7 @@ void allChangesReportControl()
             if (filterNextChange_DoneOrCancelled(&temp2, chosen_product.product_name))
             {
                 change_list[i] = temp2;
-                cout << left << setw(3) << to_string(i + 1) + ")"
+                cout << left << setw(4) << to_string(i + 1) + ")"
                      << setw(31) << temp2.description
                      << setw(10) << temp2.change_ID
                      << setw(11) << temp2.status
@@ -1339,7 +1340,7 @@ void allChangesReportControl()
             cout << i + 1 << ") More\n";
         }
 
-        cout << "0)  Exit\n";
+        cout << " 0) Exit\n";
 
         cout << "Enter selection: ";
         int userInput;
