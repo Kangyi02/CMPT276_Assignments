@@ -1352,7 +1352,7 @@ void allRequestersReportControl()
         while (productCount < 20 && getNextProduct(&temp1))
         {
             product_list[productCount] = temp1;                             // Store product in array
-            cout << left << setw(4) << to_string(productCount + 1) + ") " << temp1.product_name << "\n"; // Display product
+            cout << right << setw(4) << to_string(productCount + 1) + ") " << left << temp1.product_name << "\n"; // Display product
             productCount++;
         }
 
