@@ -156,14 +156,13 @@ void createReleaseControl()
             return; // Return to the main menu if user cancels
         } // Go back to the top if i+1) more
     }
-    char release_ID[9]; 
-    string tempReleaseID;
 
+    char release_ID[9]; // Adjusted size to account for null-terminator
+    string tempReleaseID;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     while (true)
     {
-       // Adjusted size to account for null-terminator
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
+        //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "Enter a release ID for the new release (max 8 chars): ";
         getline(cin, tempReleaseID);
         if (tempReleaseID.length() <= 8)
@@ -177,7 +176,7 @@ void createReleaseControl()
     }
     // Copy the string to the fixed-size character array
     tempReleaseID.copy(release_ID, tempReleaseID.length());
-            release_ID[tempReleaseID.length()] = '\0';
+    release_ID[tempReleaseID.length()] = '\0';
 
     char release_date[11];
     string tempDate;
@@ -230,14 +229,14 @@ void createReleaseControl()
 // Function to format the name from "Last name, First name" to "First name Last name"
 void formatRequesterName(const string &input_name, char *formatted_name)
 {
-    char last_name[21];
-    char first_name[21];
+    char last_name[31];
+    char first_name[31];
 
     // Split the input_name into last_name and first_name
-    sscanf(input_name.c_str(), "%20[^,], %20[^\n]", last_name, first_name);
+    sscanf(input_name.c_str(), "%30[^,], %30[^\n]", last_name, first_name);
 
     // Ensure the total length is within 30 characters
-    snprintf(formatted_name, 21, "%s %s", first_name, last_name);
+    snprintf(formatted_name, 31, "%s %s", first_name, last_name);
 }
 
 // --------------------------------------------------------------------------------------
@@ -249,22 +248,21 @@ void createRequester(Requester chosen_requester)
     cout << "Creating a new requester:" << endl;
     string inputname;
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
     while (true)
     {
+        //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "Enter requester's name ('Last name, First name', max 30 chars): ";
         getline(cin, inputname);
 
-        if (inputname.length() <= 31)
+        if (inputname.length() > 31)
         {
-            break;
+            cout << "Requester name exceeds the maximum length of 30 characters. Please enter a valid name." << endl;
+            continue;
         }
-        else
-        {
-            cout << "Requester name exceeds the maximum length of 30 characters. Please enter again." << endl;
-        }
+
+        formatRequesterName(inputname, chosen_requester.requester_name);
+        break;
     }
-    formatRequesterName(inputname, chosen_requester.requester_name);
 
     while (true)
     {
@@ -305,10 +303,11 @@ void createRequester(Requester chosen_requester)
         cin >> userInput;
 
         if (userInput == "y" || userInput == "Y")
-        {
+        {   
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             while (true)
             {
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cout << "Enter the requester's department (max 12 chars): ";
                 string department_input;
                 getline(cin, department_input);
@@ -354,9 +353,10 @@ void createChange(Product chosen_product, Change* chosen_change)
 {
     // Prompt user to create a new change
     string temp_description;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     while (true)
     {
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "Enter the description of the new change (max 30 chars): ";
         getline(cin, temp_description);
 
@@ -415,13 +415,13 @@ void createChangeRequestControl()
     {
         requester_list[0] = temp;
         cout << "Select a requester that reports this change request:" << endl;
-        cout << left << setw(24) << "   Requester name" 
+        cout << left << setw(34) << "   Requester name" 
              << setw(12) << "Phone" 
              << setw(25) << "Email" 
              << setw(13) << "Department" << endl;
 
         cout << left << "1) " 
-             << setw(21) << temp.requester_name 
+             << setw(31) << temp.requester_name 
              << setw(12) << temp.phone_number 
              << setw(25) << temp.email
              << setw(13) << temp.department
@@ -433,7 +433,7 @@ void createChangeRequestControl()
             {
                 requester_list[i] = temp; // Add requester to the list
                 cout << left << setw(3) << to_string(i+1) + ") " 
-                     << setw(21) << temp.requester_name 
+                     << setw(31) << temp.requester_name 
                      << setw(12) << temp.phone_number 
                      << setw(25) << temp.email
                      << setw(13) << temp.department
@@ -718,7 +718,7 @@ void createChangeRequestControl()
 
     // Create the new change request (Write the record to the file) and confirm success
     if (addChangeRequest(&new_changeRequest))
-        cout << "The new change request has been successfully created." << endl;
+        cout << "The new change request has been successfully added." << endl;
 }
 
 // ---------------------------------------------------------------------------------------
@@ -1048,10 +1048,10 @@ void updateChangeControl()
             cout << "Old description is: "
                  << chosen_change.description
                  << endl;
-
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             while (true)
             {
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cout << "New description is: ";
                 getline(cin, tempDescription);
                 if (tempDescription.length() > 30)
@@ -1064,6 +1064,11 @@ void updateChangeControl()
 
             tempDescription.copy(chosen_change.description, tempDescription.length());
             chosen_change.description[tempDescription.length()] = '\0'; // Get new description
+            break;
+        }
+        else if (userInput == "N" || userInput == "n")
+        {
+            break;
         }
     }
 
@@ -1231,6 +1236,9 @@ void allChangesReportControl()
             return;
         }
 
+        cout << "Select a product to print its report:"
+             << endl << "   Product" << endl; 
+
         int productCount = 0;
         while (getProductFlag && productCount < 20)
         {
@@ -1286,7 +1294,7 @@ void allChangesReportControl()
 
     while (true)
     {
-        cout << "Change report for the product'" << chosen_product.product_name << "': \n";
+        cout << "Change report for the product '" << chosen_product.product_name << "': \n";
         cout << left << setw(34) << "   Description"
              << setw(10) << "Change ID"
              << setw(11) << "State"
@@ -1351,7 +1359,8 @@ void allRequestersReportControl()
     while (!productChosen)
     {
         int productCount = 0;
-        cout << "Select a product to print its report: \n";
+        cout << "Select a product to print its report:"
+             << endl << "   Product" << endl;
 
         while (productCount < 20 && getNextProduct(&temp1))
         {
@@ -1402,7 +1411,7 @@ void allRequestersReportControl()
     {
         int changeCount = 0;
 
-        cout << "   Change report for the product '" << chosen_product.product_name << "': " << endl;
+        cout << "Change report for the product '" << chosen_product.product_name << "': " << endl;
         cout << left << setw(34) << "   Description"
              << setw(10) << "Change ID"
              << setw(11) << "State"
@@ -1465,7 +1474,7 @@ void allRequestersReportControl()
     {
         int releaseCount = 0;
 
-        cout << "Select an anticipated release that you want to update to:" << endl 
+        cout << "Select a release that is related to this change:" << endl 
              << left << setw(14) << "   Release ID"
              << setw(13) << "Release date" << endl;
 
@@ -1481,9 +1490,9 @@ void allRequestersReportControl()
 
         if (releaseCount == 20 && filterNextRelease(&temp3, chosen_product.product_name))
         {
-            cout << releaseCount + 1 << ") More\n";
+            cout << releaseCount + 1 << ") More" << endl;
         }
-        cout << "0) Exit\n";
+        cout << "0) Exit" << endl;
         cout << "Enter selection: ";
 
         int user_input;
@@ -1504,7 +1513,7 @@ void allRequestersReportControl()
         }
         else
         {
-            cout << "Invalid selection. Please try again.\n";
+            cout << "Invalid selection. Please try again." << endl;
         }
     }
 
@@ -1540,7 +1549,7 @@ void allRequestersReportControl()
             filterNextRequester(&temp4, temp5.requester_name); // Get the requester by name
             requester_list[requestCount] = temp4;
             cout << left << setw(15) << to_string(requestCount + 1) + ") Requester: " 
-                 << setw(21) << temp4.requester_name
+                 << setw(31) << temp4.requester_name
                  << "Email: " 
                  << setw(25) << temp4.email 
                  << endl;
@@ -1551,29 +1560,22 @@ void allRequestersReportControl()
 
     if (requestCount == 20 && filterNextChangeRequest(&temp5, chosen_change.change_ID))
     {
-        cout << requestCount + 1 << ") More\n";
+        cout << requestCount + 1 << ") More" << endl;
     }
-    cout << "0) Exit\n";
-    cout << "Enter selection: ";
+    cout << "0) Exit" << endl;
 
-    int user_input;
-    cin >> user_input;
-
-    if (user_input >= 1 && user_input <= requestCount)
+    int userInput;
+    while(true)
     {
-        // Process the selected requester if necessary
-    }
-    else if (user_input == requestCount + 1 && requestCount == 20)
-    {
-        // Refill the requester list and display more requesters
-    }
-    else if (user_input == 0)
-    {
-        return;
-    }
-    else
-    {
-        cout << "Invalid selection. Please try again.\n";
+        cout << "Enter selection: ";
+        int user_input;
+        cin >> user_input;
+        if (userInput <= 0 && userInput >= requestCount + 1)
+        {
+            cout << "Invalid input. Enter again." << endl;
+            continue;
+        }
+        break;
     }
 }
 

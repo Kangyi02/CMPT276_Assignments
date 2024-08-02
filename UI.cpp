@@ -13,9 +13,11 @@
 #include "UI.h"
 #include "ScenarioControl.h"
 #include <iostream>
+#include <limits>
 
 using std::cin;
 using std::cout;
+using std::endl;
 
 // Main menu
 void activateUI()
@@ -25,16 +27,27 @@ void activateUI()
     while (userInput)
     {
         // Print the main menu
-        cout << "\n";
-        cout << "Main menu:\n";
-        cout << "1) Create\n";
-        cout << "2) Update\n";
-        cout << "3) Query\n";
-        cout << "4) Reports\n";
-        cout << "0) Exit\n";
-        cout << "Enter selection: ";
+        cout << endl
+             << "Main menu:" << endl
+             << "1) Create" << endl
+             << "2) Update" << endl
+             << "3) Query" << endl
+             << "4) Reports" << endl
+             << "0) Exit" << endl
+             << "Enter selection: ";
 
         cin >> userInput;
+
+        // Check if the input was invalid
+        if (cin.fail()) {
+            // Clear the error state
+            cin.clear();
+            // Discard invalid input
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cout << "Invalid input. Enter a number between 0 and 4." << endl;
+            userInput = 1;
+            continue;
+        }
 
         switch (userInput)
         {
@@ -54,6 +67,9 @@ void activateUI()
             userInput = 0;
             shutDownControl();
             break;
+        default:
+            cout << "Invalid input. Enter a number between 0 and 4." << endl;
+            break;
         }
     }
 }
@@ -64,16 +80,27 @@ void activateUI()
 void create()
 {
     // Print the create sub-menu
-    cout << "Create Menu:\n";
-    cout << "1) Create a product\n";
-    cout << "2) Create a release of a product\n";
-    cout << "3) Create a change request\n";
-    cout << "0) Exit\n";
-    cout << "Enter selection: ";
+    cout << "Create Menu:" << endl
+        << "1) Create a product" << endl
+        << "2) Create a release of a product" << endl
+        << "3) Create a change request" << endl
+        << "0) Exit" << endl
+        << "Enter selection: ";
 
     // Get the input
     int userInput;
     cin >> userInput;
+
+    // Check if the input was invalid
+    if (cin.fail()) 
+    {
+        // Clear the error state
+        cin.clear();
+        // Discard invalid input
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cout << "Invalid input. Returning to main menu." << endl;
+        userInput = 0;
+    }
 
     // Switch cases
     switch (userInput)
@@ -89,6 +116,9 @@ void create()
         break;
     case (0):
         break;
+    default:
+        cout << "Invalid input. Returning to the main menu." << endl;
+        break;
     }
 }
 
@@ -98,14 +128,25 @@ void create()
 void query()
 {
     // Print the query sub-menu
-    cout << "Query Menu:\n";
-    cout << "1) Query a change to the screen\n";
-    cout << "0) Exit\n";
-    cout << "Enter selection: ";
+    cout << "Query Menu:" << endl
+         << "1) Query a change to the screen" << endl
+         << "0) Exit" << endl
+         << "Enter selection: ";
 
     // Get the input
     int userInput;
     cin >> userInput;
+
+    // Check if the input was invalid
+    if (cin.fail()) 
+    {
+        // Clear the error state
+        cin.clear();
+        // Discard invalid input
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cout << "Invalid input. Returning to main menu." << endl;
+        userInput = 0;
+    }
 
     // Switch cases
     switch (userInput)
@@ -114,6 +155,9 @@ void query()
         queryChangeControl();
         break;
     case (0):
+        break;
+    default:
+        cout << "Invalid input. Returning to the main menu." << endl;
         break;
     }
 }
@@ -124,14 +168,25 @@ void query()
 void update()
 {
     // Print the update sub-menu
-    cout << "Update Menu:\n";
-    cout << "1) Update a change\n";
-    cout << "0) Exit\n";
-    cout << "Enter selection: ";
+    cout << "Update Menu:" << endl
+         << "1) Update a change" << endl
+         << "0) Exit" << endl
+         << "Enter selection: ";
 
     // Get the input
     int userInput;
     cin >> userInput;
+
+    // Check if the input was invalid
+    if (cin.fail()) 
+    {
+        // Clear the error state
+        cin.clear();
+        // Discard invalid input
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cout << "Invalid input. Returning to main menu." << endl;
+        userInput = 0;
+    }
 
     // Switch cases
     switch (userInput)
@@ -140,6 +195,9 @@ void update()
         updateChangeControl();
         break;
     case (0):
+        break;
+    default:
+        cout << "Invalid input. Returning to the main menu." << endl;
         break;
     }
 }
@@ -150,15 +208,26 @@ void update()
 void reports()
 {
     // Print the create sub-menu
-    cout << "Reports Menu:\n";
-    cout << "1) Print a report with all changes for a product\n";
-    cout << "2) Print a report with requesters\n";
-    cout << "0) Exit\n";
-    cout << "Enter selection: ";
+    cout << "Reports Menu:" << endl
+         << "1) Print a report with all changes for a product" << endl
+         << "2) Print a report with requesters" << endl
+         << "0) Exit" << endl
+         << "Enter selection: ";
 
     // Get the input
     int userInput;
     cin >> userInput;
+
+    // Check if the input was invalid
+    if (cin.fail()) 
+    {
+        // Clear the error state
+        cin.clear();
+        // Discard invalid input
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cout << "Invalid input. Returning to main menu." << endl;
+        userInput = 0;
+    }
 
     // Switch cases
     switch (userInput)
@@ -170,6 +239,9 @@ void reports()
         allRequestersReportControl();
         break;
     case (0):
+        break;
+    default:
+        cout << "Invalid input. Returning to the main menu." << endl;
         break;
     }
 }
